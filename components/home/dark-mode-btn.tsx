@@ -1,0 +1,53 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
+
+const toggleVars = {
+  initial:{
+    opacity: 0.7,
+    scaleX: 1.2,
+    scaleY: 0.8
+  },
+  visible:{
+    opacity: 1,
+    scaleX: 1,
+    scaleY: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 15,
+      duration: 8,
+      ease: "easeInOut"
+    }
+  },
+};
+
+export default function DarkModeBtn(){
+  //dark mode btn(사용자가 직접 조정ㅇ)
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(()=>{
+    const root = document.documentElement;
+    setIsDark(root.classList.contains("dark"));
+  }, []);
+
+  const toggleDarkMode = () => {
+    const root = document.documentElement;
+    const newDark = isDark ? "light" : "dark";
+    root.classList.toggle("dark", newDark === "dark");
+    localStorage.setItem("theme", newDark); //localStorage에 user 설정 저장ㅇ
+    setIsDark(newDark === "dark");
+  };
+
+  return(
+    <button onClick={toggleDarkMode}
+    className="flex items-center justify-center w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+      <motion.svg key={isDark ? "dark" : "light"}
+      variants={toggleVars}  initial="initial" animate="visible"
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="pointer-none w-11 h-11 mode-svg-color media-bar-w-s">
+        <polygon points="7.18 26.094 8.495 26.094 8.495 33.108 9.56 33.108 9.56 46.236 8.495 46.236 8.495 53.25 7.18 53.25 7.18 60.263 14.194 60.263 14.194 53.25 12.879 53.25 12.879 46.236 11.814 46.236 11.814 33.108 12.879 33.108 12.879 26.094 14.194 26.094 14.194 19.08 7.18 19.08 7.18 26.094" /><polygon points="69.865 33.108 69.865 26.094 71.18 26.094 71.18 19.08 64.166 19.08 64.166 26.094 65.481 26.094 65.481 33.108 66.546 33.108 66.546 46.236 65.481 46.236 65.481 53.25 64.166 53.25 64.166 60.263 71.18 60.263 71.18 53.25 69.865 53.25 69.865 46.236 68.8 46.236 68.8 33.108 69.865 33.108" /><rect x="36.988" y="36.165" width="4.384" height="7.014"/><polygon points="17.116 29.601 18.431 29.601 18.431 33.108 19.496 33.108 19.496 46.236 18.431 46.236 18.431 49.743 17.116 49.743 17.116 56.756 24.13 56.756 24.13 49.743 22.815 49.743 22.815 46.236 21.75 46.236 21.75 33.108 22.815 33.108 22.815 29.601 24.13 29.601 24.13 22.587 17.116 22.587 17.116 29.601"/><polygon points="54.23 29.601 55.545 29.601 55.545 33.108 56.61 33.108 56.61 46.236 55.545 46.236 55.545 49.743 54.23 49.743 54.23 56.756 61.244 56.756 61.244 49.743 59.929 49.743 59.929 46.236 58.864 46.236 58.864 33.108 59.929 33.108 59.929 29.601 61.244 29.601 61.244 22.587 54.23 22.587 54.23 29.601"/><polygon points="31.686 33.108 32.751 33.108 32.751 26.094 28.367 26.094 28.367 33.108 29.432 33.108 29.432 46.236 27.052 46.236 27.052 53.25 34.066 53.25 34.066 46.236 31.686 46.236 31.686 33.108"/><polygon points="48.928 33.108 49.993 33.108 49.993 26.094 45.609 26.094 45.609 33.108 46.674 33.108 46.674 46.236 44.294 46.236 44.294 53.25 51.308 53.25 51.308 46.236 48.928 46.236 48.928 33.108"/>
+      </motion.svg>
+    </button>
+  );
+}
