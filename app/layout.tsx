@@ -41,6 +41,7 @@ export default function RootLayout({
         xl:max-w-screen-lg 
         xl:text-xl
         2xl:max-w-screen-xl
+        scrollbar-hidden
         `}
       >
         <DarkMode />

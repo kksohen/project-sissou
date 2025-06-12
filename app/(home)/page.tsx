@@ -1,14 +1,12 @@
 import ConditionBar from "@/components/home/condition-bar";
+import ThreeCanvas from "@/components/home/three-canvas";
 import MenuBar from "@/components/menu-bar";
 
 export default function Home() {
   return (
     <div className="w-full h-full flex flex-col relative">
       {/* three js*/}
-      <div>
-        <div>three js img assets</div>
-        <div>한글입니다.</div>
-      </div>
+      <ThreeCanvas />
       {/* condition bar */}
       <ConditionBar />
       {/* bottom bar */}

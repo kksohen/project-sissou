@@ -1,0 +1,15 @@
+//three, shader 관련
+export const CONSTANTS = {
+  PIXEL_DENSITY: 1.5,
+  CAMERA_FOV: 45,
+  CAMERA_POSITION: { x: 0, y: 0, z: -0.4},
+  SPHERE_COUNT: 30,
+  LOGO_RADIUS: 2,
+  EASING_FACTORS: {
+    LOGO_ROTATION: 0.05,
+    MESH_POSITION: 0.1,
+    MESH_ROTATION: 0.03,
+    SPHERE_POSITION: 0.1
+  },
+  FADE_DURATION: 300,
+} as const;

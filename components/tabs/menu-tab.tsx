@@ -75,13 +75,13 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
       let newRadius = 100;
       
       if(vw < 640){
-        newRadius = 106;
-      } else if(vw < 768){
         newRadius = 112;
+      } else if(vw < 768){
+        newRadius = 119;
       } else if(vw < 1024){
-        newRadius = 125;
+        newRadius = 132;
       } else {
-        newRadius = 137;
+        newRadius = 144;
       }
       setRadius(newRadius);
     };
@@ -141,7 +141,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
 
   const getLinkClass = (href: string) =>
     pathname === href ? "mode-secondary backdrop-blur-none" : 
-    "mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none";
+    "mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all";
 
   return createPortal(
     <motion.div variants={menuBoxVars} initial="initial" animate="animate" exit="exit"

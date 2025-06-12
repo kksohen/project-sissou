@@ -31,8 +31,10 @@ return(
     <div className="flex flex-row items-center justify-between">
       {/* logo - typography */}
       <div data-cursor-target
-      className="relative z-30 w-16 h-16 flex items-center justify-center media-bar-w-lg mode-secondary-50 backdrop-blur-lg rounded-full">
-        <Link href="/" className="flex items-center justify-center w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+      className="relative z-30 w-16 h-16 flex items-center justify-center media-bar-w-lg mode-secondary-50 backdrop-blur-lg rounded-full
+      border-custom-left
+      ">
+        <Link href="/" className="flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-lg media-bar-w-sm shadow-md mode-70">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" className="pointer-none w-10 h-10 mode-svg-color animate-slow-spin media-bar-w-xs">
             <path d="M924.4,597.5c-8-24.1-29.2-39.6-54-39.6s-.2,0-.3,0c-19.3,0-36.3,8.2-49,15.4-20.1,11.3-54,39.5-76.8,59.2l57.3-96.4-39-22.5-112,193.9,38.7,22.4,2.6-2.2c.5-.4,51.4-41.8,90.3-73.4.8-.7,2-1.6,3.5-2.9,51.7-43.5,74.6-47.1,84.7-42.4,17.4,8,13.2,35.1,10.6,46.4-10.1,43.9-47.9,96.3-79.7,95.7h0c-2,0-4.5-.7-5.6-2.8-.3-.5-.3-1.1-.2-1.7,1.6-7.1,7.4-34.8,8.4-43.3v-.8c0-2.4-.9-4.7-2.6-6.4-1.4-1.4-3.3-1.9-5.2-2.2s-4,.9-5.3,2.2-2,2.3-2.7,3.7c-12.5,25.4-28.6,51.5-41.1,66.6-5.7,6.8-5.1,16.7,1.2,23,7.8,7.9,23.4,14.2,24.1,14.5h.2c5.6,2,11.3,2.8,17,2.8,24.1,0,46.6-14.8,54.1-20.1,24.1-17.5,49.3-49.8,65.8-84.2,19-39.7,24.4-77,15.1-104.9Z"/>
             <g>
@@ -68,17 +70,18 @@ return(
       mode-secondary-50 rounded-full backdrop-blur-lg 
       sm:w-30 md:w-60 lg:w-lg xl:w-3xl 2xl:w-7xl 
       w-5xl-custom w-xs-custom media-bar-h-lg
+      border-custom-left-middle
       ">
         <div className="relative w-full overflow-hidden">
           {/* mobile animation */}
           <div className="block lg:hidden whitespace-nowrap 
           animate-text-scroll-media">
-            Prologue : Home Sweet Home!
+            Prologue : Home Sweet Home !
           </div>
           {/* desktop animation */}
           <div className="hidden lg:block whitespace-nowrap 
           animate-text-scroll">
-            Prologue : Home Sweet Home!
+            Prologue : Home Sweet Home !
           </div>
         </div>
       </div>
@@ -102,7 +105,9 @@ return(
       <div data-cursor-target
       className="relative z-30 w-16 h-16 -ml-6 media-bar-w-lg
       mode-secondary-50 backdrop-blur-lg rounded-full
-      flex items-center justify-center">
+      flex items-center justify-center
+      border-custom-left-middle
+      ">
         <Search isOpen={isSearchOpen} 
         setIsOpen={setIsSearchOpen} 
         setMenuOpen={setIsMenuOpen}/>
@@ -124,9 +129,10 @@ return(
     
       {/* login */}
       <div data-cursor-target
-      className="relative z-30 w-16 h-16 -ml-6 flex items-center justify-center media-bar-w-lg mode-secondary-50 backdrop-blur-lg rounded-full">
+      className="relative z-30 w-16 h-16 -ml-6 flex items-center justify-center media-bar-w-lg mode-secondary-50 backdrop-blur-lg rounded-full border-custom-left-middle
+      ">
         <Link href="/login" className="flex items-center justify-center 
-        w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+        w-12 h-12 rounded-full backdrop-blur-lg media-bar-w-sm shadow-md mode-70">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" className="pointer-none w-12 h-12 mode-svg-color media-bar-w-sm">
             <path d="M40,12c-15.464,0-28,12.552-28,28.035,0,14.819,11.484,26.951,26.027,27.965v-5.305l-10.851-5.693,5.919-3.951,3.168-9.685c-8.012-.859-17.965-4.424-17.965-8.691,0-4.909,11.895-8.889,21.702-8.889s21.702,3.98,21.702,8.889c0,4.268-9.953,7.832-17.965,8.691l3.168,9.685,5.919,3.951-10.851,5.693h.035v5.303c14.526-1.031,25.992-13.156,25.992-27.963,0-15.483-12.536-28.035-28-28.035Z"/>
           </svg>

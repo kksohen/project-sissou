@@ -55,20 +55,26 @@
     --color-warning: #F6543D;
     --color-error: #BB0215;
 
+    --three-mode-bg: #ffd6f3;
     --mode-bg: #ffffff;
     --mode-color: #252527;
-    --mode-secondary: #00A052;
-    --mode-secondary-50: rgba(0, 160, 83, 0.5);
-    --mode-bar-color: rgba(0, 160, 83, 0.65);
-    --mode-svg-color: #252527;
+    --mode-secondary: #252527;
+    --mode-secondary-70: rgba(37, 37, 39, 0.7);
+    --mode-secondary-50: rgba(37, 37, 39, 0.4);
+    --mode-secondary-30: rgba(37, 37, 39, 0.2);
+    --mode-bar-color: rgba(37, 37, 39, 0.55);
+    --mode-svg-color: #ffffff;
   }
 
   :root.dark{
+    --three-mode-bg: #000000;
     --mode-bg: #000000;
     --mode-color: #FCFAEE;
     --mode-secondary: #ffffff;
-    --mode-secondary-50: rgba(255, 255, 255, 0.5);
-    --mode-bar-color: rgba(255, 255, 255, 0.65);
+    --mode-secondary-70: rgba(255, 255, 255, 0.7);
+    --mode-secondary-50: rgba(255, 255, 255, 0.4);
+    --mode-secondary-30: rgba(255, 255, 255, 0.3);
+    --mode-bar-color: rgba(255, 255, 255, 0.55);
     --mode-svg-color: #000000;
 
     --color-primary: #06ABFF;
@@ -87,7 +93,7 @@
     --color-error: #D80016;
   }
   html, body{ /* dark mode transition */
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, all 0.3s ease-in-out;
   }
   *{
     margin: 0;padding: 0;
@@ -115,9 +121,17 @@
 
     background-color: var(--mode-bg);
     color: var(--mode-color);
+    
   }
 }
 @layer utilities{ /* customizing */
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; 
+  }
+  .scrollbar-hidden {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
   @media (max-width: 640px) {
     .max-w-screen-xs{
       margin: 0 1rem;
@@ -293,6 +307,9 @@
   .mode-bg{
     background-color: var(--mode-bg);
   }
+  .mode-70{
+    background-color: var(--mode-secondary-70);
+  }
 
   /* animations */
   .animate-slow-spin{
@@ -349,6 +366,40 @@
   /* mouse event */
   .pointer-none {
   pointer-events: none;
+  }
+
+  /* border custom - menu & condition bar */
+  .border-custom-all{
+    border: 0.0625rem solid var(--mode-secondary-30);
+  }
+  .border-custom-top{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-bottom: none;
+    padding-bottom: 0.0313rem;
+  }
+  .border-custom-middle{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-top: none;
+    border-bottom: none;
+  }
+  .border-custom-bottom{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-top: none;
+  }
+  .border-custom-left{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-right: none;
+    padding-right: 0.0313rem;
+  }
+  .border-custom-left-middle{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-left: none;
+    border-right: none;
+  }
+  .border-custom-right{
+    border: 0.0313rem solid var(--mode-secondary-30);
+    border-left: none;
+    padding-left: 0.0625rem;
   }
 }
 @layer components{}

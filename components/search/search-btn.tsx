@@ -64,7 +64,9 @@ export default function SearchBtn({isOpen, setIsOpen} : SearchBtnProps){
   return(
     <button onClick={()=>setIsOpen((prev)=>!prev)} 
     className="flex items-center justify-center w-12 h-12 
-    mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+    rounded-full backdrop-blur-lg media-bar-w-sm
+    shadow-md mode-70
+    ">
       <AnimatePresence mode="wait" initial={false}>
       {isOpen ? (
         <motion.svg key="playing" variants={xIconVars}

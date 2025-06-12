@@ -42,7 +42,9 @@ export default function DarkModeBtn(){
 
   return(
     <button onClick={toggleDarkMode}
-    className="flex items-center justify-center w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+    className="flex items-center justify-center w-12 h-12 
+    rounded-full backdrop-blur-lg media-bar-w-sm
+    shadow-md mode-70">
       <motion.svg key={isDark ? "dark" : "light"}
       variants={toggleVars}  initial="initial" animate="visible"
       xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="pointer-none w-11 h-11 mode-svg-color media-bar-w-s">

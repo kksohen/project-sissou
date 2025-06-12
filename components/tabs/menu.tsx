@@ -17,8 +17,8 @@ export default function Menu({isOpen,setIsOpen, setSearchOpen}: MenuProps){
   
   return(
     <>
-    <div className="relative z-30 w-16 h-16 -ml-6 media-bar-w-lg flex items-center justify-center mode-secondary-50 backdrop-blur-lg rounded-full">
-      <div className="flex items-center justify-center w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+    <div className="relative z-30 w-16 h-16 -ml-6 media-bar-w-lg flex items-center justify-center mode-secondary-50 backdrop-blur-lg rounded-full border-custom-right">
+      <div className="flex items-center justify-center w-12 h-12 mode-70 rounded-full backdrop-blur-lg media-bar-w-sm shadow-md">
         <button
         onClick={()=>{
           setIsOpen(prev=>!prev);

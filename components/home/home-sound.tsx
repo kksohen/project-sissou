@@ -36,7 +36,7 @@ export default function HomeSound() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(()=>{
-    const audio = new Audio("/music/home-sound.mp3");
+    const audio = new Audio("/assets/audio/home-sound.mp3");
     audio.loop = true;
     setAudio(audio);
 
@@ -59,7 +59,9 @@ export default function HomeSound() {
 
   return (
     <button onClick={togglePlay}
-    className="flex items-center justify-center w-12 h-12 mode-secondary-50 rounded-full backdrop-blur-lg media-bar-w-sm">
+    className="flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-lg media-bar-w-sm
+    shadow-md mode-70
+    ">
       <AnimatePresence mode="wait" initial={false}>
       {isPlaying ? (<motion.svg 
         key="playing" variants={toggleVars}
