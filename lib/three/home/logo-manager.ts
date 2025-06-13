@@ -56,7 +56,30 @@ export class LogoManager{
   private processLogoMeshes(){
     if (!this.logo || !this.sphereRawMat) return;
 
-    let meshCount = 0;
+    //mesh animation random.ver
+    const meshes: LogoMesh[] = [];
+
+    this.logo.traverse((obj)=>{
+      if((obj as THREE.Mesh).isMesh){
+        const mesh = obj as LogoMesh;
+        mesh.material = this.sphereRawMat!;
+        meshes.push(mesh);
+      };
+    });
+
+    const randomMeshes = [...meshes];
+    for (let i = randomMeshes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [randomMeshes[i], randomMeshes[j]] = [randomMeshes[j], randomMeshes[i]];
+    };
+
+    randomMeshes.forEach((mesh, i) => {
+      this.logoMeshes.push(mesh);
+      if(i === 2) this.setLogoInitialPositions();
+    });
+
+    //mesh animation [0,1,2]
+    /* let meshCount = 0;
     this.logo.traverse((obj) => {
       if ((obj as THREE.Mesh).isMesh) {
         const mesh = obj as LogoMesh;
@@ -64,11 +87,11 @@ export class LogoManager{
         meshCount++;
         this.logoMeshes.push(mesh);
         
-        if (meshCount === 3) {
+        if (meshCount === 2) { //1st 먼저 등장
           this.setLogoInitialPositions();
         };
       };
-    });
+    }); */
   };
 
   private setLogoInitialPositions(){
