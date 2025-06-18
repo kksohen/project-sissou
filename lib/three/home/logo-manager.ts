@@ -12,6 +12,29 @@ export class LogoManager{
   private isLogoSet = false;
   private isSphereSet = false;
 
+  setResponsiveScale(width: number, _height: number){
+    if(!this.logo) return;
+
+    //화면 크기에 따른 로고 크기 조정
+    let scale = 1;
+
+    if(width < 409){
+      scale = 0.4;
+    }else if(width < 566){
+      scale = 0.5;
+    }else if(width < 769){
+      scale = 0.6;
+    }else if(width < 961){
+      scale = 0.7;
+    }else if(width < 1025){
+      scale = 0.8;
+    }else{
+      scale = 1;
+    };
+
+    this.logo.scale.setScalar(scale);
+  };
+
   setEnvMap(envMap: THREE.CubeTexture){
     this.envMap = envMap;
     if(this.sphereRawMat){
@@ -101,7 +124,7 @@ export class LogoManager{
     logoGroup.original_rot = this.logo.rotation.clone();
     this.logo.rotation.y = Math.PI * 5.0;
     //modeling 조금만 위로 올림
-    this.logo.position.y += 0.013;
+    this.logo.position.y += 0.0135;
 
     this.logoMeshes.forEach(mesh => {
       this.setMeshInitialPosition(mesh);

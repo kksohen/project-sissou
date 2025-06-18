@@ -56,13 +56,35 @@ export class QuadPass {
       ]
     };
 
-    params.shader.vertexShader =
+    //resolution 수동 추가해줘야 함(오류 때문)
+    if(!params.shader.vertexShader.includes('uniform vec2 resolution')){
+      params.shader.vertexShader =
+      "precision mediump float;\nprecision mediump int;\nuniform vec2 resolution;\n" +
+      params.shader.vertexShader;
+    }else{
+      params.shader.vertexShader =
+      "precision mediump float;\nprecision mediump int;\n" +
+      params.shader.vertexShader;
+    };
+
+    if(!params.shader.fragmentShader.includes('uniform vec2 resolution')){
+    params.shader.fragmentShader =
+    "precision mediump float;\nprecision mediump int;\nuniform vec2 resolution;\n" +
+    params.shader.fragmentShader;
+    }else{
+      params.shader.fragmentShader =
+      "precision mediump float;\nprecision mediump int;\n" +
+      params.shader.fragmentShader;
+    };
+
+    //resolution 안 적을 시 자동 추가해주는 코드
+    /* params.shader.vertexShader =
       "precision mediump float;\nprecision mediump int;\nuniform vec2 resolution;\n" +
       params.shader.vertexShader;
 
     params.shader.fragmentShader =
       "precision mediump float;\nprecision mediump int;\nuniform vec2 resolution;\n" +
-      params.shader.fragmentShader;
+      params.shader.fragmentShader; */
 
     this.material = new THREE.RawShaderMaterial({
       vertexShader: params.shader.vertexShader,

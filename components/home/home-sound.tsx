@@ -36,7 +36,7 @@ export default function HomeSound() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(()=>{
-    const audio = new Audio("/assets/audio/home-sound.mp3");
+    const audio = new Audio("/assets/audio/home-sound-final.mp3");
     audio.loop = true;
     setAudio(audio);
 

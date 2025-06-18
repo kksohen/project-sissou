@@ -10,26 +10,40 @@ import { LogoManager } from './logo-manager';
 export class SceneManager{
   private refs: ReturnType<typeof useThreeRefs>;
   private logoManager = new LogoManager();
+  private isDisposed = false;
+  private loadingManager: THREE.LoadingManager | null = null;
 
   constructor(refs: ReturnType<typeof useThreeRefs>){
     this.refs = refs;
   };
 
   init(){
-    this.initRenderer();
-    this.initScene();
-    this.initCamera();
-    this.initControls();
-    this.initRenderTargets();
-    this.initLoaders();
-    this.initPasses();
-    this.animate();
+    if (this.isDisposed) return;
+    
+    try {
+      this.initRenderer();
+      this.initScene();
+      this.initCamera();
+      this.initControls();
+      this.initRenderTargets();
+      this.initLoaders();
+      this.initPasses();
+      this.animate();
+    } catch (error) {
+      console.error('SceneManager initialization failed:', error);
+      this.dispose();
+    };
   };
 
   private initRenderer(){
     const {containerRef, rendererRef} = this.refs;
     const container = containerRef.current;
-    if(!container) return;
+    if(!container || this.isDisposed) return;
+
+    //기존 renderer 제거
+    if (rendererRef.current) {
+      this.disposeRenderer();
+    };
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -40,7 +54,6 @@ export class SceneManager{
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(CONSTANTS.PIXEL_DENSITY);
-
     renderer.autoClear = false;
 
     container.appendChild(renderer.domElement);
@@ -49,12 +62,16 @@ export class SceneManager{
 
   private initScene(){
     const {sceneRef} = this.refs;
+    if (this.isDisposed) return;
+    
     const scene = new THREE.Scene();
     sceneRef.current = scene;
   };
 
   private initCamera(){
     const {cameraRef} = this.refs;
+    if (this.isDisposed) return;
+    
     const camera = new THREE.PerspectiveCamera(
       CONSTANTS.CAMERA_FOV,
       window.innerWidth / window.innerHeight,
@@ -72,7 +89,7 @@ export class SceneManager{
 
   private initControls(){
     const {rendererRef, cameraRef, controlsRef} = this.refs;
-    if(!rendererRef.current || !cameraRef.current) return;
+    if(!rendererRef.current || !cameraRef.current || this.isDisposed) return;
 
     const controls = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
     controls.enableDamping = true;
@@ -81,6 +98,7 @@ export class SceneManager{
 
   private initRenderTargets(){
     const {sceneBufferRef} = this.refs;
+    if (this.isDisposed) return;
 
     const sceneBuffer = new THREE.WebGLRenderTarget(
       window.innerWidth * CONSTANTS.PIXEL_DENSITY,
@@ -109,86 +127,110 @@ export class SceneManager{
       cameraRef,
       materialsRef,
       geometriesRef
-    } =this.refs;
+    } = this.refs;
 
-    const loadingManager = new THREE.LoadingManager();
-    const gltfLoader = new GLTFLoader(loadingManager);
-    const cubeLoader = new THREE.CubeTextureLoader(loadingManager);
+    if (this.isDisposed) return;
+
+    this.loadingManager = new THREE.LoadingManager();
+    const gltfLoader = new GLTFLoader(this.loadingManager);
+    const cubeLoader = new THREE.CubeTextureLoader(this.loadingManager);
 
     loadersRef.current.gltf = gltfLoader;
     loadersRef.current.cube = cubeLoader;
+
+    this.loadingManager.onError = (url) => {
+      console.error('Failed to load resource:', url);
+    };
 
     //cubeMap load
     cubeLoader.setPath("/assets/models/").load([
       'px3.png', 'nx3.png', 'py3.png', 'ny3.png', 'pz3.png', 'nz3.png'
     ], (envmap)=>{
+      if (this.isDisposed) return;
+      
       envMapRef.current = envmap;
       texturesRef.current.push(envmap);
-
       this.logoManager.setEnvMap(envmap);
+    }, undefined, (error) => {
+      console.error('Failed to load cubemap:', error);
     });
 
     //logo models load
     gltfLoader.load("/assets/models/logo-symbol-final.glb", (gltf)=>{
+      if (this.isDisposed) return;
+      
       gltf.scene.rotateY(Math.PI);
       gltf.scene.rotateX(Math.PI * 0.5);
-
       this.logoManager.setLogo(gltf.scene);
+    }, undefined, (error) => {
+      console.error('Failed to load logo model:', error);
     });
 
     //loading success
-    loadingManager.onLoad = ()=>{
-      if (!cameraRef.current) return;
+    this.loadingManager.onLoad = ()=>{
+      if (!cameraRef.current || this.isDisposed) return;
 
-      const material = this.logoManager.initializeLogo(cameraRef.current);
-      if(material){
-        sphereMaterialRef.current = material;
-        materialsRef.current.push(material);
-      };
-      const sphereGeometries = this.logoManager.createSpheres();
-      geometriesRef.current.push(...sphereGeometries);
+      try {
+        const material = this.logoManager.initializeLogo(cameraRef.current);
+        if(material){
+          sphereMaterialRef.current = material;
+          materialsRef.current.push(material);
+        };
+        
+        const sphereGeometries = this.logoManager.createSpheres();
+        geometriesRef.current.push(...sphereGeometries);
 
-      const logo = this.logoManager.getLogo();
-      if(sceneRef.current && logo){
-        sceneRef.current.add(logo);
+        const logo = this.logoManager.getLogo();
+        if(sceneRef.current && logo){
+          sceneRef.current.add(logo);
+          this.logoManager.setResponsiveScale(window.innerWidth, window.innerHeight);
+        };
+      } catch (error) {
+        console.error(error);
       };
     };
   };
 
   private initPasses(){
     const { rendererRef, sceneBufferRef, mainPassRef, backPassRef } = this.refs;
-    if (!rendererRef.current || !sceneBufferRef.current) return;
+    if (!rendererRef.current || !sceneBufferRef.current || this.isDisposed) return;
 
-    const backPass = new QuadPass({
-      renderer: rendererRef.current,
-      pixel_density: CONSTANTS.PIXEL_DENSITY,
-      shader: home_bck_shader,
-      uniforms: {
-        copy_buffer: { value: null }
-      }
-    });
+    try {
+      const backPass = new QuadPass({
+        renderer: rendererRef.current,
+        pixel_density: CONSTANTS.PIXEL_DENSITY,
+        shader: home_bck_shader,
+        uniforms: {
+          copy_buffer: { value: null }
+        }
+      });
 
-    const mainPass = new QuadPass({
-      renderer: rendererRef.current,
-      pixel_density: CONSTANTS.PIXEL_DENSITY,
-      shader: home_main_shader,
-      uniforms: {
-        scene_buffer: { value: sceneBufferRef.current.texture },
-        bck_buffer: { value: backPass.buffer.texture }
-      }
-    });
-    
-    backPass.uniforms.copy_buffer.value = mainPass.buffer.texture;
+      const mainPass = new QuadPass({
+        renderer: rendererRef.current,
+        pixel_density: CONSTANTS.PIXEL_DENSITY,
+        shader: home_main_shader,
+        uniforms: {
+          scene_buffer: { value: sceneBufferRef.current.texture },
+          bck_buffer: { value: backPass.buffer.texture }
+        }
+      });
+      
+      backPass.uniforms.copy_buffer.value = mainPass.buffer.texture;
 
-    mainPassRef.current = mainPass;
-    backPassRef.current = backPass;
+      mainPassRef.current = mainPass;
+      backPassRef.current = backPass;
 
-    rendererRef.current.setRenderTarget(backPass.buffer);
-    rendererRef.current.clear(true, true, false);
-    rendererRef.current.setRenderTarget(null);
+      rendererRef.current.setRenderTarget(backPass.buffer);
+      rendererRef.current.clear(true, true, false);
+      rendererRef.current.setRenderTarget(null);
+    } catch (error) {
+      console.error(error);
+    };
   };
 
   resize(){
+    if (this.isDisposed) return;
+    
     const { 
       cameraRef, 
       rendererRef, 
@@ -203,6 +245,8 @@ export class SceneManager{
     cameraRef.current.updateProjectionMatrix();
     rendererRef.current.setSize(window.innerWidth, window.innerHeight);
 
+    this.logoManager.setResponsiveScale(window.innerWidth, window.innerHeight);
+
     if(sceneBufferRef.current){
       sceneBufferRef.current.setSize(
         window.innerWidth * CONSTANTS.PIXEL_DENSITY, 
@@ -215,6 +259,8 @@ export class SceneManager{
   };
 
   private update(){
+    if (this.isDisposed) return;
+    
     const { 
       controlsRef, 
       cameraRef,
@@ -232,6 +278,8 @@ export class SceneManager{
   };
 
   private render(){
+    if (this.isDisposed) return;
+    
     const { 
       rendererRef, 
       sceneRef, 
@@ -265,19 +313,43 @@ export class SceneManager{
     };
   };
 
-  private animate=()=>{
+  private animate = () => {
+    if (this.isDisposed) return;
+    
     const {animationIdRef} = this.refs;
     animationIdRef.current = requestAnimationFrame(this.animate);
     this.update();
     this.render();
   };
 
+  private disposeRenderer() {
+    const { rendererRef, containerRef } = this.refs;
+    const container = containerRef.current;
+    
+    if(rendererRef.current){
+      try{
+        //DOM 요소 제거 전 존재 확인
+        if(container && rendererRef.current.domElement.parentNode === container){
+          container.removeChild(rendererRef.current.domElement);
+        };
+        
+        rendererRef.current.dispose();
+        rendererRef.current.forceContextLoss();
+      }catch(error){
+        console.error(error);
+      }finally{
+        rendererRef.current = null;
+      };
+    };
+  };
+
   dispose(){
+    if (this.isDisposed) return;
+    this.isDisposed = true;
+
     const {
       animationIdRef, 
-      rendererRef, 
       controlsRef, 
-      containerRef,
       geometriesRef,
       materialsRef,
       texturesRef,
@@ -286,40 +358,120 @@ export class SceneManager{
       sceneBufferRef
     } = this.refs;
 
-    const container = containerRef.current;
-
-    //cleanup
-    //animation 
+    //1.animations 정지
     if(animationIdRef.current){
       cancelAnimationFrame(animationIdRef.current);
+      animationIdRef.current = null;
     };
-    this.logoManager.dispose();
-    //renderer
-    if(rendererRef.current && container){
-      container.removeChild(rendererRef.current.domElement);
-      rendererRef.current.dispose();
+    //2.LogoManager 정리
+    try{
+      this.logoManager.dispose();
+    }catch(error){
+      console.error(error);
     };
-    //controls
-    controlsRef.current?.dispose();
-    //geometry
-    geometriesRef.current.forEach(geom => geom.dispose());
-    //material
-    materialsRef.current.forEach(mat => mat.dispose());
-    //texture
-    texturesRef.current.forEach(text => text.dispose());
+    //3.controls 정리
+    try{
+      controlsRef.current?.dispose();
+      controlsRef.current = null;
+    }catch(error){
+      console.error(error);
+    };
+    //4.resource 정리
+    try{
+      //geometries
+      geometriesRef.current.forEach(geom => {
+        try{ 
+          geom.dispose(); 
+        }catch(e){ 
+          console.error(e); 
+        };
+      });
+      geometriesRef.current.length = 0;
+      //materials
+      materialsRef.current.forEach(mat => {
+        try{ 
+          mat.dispose(); 
+        }catch(e){ 
+          console.error(e); 
+        };
+      });
+      materialsRef.current.length = 0;
+      //textures
+      texturesRef.current.forEach(text => {
+        try{
+          text.dispose();
+        }catch(e){ 
+          console.error(e); 
+        };
+      });
+      texturesRef.current.length = 0;
+    }catch(error){
+      console.error(error);
+    };
     //passes
-    if(mainPassRef.current){
-      mainPassRef.current.buffer.dispose();
-      mainPassRef.current.material.dispose();
-      mainPassRef.current.quad_geometry.dispose();
+    try{
+      if(mainPassRef.current){
+        mainPassRef.current.buffer?.dispose();
+        mainPassRef.current.material?.dispose();
+        mainPassRef.current.quad_geometry?.dispose();
+        mainPassRef.current = null;
+      };
+      
+      if(backPassRef.current){
+        backPassRef.current.buffer?.dispose();
+        backPassRef.current.material?.dispose();
+        backPassRef.current.quad_geometry?.dispose();
+        backPassRef.current = null;
+      };
+    }catch(error){
+      console.error(error);
     };
-    if(backPassRef.current){
-      backPassRef.current.buffer.dispose();
-      backPassRef.current.material.dispose();
-      backPassRef.current.quad_geometry.dispose();
+    //render target
+    try{
+      sceneBufferRef.current?.dispose();
+      sceneBufferRef.current = null;
+    }catch(error){
+      console.error(error);
     };
-    //renderTarget
-    sceneBufferRef.current?.dispose();
+    //loadingManager
+    if(this.loadingManager){
+      this.loadingManager = null;
+    };
+    //renderer
+    this.disposeRenderer();
+    //refs 초기화
+    this.resetAllRefs();
   };
 
+  private resetAllRefs(){
+    const refs = this.refs;
+
+    refs.sceneRef.current = null;
+    refs.cameraRef.current = null;
+    refs.rendererRef.current = null;
+    refs.controlsRef.current = null;
+
+    refs.animationIdRef.current = null;
+    refs.timeRef.current = 0;
+    refs.sphereMaterialRef.current = null;
+
+    refs.bgColorRef.current = new THREE.Color();
+    refs.targetBgColorRef.current = new THREE.Color();
+    
+    refs.logoRef.current = null;
+    refs.logoMeshesRef.current = [];
+    refs.spheresRef.current = [];
+    refs.envMapRef.current = null;
+    refs.isLogoRef.current = false;
+    refs.isSphereRef.current = false;
+
+    refs.mainPassRef.current = null;
+    refs.backPassRef.current = null;
+    refs.sceneBufferRef.current = null;
+    
+    refs.geometriesRef.current = [];
+    refs.materialsRef.current = [];
+    refs.texturesRef.current = [];
+    refs.loadersRef.current = {};
+  };
 }

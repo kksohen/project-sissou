@@ -12,6 +12,7 @@ vertexShader: `
   }
 `,
 fragmentShader: `
+  uniform vec2 resolution;
   uniform sampler2D copy_buffer;
   
   void main() {
