@@ -2,12 +2,11 @@
 import Link from "next/link";
 import Search from "./search/search";
 import Menu from "./tabs/menu";
-import { useState } from "react";
+import { useContext } from "react";
+import { ModalContext } from "./home/modal-context";
 
 export default function MenuBar() {
-  //search, menu 상태 관리(search open일 때, menu click하면 닫히게 <=> menu open일 때, search click하면 닫히게(양방향))
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const {isOpen, onToggle} = useContext(ModalContext);
 
 return(
   <nav className="fixed z-10 bottom-4 left-1/2 -translate-x-1/2
@@ -108,9 +107,7 @@ return(
       flex items-center justify-center
       border-custom-left-middle
       ">
-        <Search isOpen={isSearchOpen} 
-        setIsOpen={setIsSearchOpen} 
-        setMenuOpen={setIsMenuOpen}/>
+        <Search isOpen={isOpen.search} onToggle={() => onToggle("search")} />
       </div>
 
       {/* 이음 선 */}
@@ -155,10 +152,7 @@ return(
 
       {/* hamburger bar */}
       <div data-cursor-target>
-        <Menu isOpen={isMenuOpen} 
-        setIsOpen={setIsMenuOpen}
-        setSearchOpen={setIsSearchOpen}
-        />
+        <Menu isOpen={isOpen.menu} onToggle={() => onToggle("menu")} />
       </div>
     </div>
   </nav>

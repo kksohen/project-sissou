@@ -4,24 +4,24 @@
 /* lg : @media(min-width: 1024px){} */
 /* xl : @media(min-width: 1280px){} */
 /* 2xl : @media(min-width: 1536px){} */
-@font-face {
+@font-face{
   font-family: 'Alliance No.2 Light';
   font-style: normal;
   font-weight: normal;
   src: url("../fonts/Degarism\ Studio\ -\ Alliance\ No.2\ Light.woff") format('woff');
   font-display: swap;
 }
-.font-alliance {
+.font-alliance{
   font-family: 'Alliance No.2 Light', sans-serif;
 }
-@font-face {
+@font-face{
   font-family: "ABCWhyteHangulInktrapVariable-Trial";
   font-style: normal;
   font-weight: normal;
   font-display: swap;
   src: url("../fonts//ABCWhyteHangulInktrapVariable-Trial.woff2") format('woff2'), url("../fonts//ABCWhyteHangulInktrapVariable-Trial.woff") format('woff');
 }
-.font-abcwhyte {
+.font-abcwhyte{
   font-family: "ABCWhyteHangulInktrapVariable-Trial", sans-serif;
 }
 
@@ -63,7 +63,9 @@
     --mode-secondary-50: rgba(37, 37, 39, 0.4);
     --mode-secondary-30: rgba(37, 37, 39, 0.2);
     --mode-bar-color: rgba(37, 37, 39, 0.55);
-    --mode-svg-color: #ffffff;
+    --mode-svg-color: #fafafa;
+
+    --font-weight-custom: 550;
   }
 
   :root.dark{
@@ -75,7 +77,7 @@
     --mode-secondary-50: rgba(255, 255, 255, 0.4);
     --mode-secondary-30: rgba(255, 255, 255, 0.3);
     --mode-bar-color: rgba(255, 255, 255, 0.55);
-    --mode-svg-color: #000000;
+    --mode-svg-color: #1a1a1a;
 
     --color-primary: #06ABFF;
     --color-secondary: #00BF5D;
@@ -91,6 +93,12 @@
     --color-success: #079C79;
     --color-warning: #E5432C;
     --color-error: #D80016;
+
+    --font-weight-custom: 600;
+  }
+  :root.dark body{ /* dark mode font */
+    font-weight: 650;
+    letter-spacing: -0.0145em;
   }
   html, body{ /* dark mode transition */
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, all 0.3s ease-in-out;
@@ -98,7 +106,7 @@
   *{
     margin: 0;padding: 0;
   }
-  *, html, body, div, button, a, input, textarea, select, option, label, summary, iframe, [contenteditable] {
+  *, html, body, div, button, a, input, textarea, select, option, label, summary, iframe, [contenteditable]{
     cursor: none;
   }
   ol,ul{
@@ -112,16 +120,18 @@
   img,video{vertical-align: bottom;}
   table{border-collapse: collapse;}
   button{border: none; background: transparent;}
+  button:focus, button:active, button:focus-visible{
+  outline: none;
+  }
   body{
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", 
     var(--font-pretendard), "neue-haas-grotesk-text", "Pretendard", "Noto Sans KR", system-ui, sans-serif;
     
     line-height: 1.25;
-    font-weight: 600;
+    font-weight: 600; /* light mode font */
 
     background-color: var(--mode-bg);
     color: var(--mode-color);
-    
   }
 }
 @layer utilities{ /* customizing */
@@ -400,6 +410,11 @@
     border: 0.0313rem solid var(--mode-secondary-30);
     border-left: none;
     padding-left: 0.0625rem;
+  }
+
+  /* font custom */
+  .font-weight-custom{
+    font-weight: var(--font-weight-custom);
   }
 }
 @layer components{}

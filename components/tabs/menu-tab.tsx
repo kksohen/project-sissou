@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import React, { useEffect, useState } from "react";
+import { links } from "@/lib/constants";
 
 //framer-motion
 const menuBoxVars = {
@@ -34,30 +35,6 @@ const menuBoxVars = {
     },
   }
 };
-
-//menu links - list
-const links = [
-  { href: "/", label: "제로", key: "zero" },
-  { href: "/", label: "Prologue", key: "prologue" },
-  { href: "/exhibition-born", label: "기", key: "gi" },
-  { href: "/exhibition-born", label: "Born", key: "born"},
-  { href: "/exhibition-growth", label: "승", key: "seung" },
-  { href: "/exhibition-growth", label: "Growth", key: "growth"},
-  { href: "/portfolio", label: "간", key: "gan" },
-  { href: "/portfolio", label: "Intermission", key: "intermission" },
-  { href: "/exhibition-climax", label: "전", key: "jeon" },
-  { href: "/exhibition-climax", label: "Climax", key: "climax" },
-  { href: "/exhibition-end", label: "결", key:"end" },
-  { href: "/exhibition-end", label: "End : Da Capo", key: "daCapo" },
-  { href: "/brand", label: "후일담", key: "epilogue" },
-  { href: "/brand", label: "Epilogue : Behind", key: "behind" },
-  { href: "/community", label: "커뮤니티", key: "comm" },
-  { href: "/community", label: "Community", key: "community" },
-  { href: "/goods", label: "굿즈", key:"good" },
-  { href: "/goods", label: "Goods", key:"goods" },
-  { href: "/contact", label: "컨택", key:"cont" },
-  { href: "/contact", label: "Contact", key:"contact" },
-];
 
 export default function MenuTab({onClose} : {onClose: ()=> void}) {
   const pathname = usePathname(); //현재 path 찾아서 highlight 처리해줌
@@ -135,7 +112,10 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
   };
 
   //해당 페이지에서 해당 링크 클릭시 모달창 닫힘
-  const handleClick = () => {
+  const handleClick = (e:React.MouseEvent, href: string) => {
+    if(pathname === href){
+      e.preventDefault(); //새고 방지
+    };
     onClose(); 
   };
 
@@ -181,7 +161,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
         }));
 
         return(
-          <Link href={href} key={key || href} onClick={handleClick}
+          <Link href={href} key={key || href} onClick={(e)=>handleClick(e, href)}
           className={`${getLinkClass(href)} absolute top-1/2 left-1/2`}
           style={{
             transform: `translate(-50%, -50%) translate(${x}px, ${y}px) translateZ(${z}px) rotateX(${itemAngle}deg) scale(${scale})`,

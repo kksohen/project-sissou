@@ -1,26 +1,18 @@
-"use client";
-
+import { HomeModalProps } from '../home/home-modal';
 import SearchBtn from './search-btn';
 import SearchList from './search-list';
 import { AnimatePresence } from "framer-motion";
 
-interface SearchProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export default function Search({isOpen, onToggle}: HomeModalProps) {
 
-export default function Search({isOpen,setIsOpen,setMenuOpen}:SearchProps) {
+  const closeMenu = ()=>onToggle();
 
   return(
   <>
-    <SearchBtn isOpen={isOpen} setIsOpen={(value)=>{
-      setMenuOpen(false);
-      setIsOpen(typeof value === "function" ? value : ()=> value);
-    }}/>
+    <SearchBtn isOpen={isOpen} setIsOpen={onToggle}/>
     {/* search open */}
     <AnimatePresence>
-      {isOpen && <SearchList />}
+      {isOpen && <SearchList onClose={closeMenu}/>}
     </AnimatePresence>
   </>
   );

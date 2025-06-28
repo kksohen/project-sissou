@@ -4,7 +4,14 @@ import { useThreeRefs } from '@/lib/three/useThreeRefs';
 import { useBgColor } from '@/lib/three/useBgColor';
 import { SceneManager } from '@/lib/three/home/scene-manager';
 
-export default function ThreeCanvas() {
+interface IThreeCanvas{
+  onSceneManager?: (manager: SceneManager)=> void;
+  onSceneManagerDispose?: ()=> void;
+};
+
+export default function ThreeCanvas({
+  onSceneManager, onSceneManagerDispose
+}: IThreeCanvas) {
   const refs = useThreeRefs();
   const { containerRef } = refs;
   const sceneManagerRef = useRef<SceneManager | null>(null);
@@ -19,20 +26,24 @@ export default function ThreeCanvas() {
     if (sceneManagerRef.current) {
       sceneManagerRef.current.dispose();
       sceneManagerRef.current = null;
+      onSceneManagerDispose?.();
     };
 
     //2.컨테이너 초기화
-    container.innerHTML = '';
+    container.innerHTML = "";
 
     //3.새 인스턴스 생성
     const sceneManager = new SceneManager(refs);
     sceneManagerRef.current = sceneManager;
 
+    //4.초기화 지연시킴(dom 안정화)
     const initTimeout = setTimeout(() => {
       try {
         sceneManager.init();
+        onSceneManager?.(sceneManager);
       } catch (error) {
         console.error(error);
+        onSceneManagerDispose?.();
       }
     }, 50);
 
@@ -51,6 +62,7 @@ export default function ThreeCanvas() {
       if (sceneManagerRef.current) {
         sceneManagerRef.current.dispose();
         sceneManagerRef.current = null;
+        onSceneManagerDispose?.();
       }
     };
 

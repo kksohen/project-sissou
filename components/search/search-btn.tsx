@@ -1,5 +1,4 @@
 // "use client";
-
 import { AnimatePresence, motion } from 'framer-motion';
 
 //framer-motion
@@ -55,10 +54,10 @@ const searchIconVars = {
   }
 };
 
-interface SearchBtnProps {
+interface SearchBtnProps{
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 export default function SearchBtn({isOpen, setIsOpen} : SearchBtnProps){
   return(

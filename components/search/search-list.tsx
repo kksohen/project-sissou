@@ -1,7 +1,9 @@
 // "use client";
 
+import { links } from '@/lib/constants';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 //framer-motion
 const searchBoxVars = {
@@ -29,7 +31,16 @@ const searchBoxVars = {
   }
 };
 
-export default function SearchList(){
+export default function SearchList({onClose} : {onClose: ()=> void}){
+const pathname = usePathname();
+  //해당 페이지에서 해당 링크 클릭시 모달창 닫힘
+const handleClick = (e:React.MouseEvent, href: string) => {
+  if(pathname === href){
+    e.preventDefault(); //새고 방지
+  };
+  onClose();
+};
+
   return(
     <motion.div variants={searchBoxVars} initial="initial" animate="animate" exit="exit"
     className="
@@ -42,62 +53,14 @@ export default function SearchList(){
     flex items-center flex-wrap 
     gap-1 sm:gap-2 mode-svg-color
     *:px-4 *:py-2 *:rounded-full ">
-      <Link href="/" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">제로</Link>
-      <Link href="/" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">Prologue</Link>
-      
-      <Link href="/exhibition-born" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      
-      ">기</Link>
-      <Link href="/exhibition-born" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Born</Link>
-
-      <Link href="/exhibition-growth" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">승</Link>
-      <Link href="/exhibition-growth" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Growth</Link>
-
-      <Link href="/portfolio" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">간</Link>
-      <Link href="/portfolio" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Intermission</Link>
-
-      <Link href="/exhibition-climax" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">전</Link>
-      <Link href="/exhibition-climax" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Climax</Link>
-      
-      <Link href="/exhibition-end" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">결</Link>
-      <Link href="/exhibition-end" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">End : Da Capo</Link>
-      
-      <Link href="/brand" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">후일담</Link>
-      <Link href="/brand" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">Epilogue : Behind</Link>
-      
-      <Link href="/community" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">커뮤니티</Link>
-      <Link href="/community" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Community</Link>
-
-      <Link href="/goods" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">굿즈</Link>
-      <Link href="/goods" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
-      border-custom-all 
-      ">Goods</Link>
-      
-      <Link href="/contact" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">컨택</Link>
-      <Link href="/contact" className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none border-custom-all 
-      ">Contact</Link>
+      {links.map(({href, label, key})=>{
+      return(
+        <Link href={href} key={key} onClick={e=>handleClick(e, href)}
+        className="mode-secondary-50 backdrop-blur-lg transition-all hover:mode-secondary hover:backdrop-blur-none
+      border-custom-all"
+        >{label}</Link>
+      )
+      })}
     </motion.div>
-  )
+  );
 }

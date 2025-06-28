@@ -8,7 +8,7 @@ vertexShader: `
   attribute vec3 position;
   
   void main() {
-      gl_Position = vec4(position, 1.0);
+    gl_Position = vec4(position, 1.0);
   }
 `,
 fragmentShader: `
@@ -22,6 +22,7 @@ fragmentShader: `
   float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 	vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 	vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
+
   float noise(vec3 p){
     vec3 a = floor(p);
     vec3 d = p - a;
@@ -44,7 +45,7 @@ fragmentShader: `
     return o4.y * d.y + o4.x * (1.0 - d.y);
 	}
   
-  void main() {
+  void main(){
       vec2 uv = gl_FragCoord.xy/resolution.xy;
       vec2 rs = resolution;
       vec4 col = texture2D(scene_buffer, uv); //main logo
@@ -55,12 +56,12 @@ fragmentShader: `
       vec2 tc = (uv - 0.5) * 0.998 + 0.5 + 0.2 * vec2(cos(angle), sin(angle)) / max(rs.x, rs.y);
 
       vec4 bck_col = texture2D(bck_buffer, tc);
-      //-----------------------------
+      //------------------------------------
       float logoIntensity = dot(col.rgb, vec3(0.299, 0.587, 0.114));
       float bckIntensity = dot(col.rgb, vec3(0.299, 0.587, 0.114));
 
-      if (logoIntensity > 0.05) { //밝은 부분에 적용, main logo 강조
-        vec3 glow = 
+      if(logoIntensity > 0.05){ //밝은 부분에 적용, main logo 강조
+        vec3 glow =
           texture2D(scene_buffer, uv + vec2(0.002, 0.0)).rgb +
           texture2D(scene_buffer, uv - vec2(0.002, 0.0)).rgb +
           texture2D(scene_buffer, uv + vec2(0.0, 0.002)).rgb +
@@ -73,11 +74,11 @@ fragmentShader: `
         }else{ //light mode
           col.rgb = max(col.rgb, bck_col.rgb * 0.9995);
         }
-      } else { //bg 잔상 
+      }else{ //bg 잔상
         col.rgb = max(col.rgb, bck_col.rgb * 0.97); 
       };
 
-      gl_FragColor = vec4(col.rgb, 1.0);
+    gl_FragColor = vec4(col.rgb, 1.0);
   }
 `
-};
+}

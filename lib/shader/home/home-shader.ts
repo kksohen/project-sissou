@@ -10,9 +10,7 @@ vertexShader: `
 
   uniform mat4 modelViewMatrix;
   uniform mat4 projectionMatrix;
-
   uniform mat3 normalMatrix;
-
   //custom
   uniform float time;
 
@@ -56,7 +54,7 @@ vertexShader: `
     return o4.y * d.y + o4.x * (1. - d.y);
   }
 
-  void main() {
+  void main(){
     vec3 pos = position;
     vorpos = pos;
 
@@ -83,22 +81,22 @@ fragmentShader: `
   uniform mat4 modelViewMatrix;
   uniform mat4 projectionMatrix;
 
+  uniform samplerCube envmap;
+  uniform vec3 campos;
+
   varying vec3 vnormal;
   varying vec3 vpos;
   varying vec3 vorpos;
-
-  uniform samplerCube envmap;
-  uniform vec3 campos;
   
   //random
-  float random (vec3 st) {
+  float random (vec3 st){
     return fract(sin(dot(st, vec3(12.9898, 78.233, 13.9191))) * 43758.5453123);
   }
 
   //PI
   #define PI 3.1415 //180
 
-  void main() {
+  void main(){
     vec2 uv = gl_FragCoord.xy;
     vec4 col = vec4(1.);
     vec3 pos = vpos;
@@ -165,4 +163,4 @@ fragmentShader: `
     gl_FragColor = vec4(col.rgb, 1.0);
   }
   `
-};
+}

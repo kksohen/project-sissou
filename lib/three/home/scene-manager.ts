@@ -12,6 +12,18 @@ export class SceneManager{
   private logoManager = new LogoManager();
   private isDisposed = false;
   private loadingManager: THREE.LoadingManager | null = null;
+  
+  private getPixelRatio(){//성능 최적화
+    return Math.min(CONSTANTS.PIXEL_DENSITY, window.devicePixelRatio); 
+  };
+
+  private getScreen(){
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      aspect: window.innerWidth / window.innerHeight
+    };
+  };
 
   constructor(refs: ReturnType<typeof useThreeRefs>){
     this.refs = refs;
@@ -30,7 +42,7 @@ export class SceneManager{
       this.initPasses();
       this.animate();
     } catch (error) {
-      console.error('SceneManager initialization failed:', error);
+      console.error(error);
       this.dispose();
     };
   };
@@ -41,7 +53,7 @@ export class SceneManager{
     if(!container || this.isDisposed) return;
 
     //기존 renderer 제거
-    if (rendererRef.current) {
+    if(rendererRef.current){
       this.disposeRenderer();
     };
 
@@ -52,8 +64,11 @@ export class SceneManager{
       premultipliedAlpha: false,
     });
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(CONSTANTS.PIXEL_DENSITY);
+    const {width, height} = this.getScreen();
+    renderer.setSize(width, height);
+
+    const pixelRatio = this.getPixelRatio();
+    renderer.setPixelRatio(pixelRatio);
     renderer.autoClear = false;
 
     container.appendChild(renderer.domElement);
@@ -100,9 +115,11 @@ export class SceneManager{
     const {sceneBufferRef} = this.refs;
     if (this.isDisposed) return;
 
+    const {width, height} = this.getScreen();
+    const pixelRatio = this.getPixelRatio();
     const sceneBuffer = new THREE.WebGLRenderTarget(
-      window.innerWidth * CONSTANTS.PIXEL_DENSITY,
-      window.innerHeight * CONSTANTS.PIXEL_DENSITY,
+      width * pixelRatio,
+      height * pixelRatio,
       {
         format: THREE.RGBAFormat,
         type: THREE.FloatType,
@@ -138,9 +155,7 @@ export class SceneManager{
     loadersRef.current.gltf = gltfLoader;
     loadersRef.current.cube = cubeLoader;
 
-    this.loadingManager.onError = (url) => {
-      console.error('Failed to load resource:', url);
-    };
+    this.loadingManager.onError = (url) => console.error(url);
 
     //cubeMap load
     cubeLoader.setPath("/assets/models/").load([
@@ -152,7 +167,7 @@ export class SceneManager{
       texturesRef.current.push(envmap);
       this.logoManager.setEnvMap(envmap);
     }, undefined, (error) => {
-      console.error('Failed to load cubemap:', error);
+      console.error(error);
     });
 
     //logo models load
@@ -163,7 +178,7 @@ export class SceneManager{
       gltf.scene.rotateX(Math.PI * 0.5);
       this.logoManager.setLogo(gltf.scene);
     }, undefined, (error) => {
-      console.error('Failed to load logo model:', error);
+      console.error(error);
     });
 
     //loading success
@@ -171,19 +186,19 @@ export class SceneManager{
       if (!cameraRef.current || this.isDisposed) return;
 
       try {
-        const material = this.logoManager.initializeLogo(cameraRef.current);
+        const material = this.logoManager.initLogo(cameraRef.current);
         if(material){
           sphereMaterialRef.current = material;
           materialsRef.current.push(material);
         };
         
-        const sphereGeometries = this.logoManager.createSpheres();
-        geometriesRef.current.push(...sphereGeometries);
+        const sphereGeom = this.logoManager.createSpheres();
+        geometriesRef.current.push(...sphereGeom);
 
         const logo = this.logoManager.getLogo();
         if(sceneRef.current && logo){
           sceneRef.current.add(logo);
-          this.logoManager.setResponsiveScale(window.innerWidth, window.innerHeight);
+          this.logoManager.setResponsive(window.innerWidth, window.innerHeight);
         };
       } catch (error) {
         console.error(error);
@@ -196,9 +211,11 @@ export class SceneManager{
     if (!rendererRef.current || !sceneBufferRef.current || this.isDisposed) return;
 
     try {
+      const pixelRatio = this.getPixelRatio();
+
       const backPass = new QuadPass({
         renderer: rendererRef.current,
-        pixel_density: CONSTANTS.PIXEL_DENSITY,
+        pixel_density: pixelRatio,
         shader: home_bck_shader,
         uniforms: {
           copy_buffer: { value: null }
@@ -207,7 +224,7 @@ export class SceneManager{
 
       const mainPass = new QuadPass({
         renderer: rendererRef.current,
-        pixel_density: CONSTANTS.PIXEL_DENSITY,
+        pixel_density: pixelRatio,
         shader: home_main_shader,
         uniforms: {
           scene_buffer: { value: sceneBufferRef.current.texture },
@@ -228,6 +245,53 @@ export class SceneManager{
     };
   };
 
+  reset(){
+    if(this.isDisposed) return;
+
+    try{
+      this.resetCamera();
+      this.resetControls();
+      this.resetLogo();
+
+      //camera pos 이동 logoManager에 전달ㅇ
+      if(this.logoManager.isInitialized && this.refs.cameraRef.current){
+      this.logoManager.updateUniform(this.refs.cameraRef.current, 0);
+      };
+    }catch(error){
+      console.error(error);
+    };
+  };
+
+  private resetCamera(){
+    const {cameraRef} = this.refs;
+    if(!cameraRef.current) return;
+
+    cameraRef.current.position.set(
+      CONSTANTS.CAMERA_POSITION.x,
+      CONSTANTS.CAMERA_POSITION.y,
+      CONSTANTS.CAMERA_POSITION.z,
+    );
+    cameraRef.current.lookAt(0,0,0);
+    cameraRef.current.updateProjectionMatrix();
+  };
+
+  private resetControls(){
+    const {controlsRef} = this.refs;
+    if(!controlsRef.current) return;
+
+    controlsRef.current.reset();
+    controlsRef.current.update();
+  };
+
+  private resetLogo(){
+    if(!this.logoManager.isInitialized) return;
+
+    this.logoManager.reset();
+
+    const {width, height} = this.getScreen();
+    this.logoManager.setResponsive(width, height);
+  };
+
   resize(){
     if (this.isDisposed) return;
     
@@ -241,16 +305,20 @@ export class SceneManager{
 
     if (!cameraRef.current || !rendererRef.current) return;
 
-    cameraRef.current.aspect = window.innerWidth / window.innerHeight;
-    cameraRef.current.updateProjectionMatrix();
-    rendererRef.current.setSize(window.innerWidth, window.innerHeight);
+    const {width, height, aspect} = this.getScreen();
 
-    this.logoManager.setResponsiveScale(window.innerWidth, window.innerHeight);
+    cameraRef.current.aspect = aspect;
+    cameraRef.current.updateProjectionMatrix();
+    rendererRef.current.setSize(width, height);
+
+    this.logoManager.setResponsive(width, height);
 
     if(sceneBufferRef.current){
+      const pixelRatio = this.getPixelRatio();
+
       sceneBufferRef.current.setSize(
-        window.innerWidth * CONSTANTS.PIXEL_DENSITY, 
-        window.innerHeight * CONSTANTS.PIXEL_DENSITY
+        width * pixelRatio, 
+        height * pixelRatio
       );
     };
 
@@ -270,9 +338,9 @@ export class SceneManager{
     if (!controlsRef.current || !cameraRef.current) return;
     controlsRef.current.update();
 
-    if (this.logoManager.isInitialized){
+    if(this.logoManager.isInitialized){
       this.logoManager.update();
-      this.logoManager.updateUniforms(cameraRef.current, timeRef.current);
+      this.logoManager.updateUniform(cameraRef.current, timeRef.current);
       timeRef.current += 0.01;
     };
   };
@@ -294,7 +362,7 @@ export class SceneManager{
     if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
 
     //scene - buffer rendering
-    if (sceneBufferRef.current) {
+    if(sceneBufferRef.current){
       rendererRef.current.setRenderTarget(sceneBufferRef.current);
       rendererRef.current.clear();
       rendererRef.current.render(sceneRef.current, cameraRef.current);
@@ -307,7 +375,7 @@ export class SceneManager{
     backPassRef.current?.render(false);
 
     //bgColor fadeIn/Out
-    if (sceneRef.current) {
+    if(sceneRef.current){
       sceneRef.current.background = bgColorRef.current;
       bgColorRef.current.lerp(targetBgColorRef.current, 0.08);
     };
@@ -328,13 +396,13 @@ export class SceneManager{
     
     if(rendererRef.current){
       try{
-        //DOM 요소 제거 전 존재 확인
+        //dom 요소 제거 전 존재 확인
         if(container && rendererRef.current.domElement.parentNode === container){
-          container.removeChild(rendererRef.current.domElement);
+          container.removeChild(rendererRef.current.domElement); //dom에서 제거
         };
         
-        rendererRef.current.dispose();
-        rendererRef.current.forceContextLoss();
+        rendererRef.current.dispose(); //three resource 정리
+        rendererRef.current.forceContextLoss(); //webGL context 해제
       }catch(error){
         console.error(error);
       }finally{
