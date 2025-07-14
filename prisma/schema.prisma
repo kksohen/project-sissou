@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+  /**
+   * output   = "../lib/generated/prisma"
+   */
+}
+
+/**
+ * datasource db {
+ * provider = "postgresql"
+ * url      = env("DATABASE_URL")
+ * }
+ */
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * prisma schema 작성: npx prisma migrate dev로 수정사항 업데이트
+ */
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String?  @unique
+  password   String?
+  phone      String?  @unique
+  github_id  String?  @unique
+  google_id  String?  @unique
+  kakao_id   String?  @unique
+  naver_id   String?  @unique
+  avatar     String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  tokens SMSToken[]
+  posts  Post[]
+  comments Comment[]
+  likes    Like[]
+  chat_rooms ChatRoom[]
+  messages Message[]
+  video_calls VideoCall[]
+  participants Participant[]
+  followers Follow[] @relation("UserFollowers")
+  following Follow[] @relation("UserFollowing")
+}
+
+model SMSToken {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  phone      String?  @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade) //cascade: user 데이터 삭제 시 token도 함께 삭제ㅇ
+  userId     Int
+}
+
+model Follow{
+  @@id(name:"id", [followerId, followingId])
+  created_at DateTime @default(now())
+
+  follower User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  followerId Int
+  followingId Int
+}
+
+model Post{
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  photo String
+  views Int @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  comments Comment[]
+  likes Like[]
+}
+
+model Comment{
+  id Int @id @default(autoincrement())
+  payload String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
+}
+
+model Like{
+  @@id(name:"id", [userId, postId])//userId와 postId의 조합(key로 사용)을 보고 unique한지 판별
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
+}
+
+model ChatRoom{
+  id String @id @default(cuid()) //cuid: unique한 chatRoomId 생성(보안ㅇ)
+  user User[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  messages Message[]
+
+  status Boolean @default(false) //채팅방 상태
+
+  video_calls VideoCall[]
+}
+
+model Message{
+  id Int @id @default(autoincrement())
+  payload String
+  is_read Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  room ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  userId Int
+}
+
+model VideoCall{
+  id String @id @default(cuid())
+  status String @default("WAITING")
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  room ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId String
+
+  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  hostId Int
+  participants Participant[]
+}
+
+model Participant{
+  @@id(name:"id", [callId, userId])
+  status String @default("INVITED")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  call VideoCall @relation(fields: [callId], references: [id], onDelete: Cascade)
+  callId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+}

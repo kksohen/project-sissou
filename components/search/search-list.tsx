@@ -43,16 +43,15 @@ const handleClick = (e:React.MouseEvent, href: string) => {
 
   return(
     <motion.div variants={searchBoxVars} initial="initial" animate="animate" exit="exit"
-    className="
-    fixed 
-    bottom-20
+    className="fixed
+    bottom-20 media-search-bot-xs
     2xl:-left-[1280px] left-pos-5xl
     xl:-left-[768px] lg:-left-[600px] 
     md:-left-[480px] md:w-[700px]
-    sm:-left-[375px] sm:w-[600px] left-pos-xs left-w-xs
+    sm:-left-[360px] sm:w-[585px] left-pos-xs left-w-xs
     flex items-center flex-wrap 
     gap-1 sm:gap-2 mode-svg-color
-    *:px-4 *:py-2 *:rounded-full ">
+    *:px-4 *:py-2 *:rounded-full">
       {links.map(({href, label, key})=>{
       return(
         <Link href={href} key={key} onClick={e=>handleClick(e, href)}

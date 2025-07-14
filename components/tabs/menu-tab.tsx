@@ -43,6 +43,15 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
   const [isDrag, setIsDrag] = useState(false);
   const [startX, setStartX] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
+
+  //menu창 열린 동안 배경 스크롤 비활성화
+  useEffect(()=>{
+    document.body.style.overflow = "hidden";
+
+    return()=>{
+      document.body.style.overflow = "unset";
+    };
+  },[]);
   
   //반응형 원 반지름 조정
   const [radius, setRadius] = useState(137); 
@@ -87,6 +96,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
 
   //menu link list wheel event handler
   const handleWheel = (e:React.WheelEvent)=>{
+    e.preventDefault();
     rawAngle.set(rawAngle.get() + e.deltaY * 0.2); //감도조절
   };
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -106,6 +116,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
     setTouchStartX(e.touches[0].clientX);
   };
   const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
     const deltaX = e.touches[0].clientX - touchStartX;
     setTouchStartX(e.touches[0].clientX);
     rawAngle.set(rawAngle.get() + deltaX * 0.2); //mobile로 확인할 것

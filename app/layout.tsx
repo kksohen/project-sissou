@@ -3,6 +3,7 @@ import "./globals.css";
 import localFont from "next/font/local";
 import DarkMode from "@/components/dark-mode";
 import { MouseCursor } from "@/components/mouse-cursor";
+import { ModalProvider } from '../components/modal-context';
 
 //local font
 const pretendard = localFont({
@@ -46,7 +47,9 @@ export default function RootLayout({
       >
         <DarkMode />
         <MouseCursor />
-        {children}
+        <ModalProvider>
+          {children}
+        </ModalProvider>
       </body>
     </html>
   );
