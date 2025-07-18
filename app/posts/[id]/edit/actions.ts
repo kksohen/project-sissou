@@ -39,7 +39,7 @@ export async function updatePost(postId:number, formData: FormData){
       });
       revalidatePath("/community");
       revalidateTag("post-detail");
-      redirect(`/community/posts/${post.id}`);
+      redirect(`/posts/${post.id}`);
     }
   }
 };

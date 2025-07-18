@@ -1,7 +1,7 @@
 "use client";
 
 import { logOutAction } from "@/app/(tabs)/profile/actions";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
+import { RectangleStackIcon } from "@heroicons/react/24/solid";
 
 export default function Logout(){
 
@@ -17,12 +17,11 @@ export default function Logout(){
   return(
     <form> 
       <button onClick={handleLogout} data-cursor-target
-      className="rounded-full size-11 flex justify-center items-center social-btn-size 
+      className="rounded-full size-8 sm:size-11 flex justify-center items-center 
       form-text-color form-bg-color
-      border-[0.0625rem] border-[var(--ring-color)]
-      hover:border-[var(--mode-secondary)]
-      hover:mode-secondary hover:mode-svg-color transition-all">
-        <ArrowRightStartOnRectangleIcon className="size-6 pointer-none stroke-2" />
+      border-[0.0625rem] border-[var(--ring-color)] 
+      hover:bg-error transition-all">
+        <RectangleStackIcon className="size-4 sm:size-6 pointer-none stroke-2"/>
       </button>
     </form>
   );

@@ -31,13 +31,12 @@
 
     --color-primary: #0098FF;
     --color-secondary: #00A052;
-    --color-point: #0098FF;
+    --color-point: #E8FD00;
     --color-accent: #FF5FCF;
     --color-accent-50: rgba(255, 95, 207, 0.15);
 
     --fill-primary: #0098FF;
     --fill-secondary: #00A052;
-    --fill-point: #00A052;
     --fill-accent: #FF5FCF;
 
     --fill-base-500: #28282C;
@@ -108,11 +107,9 @@
 
     --color-primary: #06ABFF;
     --color-secondary: #00BF5D;
-    --color-point: #E8FD00;
 
     --fill-primary: #06ABFF;
     --fill-secondary: #00BF5D;
-    --fill-point: #E8FD00;
 
     --bg-primary: #06ABFF;
     --bg-secondary: #00BF5D;
@@ -335,6 +332,7 @@
   }
   .color-point{
     color: var(--color-point);
+    background-color: var(--color-point);
   }
   .color-accent{
     color: var(--color-accent);
@@ -377,9 +375,6 @@
   }
   .fill-secondary{
     fill: var(--fill-secondary);
-  }
-  .fill-point{
-    fill: var(--fill-point);
   }
   .fill-base-500{
     fill: var(--fill-base-500);

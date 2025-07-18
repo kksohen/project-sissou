@@ -1,5 +1,4 @@
 "use client";
-import ConditionBar from "@/components/auth/condition-bar";
 import MenuBar from "@/components/menu-bar";
 import FormInput from '@/components/auth/form-input';
 import FormBtn from "@/components/auth/form-btn";
@@ -64,7 +63,7 @@ export default function CreateAccount(){
 
       <SocialLogin/>
 
-      <ConditionBar />
+      {/* <ConditionBar /> */}
       <MenuBar />
     </div>
   );

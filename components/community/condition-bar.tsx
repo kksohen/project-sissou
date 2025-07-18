@@ -55,7 +55,7 @@ export default function ConditionBar() {
       <li data-cursor-target
       className="relative z-10 w-16 h-16 flex items-center justify-center media-bar-w-lg mode-secondary-50 backdrop-blur-lg rounded-full
       border-custom-bottom">
-        <Link href="/community/posts/add">
+        <Link href="/posts/add">
           <button 
           className="flex items-center justify-center w-12 h-12
           rounded-full backdrop-blur-lg media-bar-w-sm

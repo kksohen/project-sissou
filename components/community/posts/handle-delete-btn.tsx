@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { deletePostAction } from "@/app/(tabs)/community/posts/[id]/actions";
+import { deletePostAction } from "@/app/posts/[id]/actions";
 import Link from "next/link";
 
 interface HandleDeleteBtnProps{
@@ -31,7 +31,7 @@ export default function HandleDeleteBtn({isOwner = false, postId}: HandleDeleteB
     <>
       {isOwner &&
       <div className="flex items-center gap-2.5">
-        <Link href={`/community/posts/${postId}/edit`}>
+        <Link href={`/posts/${postId}/edit`}>
           <button data-cursor-target
           className="flex items-center justify-center rounded-full 
           mode-secondary mode-svg-color transition-all

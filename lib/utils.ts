@@ -47,11 +47,9 @@ export function skipHistory(path: string){
   }
 
   const result = [
-    path.endsWith("/add"),
-    path.endsWith("/edit"),
-    path.includes("/edit/"), 
-    path.includes("/posts/add"),
-    path.includes("/posts/edit"),
+    pathname.endsWith("/add"),
+    pathname.endsWith("/edit") && !pathname.includes("/posts/"), // /posts/[id]/edit 제외X
+    pathname.includes("/edit/") && !pathname.includes("/posts/"), // posts edit 제외X
     isModal && /\/profile\/\d+$/.test(pathname), //프로필 모달 제외
     path.includes("/.well-known/"),
     path.includes("/favicon"),

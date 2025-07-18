@@ -1,6 +1,6 @@
 "use client";
 
-import { dislikePost, likePost } from "@/app/(tabs)/community/posts/[id]/actions";
+import { dislikePost, likePost } from "@/app/posts/[id]/actions";
 import { startTransition, useOptimistic } from "react";
 import { HeartIcon as OutlineHeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/24/solid";

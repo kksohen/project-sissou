@@ -70,18 +70,30 @@ export async function middleware(req: NextRequest){
 
     //modal + auth 페이지 아닌 경우
     if(!skipHistory(fullPath) && !isAuthUrl){ 
-      const lastPage = session.navigationHistory[session.navigationHistory.length - 1];
+      const history = [...session.navigationHistory];
+      const lastPage = history[history.length - 1];
 
-      if(lastPage !== fullPath){ //같은 경로이더라도 modal에서 돌아온 경우 업뎃
-        session.navigationHistory.push(fullPath);
-      }
-    };
+      if(lastPage !== fullPath){
+        //현재 페이지가 히스토리에 있는지
+        const existingIndex = history.findIndex(page => page === fullPath);
+
+        if(existingIndex !== -1){
+          //뒤로가기 + 해당 페이지 이후 모든 히스토리 제거
+          session.navigationHistory = history.slice(0, existingIndex + 1);
+        }else{//새로운 페이지인 경우
+          session.navigationHistory.push(fullPath);
+        }
+      }else{ 
+        
+      };
+    }
 
     if(session.navigationHistory.length > 5){ //히스토리 개수 제한(오래된 순으로 제거)
-      session.navigationHistory.shift();
+      session.navigationHistory = session.navigationHistory.slice(-5);
     };
 
     await session.save();
+
   }catch(error){
     console.error(error);
   };

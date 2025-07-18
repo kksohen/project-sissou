@@ -1,13 +1,13 @@
 "use client";
-import { postSchema, PostType } from "@/app/(tabs)/community/posts/add/schema"
+import { postSchema, PostType } from "@/app/posts/add/schema"
 import HandleBackBtn from "./handle-back-btn";
 import AddFormInput from "../add-form-input";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getUploadUrl } from "@/app/(tabs)/community/posts/add/actions";
-import { updatePost } from "@/app/(tabs)/community/posts/[id]/edit/actions";
+import { getUploadUrl } from "@/app/posts/add/actions";
+import { updatePost } from "@/app/posts/[id]/edit/actions";
 import FormBtn from "@/components/auth/form-btn";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 

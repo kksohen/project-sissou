@@ -189,7 +189,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
       })}
       </nav>
       </div>
-      <div className="w-full h-[200%] backdrop-blur-lg mode-bg/50"/>
+      <div className="w-full h-[200%] backdrop-blur-lg"/>
     </motion.div>,
     document.body
   );

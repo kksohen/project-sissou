@@ -59,7 +59,7 @@ export default function ModalBox({onClose} : {onClose: ()=> void}){
       <div onClick={(e)=> e.stopPropagation()}
       className="px-5 pt-1 pb-4 max-w-xs *:max-w-[200px] *:mx-auto
       rounded-3xl flex flex-col gap-3
-      mode-bg/50 mode-secondary-50 border-custom-all mode-svg-color 
+      mode-secondary-50 border-custom-all mode-svg-color 
       font-weight-custom dark:tracking-normal">
         <div className="flex flex-col items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 72" className="h-full w-20">
@@ -83,7 +83,7 @@ export default function ModalBox({onClose} : {onClose: ()=> void}){
     lg:px-7 lg:pb-7 md:px-6 md:pb-6 md:gap-4
     sm:px-5 sm:pb-5 sm:pt-2 gap-3
     rounded-4xl flex flex-col 
-    mode-bg/50 mode-secondary-50 border-custom-all mode-svg-color 
+    mode-secondary-50 border-custom-all mode-svg-color 
     text-center font-weight-custom dark:tracking-normal">
       <div className="flex flex-col items-center">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 73" className="h-full lg:w-32 md:w-28 sm:w-24">

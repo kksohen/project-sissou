@@ -7,7 +7,7 @@ export async function GET(request: Request){
   try{
     const session = await getSession();
     const history = session.navigationHistory || [];
-    const isLoggedIn = !!session.id;
+    const isLoggedIn = Boolean(session.id);
 
     const referer = request.headers.get("referer");
     let currentPath = "";
@@ -25,51 +25,52 @@ export async function GET(request: Request){
       return acc;
     }, []);
 
-    if(cleanHistory.length === 0){ //이전 히스토리 없을 시
+    if(cleanHistory.length === 0){ //이전 히스토리 없을 시 
       return NextResponse.json({path: "/"});
     };
 
-    const workingHistory = [...cleanHistory];
     let targetPage = "/";
-    const filterHistory: string[] = [];
 
-    //현재 페이지가 히스토리의 마지막인지
-    const lastHistory = workingHistory[workingHistory.length - 1];
-    if(lastHistory === currentPath){
-      workingHistory.pop(); //현재 페이지가 히스토리에 있을 때만 제거
-    };
+    //현재 페이지가 히스토리에 있는지
+    const currentPageIndex = cleanHistory.findIndex(page => page === currentPath);
 
-    if(workingHistory.length === 0){
-      return NextResponse.json({path: "/"});
-    };
+    if(currentPageIndex !== -1){
+      //히스토리에 있으면 뒤로가기
+      if(currentPageIndex > 0){
+        for(let i = currentPageIndex - 1; i >= 0; i--){
+          const candidatePage = cleanHistory[i];
+          if(!candidatePage) continue;
 
-    while(workingHistory.length > 0){
-      const candidatePage = workingHistory.pop(); //후보 페이지 검사      
-      if(!candidatePage) continue;
+          const [pathname] = candidatePage.split("?");      
+          const skipHistoryResult = skipHistory(candidatePage);
+          const canAccessResult = canAccessPage(pathname, isLoggedIn);
 
-      const [pathname] = candidatePage.split("?");      
-      const skipHistoryResult = skipHistory(candidatePage);
-      const canAccessResult = canAccessPage(pathname, isLoggedIn);
+          if(!skipHistoryResult && canAccessResult){
+            targetPage = candidatePage;
+            break; 
+          };
+        }
+      }
 
-      if(!skipHistoryResult && canAccessResult){
-        targetPage = candidatePage;
-        filterHistory.unshift(candidatePage); //타겟 페이지ㅇ
-        break;
-      };
-    };
+      session.navigationHistory = cleanHistory.filter((_, index) => index !== currentPageIndex);
 
-    //남은 히스토리들 검사해서 유효페이지만 수집
-    while(workingHistory.length > 0){
-      const page = workingHistory.pop();
-      if(page && !skipHistory(page)){
-        const [pathname] = page.split("?");
-        if(canAccessPage(pathname, isLoggedIn)){
-          filterHistory.unshift(page);
+    }else{
+      //현재 페이지가 히스토리에 없는 경우, 마지막 유효한 페이지 찾기
+      for(let i = cleanHistory.length - 1; i >= 0; i--){
+        const candidatePage = cleanHistory[i];
+        if(!candidatePage) continue;
+
+        const [pathname] = candidatePage.split("?");      
+        const skipHistoryResult = skipHistory(candidatePage);
+        const canAccessResult = canAccessPage(pathname, isLoggedIn);
+
+        if(!skipHistoryResult && canAccessResult){
+          targetPage = candidatePage;
+          break;
         };
-      };
+      }
     };
 
-    session.navigationHistory = filterHistory;
     await session.save();
 
     return NextResponse.json({path: targetPage});

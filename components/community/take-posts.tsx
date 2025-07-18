@@ -56,10 +56,9 @@ export default function TakePosts({initPosts}: TakePostsProps){
     {posts.map(post => <PostList key={post.id} {...post} />)}
     </div>
 
-    {!isLastPage ? (<div className="flex items-center justify-center 
-    -mt-16 sm:-mt-24">
+    {!isLastPage ? (<div className="flex items-center justify-center -mt-16 sm:-mt-24">
       <span ref={trigger}
-      className="opacity-60 form-text-color font-weight-basic username-spacing-comm lg:text-lg hover:opacity-100 transition-all">{isLoading ? "Loading . . .": "Load More +"}</span>
+      className="opacity-40 form-text-color font-weight-form lg:text-lg transition-all">{isLoading ? "Loading . . .": "Load More +"}</span>
     </div>) 
     : null}
     </>

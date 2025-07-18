@@ -2,6 +2,14 @@ import db from "../db";
 
 export async function getPost(id: number){
   try{
+    const existingPost = await db.post.findUnique({
+      where: {
+        id
+      }
+    });
+
+    if(!existingPost) return null;
+    
     const post = await db.post.update({//바뀐 조회수 반영해주기 위해 findUnique 대신 update 사용
     where:{
       id

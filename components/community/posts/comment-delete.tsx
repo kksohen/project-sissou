@@ -1,5 +1,5 @@
 "use client";
-import { deleteCommentAction } from "@/app/(tabs)/community/posts/[id]/actions";
+import { deleteCommentAction } from "@/app/posts/[id]/actions";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 
 interface CommentDeleteProps{

@@ -1,6 +1,6 @@
 "use client";
 
-import { uploadComment } from "@/app/(tabs)/community/posts/[id]/actions";
+import { uploadComment } from "@/app/posts/[id]/actions";
 import { startTransition, useActionState, useOptimistic } from "react";
 import CommentList from "./comment-list";
 import CommentInput from "./comment-input";
