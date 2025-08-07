@@ -1,6 +1,144 @@
 "use server";
 
 import db from "@/lib/db";
+import getSession from "@/lib/session/get-session";
+
+export async function getInitChats(){
+  const session = await getSession();
+  if(!session.id) return [];
+
+  const chats = await db.chatRoom.findMany({
+    where: {
+      type: "GROUP" //그룹채팅방만 출력
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      updated_at: true,
+      chatRoomUsers: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              avatar: true
+            }
+          }
+        }
+      },
+      _count: {
+        select: {
+          chatRoomUsers: true, //참여자 수
+          messages: {
+            where: {
+              type: "USER"
+            }
+          }
+        }
+      }
+    },
+    take: 1,
+    orderBy: {
+      updated_at: "desc"
+    }
+  });
+
+  return chats.map(room => {
+    const isGroupChat = room.type === "GROUP";
+
+    const participants = room.chatRoomUsers.map(user=>({
+      id: user.user.id,
+      username: user.user.username,
+      avatar: user.user.avatar
+    }));
+
+    const title = room.name || "Circle";
+
+    //채팅방 참여 여부
+    const isParticipating = participants.some(p => p.id === session.id);
+
+    return{
+      id: room.id,
+      title,
+      isGroupChat,
+      participants,
+      participantCount: room._count.chatRoomUsers,
+      messageCount: room._count.messages,
+      updated_at: room.updated_at,
+      isParticipating
+    }
+  });
+}
+
+export async function getMoreChats(page: number){
+  const session = await getSession();
+  if(!session.id) return [];
+
+  const chats = await db.chatRoom.findMany({
+    where: {
+      type: "GROUP" //그룹채팅방만 출력
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      updated_at: true,
+      chatRoomUsers: {
+        select: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              avatar: true
+            }
+          }
+        }
+      },
+      _count: {
+        select: {
+          chatRoomUsers: true,
+          messages: {
+            where: {
+              type: "USER"
+            }
+          }
+        }
+      }
+    },
+    skip: page * 1,
+    take: 1,
+    orderBy: {
+      updated_at: "desc"
+    }
+  });
+
+  return chats.map(room => {
+    const isGroupChat = room.type === "GROUP";
+
+    const participants = room.chatRoomUsers.map(user=>({
+      id: user.user.id,
+      username: user.user.username,
+      avatar: user.user.avatar
+    }));
+
+    const title = room.name || "Circle";
+
+    //채팅방 참여 여부
+    const isParticipating = participants.some(p => p.id === session.id);
+
+    return{
+      id: room.id,
+      title,
+      isGroupChat,
+      participants,
+      participantCount: room._count.chatRoomUsers,
+      messageCount: room._count.messages,
+      updated_at: room.updated_at,
+      isParticipating
+    }
+  });
+}
 
 export async function getInitPosts(){
   const posts = await db.post.findMany({

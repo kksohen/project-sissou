@@ -10,7 +10,7 @@ import Image from "next/image";
 interface ITakeLiked{
   id: number;
   photo: string;
-  likedAt: Date;
+  liked_at: Date;
 };
 
 export default function TakeLiked({userId}: TakeUserActivityProps){
@@ -101,7 +101,7 @@ export default function TakeLiked({userId}: TakeUserActivityProps){
         <div className="grid grid-cols-6 gap-0.5 lg:gap-1">
         {posts.map(post => (
           <Link data-cursor-target
-          key={`${post.id}-${post.likedAt}`}
+          key={`${post.id}-${post.liked_at}`}
           href={`/posts/${post.id}`}>
             <Image src={`${getThumbnailImage(post.photo)}/public`} alt={`${post.id}`}
             priority 

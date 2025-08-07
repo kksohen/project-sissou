@@ -6,18 +6,24 @@ import { useState } from "react";
 import TakeUserPosts from "../community/profile/take-user-posts";
 import { AnimatePresence, motion } from 'framer-motion';
 import TakeUserActivity from "./take-user-activity";
+import TakeUserChats from "./take-user-chats";
+import { Prisma } from "@prisma/client";
+import { getInitUserChats } from "@/app/(tabs)/profile/actions";
+
+export type initUserChats = Prisma.PromiseReturnType<typeof getInitUserChats>;
 
 interface ProfileWrapProps{
   profileInfo: userProfile;
   initUserPosts: initUserPosts;
+  initUserChats: initUserChats;
   userId: number;
 }
 
-export default function ProfileWrap({profileInfo, initUserPosts, userId}: ProfileWrapProps){
+export default function ProfileWrap({profileInfo, initUserPosts, initUserChats, userId}: ProfileWrapProps){
   const [activeTab, setActiveTab] = useState("편 Pieces");
   const [direction, setDirection] = useState(0); //sliding motion
 
-  const tabs = ["편 Pieces", "융 Chats", "연 Activity"];
+  const tabs = ["편 Pieces", "원 Circles", "연 Activity"];
 
   const handleTabsChange = (tab: string)=>{
     if (tab === activeTab) return; //더블클릭해서 슬라이드 멈춤 방지
@@ -32,7 +38,7 @@ export default function ProfileWrap({profileInfo, initUserPosts, userId}: Profil
   const renderTabs = () =>{
     switch(activeTab){
       case "편 Pieces": return <TakeUserPosts initUserPosts={initUserPosts} userId={userId}/>;
-      case "융 Chats": return <TakeUserPosts initUserPosts={initUserPosts} userId={userId}/>;
+      case "원 Circles": return <TakeUserChats initUserChats={initUserChats}/>;
       case "연 Activity": return <TakeUserActivity userId={userId}/>;
       default: <TakeUserPosts initUserPosts={initUserPosts} userId={userId}/>;
     }

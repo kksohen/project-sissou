@@ -3,7 +3,7 @@ export default function Loading(){
   return(
     <div className="my-10 max-w-full mx-auto animate-pulse">
       <div className="fixed top-0 left-0 right-0 pt-10 z-10
-      mode-svg-color-50 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
+      mode-svg-color-50 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
         <div className="mx-auto max-w-screen-xs sm:max-w-lg md:max-w-screen-sm
         lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl">
           <div className="w-32 py-3.5 loading-bg rounded-lg"/>

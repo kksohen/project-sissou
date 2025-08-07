@@ -2,6 +2,74 @@ export function formatToWon(price: number):string{
   return price.toLocaleString('ko-KR');
 };
 
+export function formatTimeDuration(start: Date, end: Date): string{
+  const durationMs = end.getTime() - start.getTime();
+  const seconds = Math.floor(durationMs / 1000);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const sec = seconds % 60;
+  
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+}
+
+export function formatToDate(date: string): string{
+  const messageDate = new Date(date);
+
+  return messageDate.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    weekday: "short"
+  });
+}
+
+export function formatToTime(date: string):string{
+  const msgDate = new Date(date);
+  const timeString = msgDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, //24시간제
+    timeZone: "Asia/Seoul"
+  });
+
+  return timeString.replace(/^24:/, "00:"); //24->00시 변환
+}
+
+export function formatToDayTime(date: string):string{
+  const msgDate = new Date(date);
+  const now = new Date();
+
+  //오늘 날짜
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const msgDay = new Date(msgDate.getFullYear(), msgDate.getMonth(), msgDate.getDate());
+  
+  //날짜 차이 계산
+  const diffTime = today.getTime() - msgDay.getTime();
+  const diffDay = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  const timeString = msgDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Seoul"
+  }).replace(/^24:/, "00:");
+
+  if(diffDay === 0){ //오늘
+    return timeString;
+
+  }else if(diffDay < 7){
+    return `${diffDay}일 전`;
+
+  }else{
+    const dateString = msgDate.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric"
+    });
+    return `${dateString}`;
+  };
+}
+
 export function formatToTimeAgo(date: string): string{
   //1. 현재시간과 비교해서 n시간 전에 만들어졌는지 알기
   const time = new Date(date).getTime();
@@ -48,8 +116,9 @@ export function skipHistory(path: string){
 
   const result = [
     pathname.endsWith("/add"),
-    pathname.endsWith("/edit") && !pathname.includes("/posts/"), // /posts/[id]/edit 제외X
-    pathname.includes("/edit/") && !pathname.includes("/posts/"), // posts edit 제외X
+    pathname.endsWith("/edit"),
+    pathname.includes("/edit/"),
+    pathname.includes("/chats/"),
     isModal && /\/profile\/\d+$/.test(pathname), //프로필 모달 제외
     path.includes("/.well-known/"),
     path.includes("/favicon"),

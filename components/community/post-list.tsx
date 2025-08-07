@@ -23,7 +23,7 @@ interface PostListProps{
 
 export default function PostList({id, title, description, views, photo, created_at, _count, user}: PostListProps){
   //desc 글자수 제한
-  const textMaxlength = (text: string | null | undefined, maxLength: number = 12)=>{
+  const textMaxlength = (text: string | null | undefined, maxLength: number)=>{
     if(!text) return "";
     return text.length > maxLength ? text.slice(0, maxLength) + " . . ." : text;
   };
@@ -44,7 +44,7 @@ export default function PostList({id, title, description, views, photo, created_
     <div className="flex justify-center">
       <Link href={`/profile/${user.id}?modal=true`} data-cursor-target>
         <div className="inline-flex flex-col items-center">
-          <div className="size-16">
+          <div className="size-15 md:size-16">
             {user.avatar ? <Image className="rounded-full pointer-none"
             src={user.avatar} alt={user.username} width={64} height={64} priority quality={100}/> :
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="pointer-none">
@@ -62,19 +62,20 @@ export default function PostList({id, title, description, views, photo, created_
     {/* post */}
     <Link href={`/posts/${id}`} data-cursor-target>
 
-      <div className="pt-3 px-10 trapezoid-posts text-center
+      <div className="pt-3 trapezoid-posts text-center
       form-text-color form-bg-color font-weight-form">
 
-        <div className="username-spacing-desc pointer-none">
+        <div className="px-10 username-spacing-desc pointer-none">
           <h2 className="font-weight-basic username-spacing
-          text-base md:text-lg lg:text-xl">{title}</h2>
-          <p className="lg:text-lg md:leading-5 lg:leading-6 opacity-70">{textMaxlength(description, 12)}</p>
+          text-base md:text-lg lg:text-xl 
+          sm:leading-5 md:leading-6 xl:leading-7">{textMaxlength(title, 10)}</h2>
+          <p className="lg:text-[1.0625rem] opacity-70">{textMaxlength(description, 12)}</p>
           <p className="text-xs md:text-sm lg:text-base opacity-40">{formatToTimeAgo(created_at.toString())}</p>
         </div>
 
         <div className="h-[0.0625rem] w-full ring-color mt-3 pointer-none"/>
 
-        <div className="pointer-none text-xs md:text-sm lg:text-base opacity-60
+        <div className="px-10 pointer-none text-xs md:text-sm lg:text-base opacity-60
         flex gap-4 items-center py-3
         *:flex *:items-center *:gap-1">
           <span>

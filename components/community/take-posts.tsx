@@ -1,9 +1,9 @@
 "use client";
 
-import { initPosts } from "@/app/(tabs)/community/page";
 import PostList from "./post-list";
 import { useEffect, useRef, useState } from "react";
 import { getMorePosts } from "@/app/(tabs)/community/actions";
+import { initPosts } from "./posts-wrap";
 
 interface TakePostsProps{
   initPosts: initPosts;
@@ -52,11 +52,11 @@ export default function TakePosts({initPosts}: TakePostsProps){
 
   return(
     <>
-    <div className="pt-16 mb-24 sm:mb-40 items-start grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-10">
+    <div className="mb-24 sm:mb-40 items-start grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-10">
     {posts.map(post => <PostList key={post.id} {...post} />)}
     </div>
 
-    {!isLastPage ? (<div className="flex items-center justify-center -mt-16 sm:-mt-24">
+    {!isLastPage ? (<div className="flex items-center justify-center sm:-mt-24">
       <span ref={trigger}
       className="opacity-40 form-text-color font-weight-form lg:text-lg transition-all">{isLoading ? "Loading . . .": "Load More +"}</span>
     </div>) 

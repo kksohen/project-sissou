@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import getSession from "./lib/session/get-session";
 import { skipHistory } from "./lib/utils";
 
-interface Routes {
+interface Routes{
   [key: string] : boolean;
 };
 
@@ -83,10 +83,8 @@ export async function middleware(req: NextRequest){
         }else{//새로운 페이지인 경우
           session.navigationHistory.push(fullPath);
         }
-      }else{ 
-        
-      };
-    }
+      }
+    };
 
     if(session.navigationHistory.length > 5){ //히스토리 개수 제한(오래된 순으로 제거)
       session.navigationHistory = session.navigationHistory.slice(-5);

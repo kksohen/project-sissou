@@ -4,9 +4,10 @@ import Image from "next/image";
 import { useState } from "react";
 import HandleBackBtn from "../posts/handle-back-btn";
 import Link from "next/link";
-import { ChatBubbleLeftRightIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
+import { WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
 import FollowBtnIcon from "./follow-btn-icon";
 import Logout from "@/components/auth/logout";
+import ChatBtn from "../chats/chat-btn";
 
 interface UserProfileProps{
   user: userProfile;
@@ -31,11 +32,11 @@ export default function ClientUserProfile({user, initFollowStatus = null, isOwne
     onTabsChange?.(tab);
   };
 
-  const tabs = ["편 Pieces", "융 Chats", "연 Activity"];
+  const tabs = ["편 Pieces", "원 Circles", "연 Activity"];
 
   return(
-  <div className="fixed top-0 left-0 right-0 z-10 pt-10
-  mode-svg-color-50 backdrop-blur-lg 
+  <div className="fixed top-0 left-0 right-0 z-[1] pt-10
+  mode-svg-color-50 backdrop-blur-sm
   shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
 
     <div className="mx-auto max-w-screen-xs 
@@ -65,10 +66,7 @@ export default function ClientUserProfile({user, initFollowStatus = null, isOwne
             {/* !isOwner - icons */}
             {!isOwner && initFollowStatus && (
             <div className="ml-auto flex gap-2 sm:gap-2.5">
-              <Link href={`/chats`} data-cursor-target
-              className="rounded-full size-8 sm:size-11 flex justify-center items-center form-text-color border-[0.0625rem] border-[var(--ring-color)] transition-all form-bg-color">
-                <ChatBubbleLeftRightIcon className="size-4 sm:size-6 pointer-none stroke-2"/>
-              </Link>
+              <ChatBtn targetUserId={user.id}/>
 
               <FollowBtnIcon isFollowing={initFollowStatus.isFollowing} followerCount={initFollowStatus.followerCount} userId={user.id} onFollowChange={handleFollowChange}/>
             </div>

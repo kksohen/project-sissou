@@ -15,13 +15,13 @@ export async function generateMetadata({params}: {params : Params}):Promise<Meta
   const idNumber = Number(id);
   if(isNaN(idNumber)){
     return{
-      title: "게시글을 찾을 수 없습니다."
+      title: "프로필을 찾을 수 없습니다."
     }
   };
   const user = await getCachedUserInfo(idNumber);
   if(!user){
     return{
-      title: "게시글을 찾을 수 없습니다."
+      title: "프로필을 찾을 수 없습니다."
     }
   };
 

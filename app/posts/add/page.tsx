@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { postSchema, PostType } from "./schema";
 import FormBtn from "@/components/auth/form-btn";
@@ -140,7 +139,7 @@ export default function AddPost(){
     <div className="my-10">
       {/* title */}
       <div className="fixed top-0 left-0 right-0 pt-10 z-10
-      mode-svg-color-50 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
+      mode-svg-color-50 backdrop-blur-sm shadow-[0_8px_32px_rgba(0,0,0,0.02)]">
         <div className="mx-auto max-w-screen-xs sm:max-w-lg md:max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl">
 
           <div className="flex items-center">
@@ -170,7 +169,7 @@ export default function AddPost(){
           <div className="h-[0.0625rem] w-full ring-color opacity-70 "/>
           <textarea placeholder="Description" 
           {...register("description")} rows={20} maxLength={500}
-          className="w-full focus:outline-none border-none
+          className="mt-3 w-full focus:outline-none border-none
           mx-auto transition-all
           bg-transparent resize-none
           form-text-color placeholder:text-[var(--form-text-color)]

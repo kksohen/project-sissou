@@ -31,7 +31,7 @@
 
     --color-primary: #0098FF;
     --color-secondary: #00A052;
-    --color-point: #E8FD00;
+    --color-point: #edc405;
     --color-accent: #FF5FCF;
     --color-accent-50: rgba(255, 95, 207, 0.15);
 
@@ -52,6 +52,7 @@
     --color-base-500: #28282C;
 
     --form-text-color: #28282C;
+    --desc-text-color: #28282C;
 
     --color-success: #12B78C;
     --color-warning: #F6543D;
@@ -68,6 +69,8 @@
     --mode-bar-color: rgba(40, 40, 44, 0.55);
     --mode-svg-color: #fafafa;
     --mode-svg-color-50: linear-gradient(145deg, rgba(250, 250, 250, 0.5), rgba(255, 255, 255, 0.02));
+
+    --mode-svg-color-70: linear-gradient(145deg, rgba(238, 238, 240, 0.6), rgba(238, 238, 240, 0.4));
 
     --font-weight-custom: 550;
     --font-weight-basic: 650;
@@ -92,6 +95,7 @@
     --loading-color: #34343A;
 
     --form-text-color: #D9D9DE;
+    --desc-text-color: #EEEEF0;
 
     --three-mode-bg: #000000;
     --mode-bg: #000000;
@@ -105,6 +109,8 @@
     --mode-svg-color: #1a1a1a;
     --mode-svg-color-50: linear-gradient(145deg, rgba(26, 26, 26, 0.5), rgba(0, 0, 0, 0.02));
 
+    --mode-svg-color-70: linear-gradient(145deg, rgba(40, 40, 44, 0.5), rgba(40, 40, 44, 0.3));
+
     --color-primary: #06ABFF;
     --color-secondary: #00BF5D;
 
@@ -116,6 +122,7 @@
 
     --color-success: #079C79;
     --color-warning: #E5432C;
+    --color-point: #E8FD00;
 
     --font-weight-custom: 600;
     --font-weight-basic: 600;
@@ -127,6 +134,9 @@
   }
   :root.dark .custom-tracking{
     letter-spacing: 0.015em;
+  }
+  html{
+    overflow-x: hidden;
   }
   html, body{ /* dark mode transition */
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, all 0.3s ease-in-out;
@@ -332,7 +342,6 @@
   }
   .color-point{
     color: var(--color-point);
-    background-color: var(--color-point);
   }
   .color-accent{
     color: var(--color-accent);
@@ -400,8 +409,23 @@
   .hover\:bg-primary:hover{
     background-color: var(--bg-primary);
   }
+  .hover\:bg-secondary:hover{
+    background-color: var(--bg-secondary);
+  }
+  .hover\:bg-accent:hover{
+    background-color: var(--color-accent);
+  }
+  .hover\:bg-point:hover{
+    background-color: var(--color-point);
+  }
+  .hover\:bg-warning:hover{
+    background-color: var(--color-warning);
+  }
   .hover\:bg-error:hover{
     background-color: var(--color-error);
+  }
+  .hover\:bg-success:hover{
+    background-color: var(--color-success);
   }
 
   .mode-secondary{
@@ -418,7 +442,10 @@
     color: var(--mode-svg-color);
   }
   .mode-svg-color-50{
-    background-color: var(--mode-svg-color-50);
+    background: var(--mode-svg-color-50);
+  }
+  .mode-svg-color-70{
+    background: var(--mode-svg-color-70);
   }
   .mode-bg{
     background-color: var(--mode-bg);
@@ -560,6 +587,69 @@
   .animate-appear{
     animation: appear 0.3s cubic-bezier(.31,1.76,.72,.76) 1;
   }
+
+  /* chatRoom bubble custom */
+  .bubble-left::before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 80%;
+    max-width: 94%;
+    width: 100%;
+    height: 10%;
+    min-height: 0.75rem;
+    max-height: 1rem;
+    border-radius: 6.25rem;
+    background: linear-gradient(to bottom, 
+      rgb(237, 252, 255, 0.7) 0%,
+      rgb(237, 252, 255, 0) 100%
+    );
+  }
+  .bubble-left{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, 
+      #1a1a1a 0%,
+      #28282c 25%,
+      #3a3a40 50%,
+      #757682 90%,
+      #92939e 100%
+    );
+    box-shadow: 0 0 0 0.0313rem #1a1a1a;
+  }
+  .bubble-right::before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 80%;
+    max-width: 94%;
+    width: 100%;
+    height: 10%;
+    min-height: 0.75rem;
+    max-height: 1rem;
+    border-radius: 6.25rem;
+    background: linear-gradient(to bottom, 
+      rgb(237, 252, 255, 0.9) 0%,
+      rgb(237, 252, 255, 0) 100%
+    );
+  }
+  .bubble-right{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, 
+      #0d619b 0%,
+      #0873c5 25%,
+      #0098ff 50%,
+      #48e0ff 90%,
+      #83edff 100%
+    );
+    box-shadow: 0 0 0 0.0313rem #0098ff;
+  }
+
 }
 
 @layer components{}

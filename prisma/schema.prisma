@@ -37,8 +37,10 @@ model User {
   posts  Post[]
   comments Comment[]
   likes    Like[]
-  chat_rooms ChatRoom[]
+  // chat_rooms ChatRoom[]
+  chatRoom_users ChatRoomUser[]
   messages Message[]
+  message_read MessageRead[]
   video_calls VideoCall[]
   participants Participant[]
   followers Follow[] @relation("UserFollowers")
@@ -103,28 +105,54 @@ model Like{
 
 model ChatRoom{
   id String @id @default(cuid()) //cuid: unique한 chatRoomId 생성(보안ㅇ)
-  user User[]
+  // user User[]
+  name String?
+  type String @default("DIRECT") //DIRECT, GROUP
+  max_participants Int @default(2) //1:1은 2명, 단체방은 4명까지
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  chatRoomUsers ChatRoomUser[]
   messages Message[]
-
   status Boolean @default(false) //채팅방 상태
-
   video_calls VideoCall[]
+}
+
+model ChatRoomUser{
+  @@id([chatRoomId, userId])
+  chatRoom ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  userId Int
+  joined_at DateTime @default(now())
+  role String @default("MEMBER") //HOST, MEMBER
 }
 
 model Message{
   id Int @id @default(autoincrement())
   payload String
   is_read Boolean @default(false)
+  type String @default("USER") //USER, JOIN, LEAVE
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
   room ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   chatRoomId String
+  userId Int?
+
+  message_read MessageRead[]
+}
+
+model MessageRead{
+  @@id([messageId, userId])
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messageId Int
   userId Int
+  read_at DateTime @default(now())
 }
 
 model VideoCall{

@@ -46,10 +46,12 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
 
   //menu창 열린 동안 배경 스크롤 비활성화
   useEffect(()=>{
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflowY = "hidden";
+    document.body.style.overflowY = "hidden";
 
     return()=>{
-      document.body.style.overflow = "unset";
+      document.documentElement.style.overflowY = "";
+      document.body.style.overflowY = "";
     };
   },[]);
   
@@ -96,7 +98,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
 
   //menu link list wheel event handler
   const handleWheel = (e:React.WheelEvent)=>{
-    e.preventDefault();
+    // e.preventDefault();
     rawAngle.set(rawAngle.get() + e.deltaY * 0.2); //감도조절
   };
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -116,7 +118,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
     setTouchStartX(e.touches[0].clientX);
   };
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     const deltaX = e.touches[0].clientX - touchStartX;
     setTouchStartX(e.touches[0].clientX);
     rawAngle.set(rawAngle.get() + deltaX * 0.2); //mobile로 확인할 것
@@ -136,7 +138,7 @@ export default function MenuTab({onClose} : {onClose: ()=> void}) {
 
   return createPortal(
     <motion.div variants={menuBoxVars} initial="initial" animate="animate" exit="exit"
-    className="fixed z-0 left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2
+    className="fixed z-[1] left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2
     mode-svg-color w-screen h-screen flex items-center justify-center"
     style={{ perspective: 800, touchAction: "none", cursor: isDrag ? "grabbing" : "grab" }}
     onWheel={handleWheel}

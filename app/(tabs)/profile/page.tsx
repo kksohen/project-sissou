@@ -1,5 +1,5 @@
 import MenuBar from "@/components/menu-bar";
-import { getUser } from "./actions";
+import { getInitUserChats, getUser } from "./actions";
 import { getInitUserPosts } from "./[id]/actions";
 import { unstable_cache as nextCache } from 'next/cache';
 import getSession from "@/lib/session/get-session";
@@ -11,7 +11,7 @@ export const metadata = {
   title: 'Profile',
 };
 
-async function getCachedUserEdit(id: number){
+export async function getCachedUserEdit(id: number){
   const cachedOperation = nextCache(getUser, ["user-edit-profile"], {
     tags: [`user-edit-profile-${id}`],
     revalidate: 60
@@ -23,10 +23,11 @@ export default async function Profile(){
   const session = await getSession();
   if(!session.id) return notFound();
 
-  const [profileInfo, editInfo, initUserPosts] = await Promise.all([
+  const [profileInfo, editInfo, initUserPosts, initUserChats] = await Promise.all([
     getCachedUserInfo(session.id), //기존 프로필 상단 부분
     getCachedUserEdit(session.id), //사용자 개인정보 수정 부분
-    getInitUserPosts(session.id) //무한스크롤 부분
+    getInitUserPosts(session.id), //무한스크롤 부분
+    getInitUserChats()
   ]);
 
   if(!profileInfo || !editInfo) return notFound();
@@ -35,8 +36,8 @@ export default async function Profile(){
     <>
       <ProfileWrap profileInfo={profileInfo}
       initUserPosts={initUserPosts}
+      initUserChats={initUserChats}
       userId={session.id} />
-      {/* <ConditionBar /> */}
       <MenuBar/>
     </>
   );

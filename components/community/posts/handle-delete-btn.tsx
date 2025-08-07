@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { deletePostAction } from "@/app/posts/[id]/actions";
+import { deletePost } from "@/app/posts/[id]/actions";
 import Link from "next/link";
 
 interface HandleDeleteBtnProps{
@@ -18,7 +18,7 @@ export default function HandleDeleteBtn({isOwner = false, postId}: HandleDeleteB
     const confirmed = window.confirm("삭제하시겠습니까?");
     if(!confirmed) return;
 
-    const res = await deletePostAction(postId);
+    const res = await deletePost(postId);
     if(res){
       alert("삭제되었습니다.");
       router.replace("/community");

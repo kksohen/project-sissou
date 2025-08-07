@@ -1,11 +1,11 @@
 "use client";
 import { followStatus, userProfile } from "@/app/(tabs)/community/@modal/(..)profile/[id]/page";
-import FormBtn from "@/components/auth/form-btn";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FollowBtn from "./follow-btn";
+import ModalChatBtn from "../chats/modal-chat-btn";
 
 interface ProfileModalProps{
   user: userProfile;
@@ -45,7 +45,7 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner}:Pro
 
   return(
     <div onClick={handleClose}
-    className="fixed z-10 w-full h-full top-0 left-0 
+    className="fixed z-10 w-full h-full top-0 left-0
     flex justify-center items-center backdrop-blur-lg">
       <div onClick={(e)=>e.stopPropagation()}
       className="mode-secondary-50 border-custom-all mode-svg-color
@@ -114,13 +114,13 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner}:Pro
       {isOwner ? (
         null
       ) : (
-        <div className="mt-3.5 sm:mt-4.5 flex gap-3 *:flex-1
+        <div className="mt-3.25 sm:mt-4.25 flex gap-3 *:flex-1
             [&>button]:py-0.5 [&>button]:px-2
             [&>button]:sm:py-1 [&>button]:sm:px-3
             [&>button]:rounded-full
             [&>button]:text-sm [&>button]:sm:text-base 
             [&>button]:md:text-lg [&>button]:lg:text-xl">
-        <FormBtn text="Message"/>
+        <ModalChatBtn targetUserId={user.id} text="Message" />
 
         <FollowBtn isFollowing={initFollowStatus.isFollowing} followerCount={initFollowStatus.followerCount} userId={user.id} onFollowChange={handleFollowChange}/>
         </div>

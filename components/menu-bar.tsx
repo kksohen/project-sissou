@@ -4,9 +4,28 @@ import Search from "./search/search";
 import Menu from "./tabs/menu";
 import { useContext } from "react";
 import { ModalContext } from "./modal-context";
+import { usePathname } from "next/navigation";
+
+const pageDesc = {
+  "/": "Prologue : 즐거운 우리 집 | Home Sweet Home | Casa Dolce Casa",
+  "/exhibition-born":"Born : 어느 날, 그들은 태어났다 . . . | One Day, They Were Born . . .",
+  "/exhibition-growth":"Growth : 그들은 무엇으로 이루어져 있는가 ? | What Are They Made of ?",
+  "/portfolio":"Intermission : SOU's Home",
+  "/exhibition-climax":"Climax : 도피 혹은 질주 | SISSOU or SISSOU",
+  "/exhibition-end":"End : 처음으로 | Da Capo",
+  "/brand":"Epilogue : Behind Exhibition . . .",
+  "/community":"Community : 만들어봐요, 우리 집 | Let's Build Our Home !",
+  "/goods":"Goods : Welcome, Homeless",
+  "/contact":"Contact : 함께 해요 | Work with Us",
+};
 
 export default function MenuBar() {
   const {isOpen, onToggle} = useContext(ModalContext);
+  const pathname = usePathname();
+
+  const getCurrentDesc = ()=>{
+    return pageDesc[pathname as keyof typeof pageDesc] || "Project SISSOU 2025"
+  };
 
 return(
   <nav className="fixed z-10 bottom-4 left-1/2 -translate-x-1/2
@@ -65,22 +84,23 @@ return(
       {/* description */}
       <div className="relative z-30 h-16 -ml-6 px-7 
       flex items-center justify-center
-      font-alliance font-black tracking-wide mode-svg-color
+      font-abcwhyte tracking-wide font-medium
+      text-base sm:text-lg lg:text-xl xl:text-[1.375rem]
+      text-[#EEEEF0] text-shadow-md
       mode-secondary-50 rounded-full backdrop-blur-lg 
       sm:w-30 md:w-60 lg:w-lg xl:w-3xl 2xl:w-7xl 
       w-5xl-custom w-xs-custom media-bar-h-lg
-      border-custom-left-middle
-      ">
+      border-custom-left-middle">
         <div className="relative w-full overflow-hidden">
           {/* mobile animation */}
           <div className="block lg:hidden whitespace-nowrap 
           animate-text-scroll-media">
-            Prologue : Home Sweet Home !
+            {getCurrentDesc()}
           </div>
           {/* desktop animation */}
           <div className="hidden lg:block whitespace-nowrap 
           animate-text-scroll">
-            Prologue : Home Sweet Home !
+            {getCurrentDesc()}
           </div>
         </div>
       </div>

@@ -90,38 +90,41 @@ export const uploadComment = async(_: any, formData: FormData)=>{
   };
 }
 
-export async function deleteCommentAction(commentId: number){
+export async function deleteComment(commentId: number){
   const session = await getSession();
-  const userId = session.id;
-  if(!userId) return false;
+  if(!session.id) return false;
 
-  const deleted = await db.comment.delete({
-    where: {
-      id: commentId,
-      userId
-    }
-  });
-  if(!deleted) return false;
-
-  revalidatePath("/community");
-  revalidateTag("post-detail");
-
-  return true;
+  try{
+    await db.comment.delete({
+      where: {
+        id: commentId,
+        userId: session.id
+      }
+    });
+    revalidatePath("/community");
+    revalidateTag("post-detail");
+    return true;
+  }catch(error){
+    console.error(error);
+    return false;
+  };
 }
 
-export async function deletePostAction(postId: number){
+export async function deletePost(postId: number){
   const session = await getSession();
-  const userId = session.id;
-  if(!userId) return false;
+  if(!session.id) return false;
 
-  const deleted = await db.post.delete({
-    where: {
-      id: postId,
-      userId
-    }
-  });
-  if(!deleted) return false;
-
-  revalidatePath("/community");
-  return true;
+  try{
+    await db.post.delete({
+      where: {
+        id: postId,
+        userId: session.id
+      }
+    });
+    revalidatePath("/community");
+    return true;
+  }catch(error){
+    console.error(error);
+    return false;
+  };
 }

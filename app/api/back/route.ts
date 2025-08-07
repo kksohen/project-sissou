@@ -1,15 +1,15 @@
 import getSession from "@/lib/session/get-session";
 import { skipHistory } from "@/lib/utils";
 import { canAccessPage } from "@/middleware";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request){
+export async function GET(req: NextRequest){
   try{
     const session = await getSession();
     const history = session.navigationHistory || [];
     const isLoggedIn = Boolean(session.id);
 
-    const referer = request.headers.get("referer");
+    const referer = req.headers.get("referer");
     let currentPath = "";
 
     if(referer){
@@ -69,7 +69,7 @@ export async function GET(request: Request){
           break;
         };
       }
-    };
+    }
 
     await session.save();
 

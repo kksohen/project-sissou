@@ -1,5 +1,5 @@
 "use client";
-import { deleteCommentAction } from "@/app/posts/[id]/actions";
+import { deleteComment } from "@/app/posts/[id]/actions";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 
 interface CommentDeleteProps{
@@ -11,7 +11,7 @@ export default  function CommentDelete({commentId}: CommentDeleteProps){
     const confirmed = window.confirm("삭제하시겠습니까?");
     if(!confirmed) return;
 
-    const res = await deleteCommentAction(commentId);
+    const res = await deleteComment(commentId);
     if(res){
       alert("삭제되었습니다.");
     }else{

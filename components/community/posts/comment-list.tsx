@@ -20,7 +20,7 @@ export default function CommentList({
 }: CommentListProps){
   return(
     <>
-    <div className="flex gap-2 pt-3">
+    <div className="flex gap-2 pt-2.5 md:pt-3">
       <Link href={`/profile/${userId}`} data-cursor-target>
         <div className="size-8 md:size-10 lg:size-12 flex-shrink-0
         pointer-none">
@@ -34,23 +34,26 @@ export default function CommentList({
         </div>
       </Link>
 
-      <div className="*:text-xs *:md:text-sm *:lg:text-base flex-1 min-w-0">
-        <div className="flex items-center gap-1">
-          <h4 className="font-weight-basic username-spacing-comm">{user.username}</h4>
-          <span className="opacity-40">|</span>
-          <p className="font-weight-form username-spacing-desc opacity-40">{formatToTimeAgo(created_at.toString())}</p>
-
-          <div className="ml-auto flex-shrink-0">
-          {userId === sessionId ? <CommentDelete commentId={id}/> 
-          : null}
+      <div className="*:text-xs *:md:text-sm *:lg:text-base flex-1 min-w-0
+      flex gap-10">
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center gap-1">
+            <h4 className="font-weight-basic username-spacing-comm">{user.username}</h4>
+            <span className="opacity-40">|</span>
+            <p className="font-weight-form username-spacing-desc opacity-40">{formatToTimeAgo(created_at.toString())}</p>
           </div>
+
+          <p className="font-weight-form username-spacing-desc opacity-70 break-all max-w-full overflow-hidden leading-3 md:leading-4">{payload}</p>
         </div>
 
-        <p className="font-weight-form username-spacing-desc opacity-70 break-all max-w-full overflow-hidden">{payload}</p>
+        <div className="ml-auto">
+          {userId === sessionId ? <CommentDelete commentId={id}/> 
+          : null}
+        </div>
       </div>
     </div>
 
-    <div className="h-[0.0625rem] w-full ring-color opacity-70 mt-3.5"/>
+    <div className="h-[0.0625rem] w-full ring-color opacity-70 mt-2.5 md:mt-3"/>
     </>
   );
 }
