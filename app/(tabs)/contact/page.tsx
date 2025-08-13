@@ -1,139 +1,209 @@
+"use client";
 import FormBtn from "@/components/auth/form-btn";
-import ConditionBar from "@/components/community/condition-bar";
 import MenuBar from "@/components/menu-bar";
+import React, { useActionState, useEffect, useState } from "react";
+import { contactAction } from "./actions";
+import FormInput from "@/components/contact/form-input";
 
 export default function Contact(){
+  const [state, action] = useActionState(contactAction, null);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [detail, setDetail] = useState("");
+  const [formData, setFormData] = useState({
+    deadline: "",
+    budget: "",
+    company: "",
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const types = [
+    {id: "BI", label: "BI", color: "hover:bg-primary", selectedBg: "bg-primary"},
+    {id: "Graphic", label: "Graphic", color: "hover:bg-secondary", selectedBg: "bg-secondary"},
+    {id: "Web", label: "Web", color: "hover:bg-accent", selectedBg: "bg-accent"},
+    {id: "UIUX", label: "UIUX", color: "hover:bg-point", selectedBg: "bg-point"},
+    {id: "Motion", label: "Motion", color: "hover:bg-success", selectedBg: "bg-success"},
+    {id: "etc", label: "etc", color: "hover:bg-warning", selectedBg: "bg-warning"},
+  ];
+
+  const handleTypeToggle = (typeId: string) => {
+
+    setSelectedTypes((prev: string[]) => {
+      if(prev.includes(typeId)){
+        return prev.filter(id => id !== typeId);
+
+      }else{
+        return [...prev, typeId];
+      }
+    });
+  };
+
+  const getBtnClass = (type: {id: string; label: string; color: string; selectedBg: string}) => {
+    const base = "transition-all";
+    const isSelected = selectedTypes.includes(type.id);
+
+    return isSelected ? `${base} ${type.selectedBg} text-[#28282C]`:`${base} ${type.color} form-text-color form-bg-color`;
+  };
+
+  //form 초기화
+  useEffect(()=>{
+    if(state?.success){
+      setSelectedTypes([]);
+      setDetail("");
+      setFormData({
+        deadline: "",
+        budget: "",
+        company: "",
+        name: "",
+        email: "",
+        phone: "",
+      });
+
+    }
+  }, [state?.success]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    const {name, value} = e.target;
+    setFormData((prevData)=>({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  
   return(
     <>
-    <div className="mt-10 max-w-full lg:max-w-4/5 xl:max-w-3/5 mx-auto mb-24 sm:mb-40">
+    <div className="mt-10 max-w-full lg:max-w-4/5 xl:max-w-3/5 mx-auto mb-24 sm:mb-36">
       {/* title */}
       <div className="mb-10
-      flex flex-col justify-center items-center gap-3 text-center">
-        <div className="w-24 h-24">
+      flex flex-col justify-center items-center gap-1.5 text-center">
+        <div className="w-25 h-25">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor">
-            <path d="M76.623,12.454c-.334-11.554.933-8.642-11.041-8.713-4.165-.025-20.307.204-25.543.119-12.964-.211-28.977-.802-30.27-.845-6.242-.208-6.936.258-6.686,5.626.322,6.91-.36,27.223-.46,30.439-.344,11.002.028,21.855.438,33.161.177,4.889,2.02,4.784,7.529,4.78,3.343-.003,43.051-.132,64.193-.126,2.939.138,2.783-2.528,2.692-5.008-.215-5.867-.88-41.258-.853-59.433ZM72.019,74.366c-20.36,1.081-44.743-1.472-64.135-.03-.83.062-1.561-.548-1.602-1.379-1.084-21.532-.248-42.847-.541-64.484-.011-.805.635-1.469,1.44-1.48,19.394-.284,44.607-.624,64.962-.919.78-.011,1.441.59,1.486,1.37,1.216,20.797.036,58.021-.221,65.511-.026.759-.63,1.371-1.388,1.411Z"/><path d="M58.168,48.252c1.476-.737,1.475-1.942-.002-2.678l-.582-.29c-1.477-.735-3.358-2.507-4.18-3.938l-4.733-8.236c-.822-1.431-.178-2.897,1.432-3.258,0,0,20.775-4.664,20.775-9.797,0-5.905-24.456-10.176-24.456-10.176-1.625-.284-1.617,1.661.019,1.878,0,0,15.066-.005,15.066,8.335s-15.029,8.626-15.029,8.626c-1.65.031-2.177,1.128-1.172,2.436,0,0,4.299,5.599,4.716,13.063.367,6.578-3.598,7.237-3.598,7.237-1.628.27-2.959,1.841-2.959,3.491v7.607c0,1.65,1.35,3,3,3h6.178c1.65,0,3,1.217,3,2.705s.688,2.705,1.53,2.705,1.53-1.217,1.53-2.705,1.35-2.705,3-2.705h6.178c1.65,0,3-1.217,3-2.705s-1.304-3.056-2.897-3.484l-17.937-4.823c-1.593-.428-1.689-1.382-.213-2.12l8.338-4.166ZM67.818,62.099c0,1.078-1.35,1.959-3,1.959h-3.118c-1.65,0-3-.882-3-1.959s1.35-1.959,3-1.959h3.118c1.65,0,3,.882,3,1.96ZM52.64,60.139c1.65,0,3,.882,3,1.96s-1.35,1.959-3,1.959h-3.118c-1.65,0-3-.882-3-1.96s1.35-1.96,3-1.96h3.118Z"/><path d="M29.98,44.215c.417-7.464,4.716-13.063,4.716-13.063,1.005-1.309.477-2.405-1.172-2.436,0,0-15.029-.286-15.029-8.626s15.066-8.335,15.066-8.335c1.636-.217,1.644-2.162.019-1.878,0,0-24.456,4.271-24.456,10.176,0,5.133,20.775,9.797,20.775,9.797,1.61.361,2.254,1.828,1.432,3.258l-4.733,8.236c-.822,1.431-2.703,3.203-4.18,3.938l-.582.29c-1.477.735-1.478,1.94-.002,2.678l8.338,4.166c1.476.737,1.38,1.691-.213,2.12l-17.937,4.823c-1.593.428-2.897,2.129-2.897,3.779v4.822c0,1.65.688,3,1.53,3s1.53-1.35,1.53-3v-4.822c0-1.65,1.35-3,3-3h3.118c1.65,0,3,1.35,3,3v4.822c0,1.65,1.35,3,3,3h9.237c1.65,0,3-1.35,3-3v-13.018c0-1.65-1.332-3.221-2.959-3.491,0,0-3.965-.659-3.598-7.237ZM27.36,69.469c-1.65,0-3-1.35-3-3v-3.33c0-1.65,1.35-3,3-3h3.118c1.65,0,3,1.35,3,3v3.33c0,1.65-1.35,3-3,3h-3.118Z"/><path d="M40,34.946c-.995,0-1.802.807-1.802,1.802s.807,1.802,1.802,1.802,1.802-.807,1.802-1.802-.807-1.802-1.802-1.802Z"/><path d="M40,42.145c-.995,0-1.802.807-1.802,1.802s.807,1.802,1.802,1.802,1.802-.807,1.802-1.802-.807-1.802-1.802-1.802Z"/><path d="M24.42,34.857c1.362-.932,1.283-1.786-.394-1.22-3.707,1.252-10.534,1.415-10.534,1.415-1.63.254-3.048,1.529-3.151,2.834s4.379,3.407,5.741,2.475c0,0,6.976-4.573,8.338-5.505Z"/><path d="M55.58,34.857c-1.362-.932-1.283-1.786.394-1.22,3.707,1.252,10.534,1.415,10.534,1.415,1.63.254,3.048,1.529,3.151,2.834s-4.379,3.407-5.741,2.475c0,0-6.976-4.573-8.338-5.505Z"/>
+            <path d="M74.11,13.739c-8.205-5.489-23.055,6.537-22.943,11.431.029,1.266,1.18,2.186,2.975,2.73,5.194,1.575,5.95-2.289,4.962-5.049-1.612-4.499-6.22,3.255-6.358,1.961-.323-3.04,12.173-11.002,16.593-7.832,7.583,5.44-6.002,20.159-6.925,20.049-1.296-.154-.961-8.171-11.619-4.516,6.809,3.02-2.219,8.315-4.818,8.838-3.456.695,3.748-5.125,1.683-9.19-1.884-3.709-5.975.567-7.66,3.551-1.685-2.984-5.775-7.26-7.66-3.551-2.065,4.065,5.139,9.885,1.683,9.19-2.599-.523-11.627-5.819-4.818-8.838-10.658-3.655-10.323,4.361-11.619,4.516-.923.11-14.509-14.609-6.925-20.049,4.42-3.17,16.916,4.792,16.593,7.832-.138,1.295-4.746-6.459-6.358-1.961-.989,2.76-.232,6.623,4.962,5.049,1.795-.544,2.946-1.464,2.975-2.73.112-4.894-14.737-16.92-22.943-11.431C-.231,17.833,1.352,28.815,15.205,38.568c-7.634,4.558-3.273,12.689-3.273,12.689,0,0-5.199,8.886,2.57,14.592,3.268,2.401,14.24,4.527,17.351-8.229.916-3.757,3.778.574,5.867-1.389,1.493-1.403,1.142-4.728.55-6.429-.712-2.046-2.67-5.144-2.137-6.931.675-2.262,2.677-3.271,3.867-4.752,1.19,1.481,3.192,2.491,3.867,4.752.533,1.787-1.424,4.885-2.137,6.931-.592,1.701-.943,5.027.55,6.429,2.09,1.963,4.951-2.368,5.867,1.389,3.111,12.757,14.083,10.63,17.351,8.229,7.769-5.707,2.57-14.592,2.57-14.592,0,0,4.361-8.131-3.273-12.689,13.854-9.753,15.436-20.735,9.315-24.83ZM25.115,41.329c1.225.116,3.226-2.385,5.042.574,1.18,1.921,1.564,3.101,1.121,3.282-1.763.719-8.756-2.314-11.843-5.785,1.872-2.042,4.157,1.785,5.68,1.929ZM29.515,46.81c-2.753,3.509-9.732,7.313-14.239,4.38,3.846-3.437,10.425-5.426,14.239-4.38ZM17.063,40.284c4.165,2.611-1.476,8.174-3.729,9.257-1.856-3.01-.472-8.321,3.729-9.257ZM17.624,59.721c-2.627,3.421-6.656-3.514-4.2-6.787,6.407,4.558,15.096-3.361,17.062-5.295,1.028-.81,2.714.198,2.557.86-.241,1.023-9.67,3.737-15.418,11.221ZM36.133,52.93c-1.355,3.472-2.745-.516-4.676.724-1.305.838-.591,2.945-1.102,4.919-.84,3.25-3.071,4.809-4.909,5.351-3.051.899-7.044-.837-4.922-4.829,2.39-4.496,10.11-7.569,12.529-9.244,2.256-1.561,4.098.471,3.08,3.078ZM49.843,41.903c1.817-2.959,3.817-.458,5.042-.574,1.523-.144,3.808-3.971,5.68-1.929-3.087,3.471-10.08,6.505-11.843,5.785-.444-.181-.059-1.36,1.121-3.282ZM64.724,51.19c-4.507,2.933-11.486-.871-14.239-4.38,3.814-1.046,10.393.943,14.239,4.38ZM54.554,63.924c-1.838-.542-4.069-2.101-4.909-5.351-.51-1.974.204-4.081-1.102-4.919-1.932-1.24-3.321,2.747-4.676-.724-1.018-2.607.824-4.639,3.08-3.078,2.419,1.674,10.14,4.748,12.529,9.244,2.122,3.992-1.872,5.728-4.922,4.829ZM62.376,59.721c-5.749-7.484-15.177-10.199-15.418-11.221-.156-.662,1.529-1.671,2.557-.86,1.966,1.933,10.654,9.853,17.062,5.295,2.455,3.273-1.573,10.207-4.2,6.787ZM66.666,49.541c-2.253-1.083-7.894-6.647-3.729-9.257,4.201.937,5.584,6.247,3.729,9.257Z"/>
           </svg>
         </div>
         <h1 className="font-weight-basic text-3xl leading-7 custom-tracking form-title">Contact</h1>
         <h1 className="font-weight-basic text-2xl form-h2">프로젝트 문의</h1>
       </div>
       
+      {/* mail 발송 후 성공, 실패 메시지 */}
+      {state?.success && (
+      <div className="text-center mb-10 color-primary 
+      username-spacing-desc font-weight-basic">{state.message}</div>
+      )}
+      {state?.error && !state?.success && (
+      <div className="text-center mb-10 color-error
+      username-spacing-desc font-weight-basic">{state.message}</div>
+      )}
+
       {/* form */}
-      <form className="flex flex-col">
-        <div className="flex flex-col gap-1 md:gap-2 lg:gap-3 form-text-color mb-10">
+      <form className="flex flex-col" action={action}>
+
+        <input required type="hidden" name="type" value={selectedTypes.join(", ")}/>
+
+        <div className="flex flex-col gap-1 md:gap-2 form-text-color mb-10">
           {/* select btn */}
-          <div className="flex flex-col gap-3 lg:gap-4 mb-2">
-            <h4 className="font-weight-basic username-spacing-comm">Type</h4>
+          <div className="flex flex-col gap-2 mb-1">
+            <h4 className="font-weight-basic username-spacing-comm lg:text-lg">Type*</h4>
+
             <div className="flex-wrap flex gap-1 sm:gap-2
             text-xs md:text-sm lg:text-base
             font-weight-form
             leading-3 md:leading-4
             *:py-1.5 *:lg:py-2
             *:px-2 *:md:px-2.5 *:lg:px-2.75 *:rounded-full
-            *:border-[0.0625rem] *:border-[var(--ring-color)]
-            *:transition-all *:hover:text-[#28282C]">
-              <button data-cursor-target
-              className="form-bg-color hover:bg-primary">BI</button>
-              <button data-cursor-target
-              className="form-bg-color hover:bg-secondary">Graphic</button>
-              <button data-cursor-target
-              className="form-bg-color hover:bg-accent">Web</button>
-              <button data-cursor-target
-              className="form-bg-color hover:bg-point">UIUX</button>
-              <button data-cursor-target
-              className="form-bg-color hover:bg-success">Motion</button>
-              <button data-cursor-target
-              className="form-bg-color hover:bg-warning">etc</button>
+            *:border-[0.0625rem] *:border-[var(--ring-color)]">
+              {types.map((type)=>(
+                <button key={type.id} data-cursor-target
+                onClick={()=> handleTypeToggle(type.id)}
+                type="button"
+                className={getBtnClass(type)}
+                >{type.label}</button>
+              ))}
             </div>
+
+            {state?.error?.fieldErrors?.type && (
+            <span className="color-warning text-xs md:text-sm font-weight-form pt-0.5 md:pt-1">{state.error.fieldErrors.type[0]}</span>
+            )}
           </div>
 
           <div className="h-[0.0625rem] w-full ring-color opacity-70"/>
 
-          <textarea placeholder="Details"
-          rows={12} maxLength={300}
-          className="my-2 w-full
+          <textarea placeholder="Details*"
+          name="details" value={detail}
+          onChange={(e)=> setDetail(e.target.value)}
+          rows={7} maxLength={300}
+          className="my-1 w-full
           focus:outline-none border-none
           mx-auto transition-all
           bg-transparent resize-none
           placeholder:text-[var(--form-text-color)]
-          placeholder:opacity-30
-          font-weight-form"/>
+          placeholder:opacity-40
+          font-weight-form lg:text-lg"/>
+
+          {state?.error?.fieldErrors?.details && (
+          <span className="color-warning text-xs md:text-sm font-weight-form">{state.error.fieldErrors.details[0]}</span>
+          )}
+
+          <div className="mb-0.5 ml-auto font-weight-form username-spacing-desc form-text-color opacity-40 text-xs md:text-sm lg:text-base">{detail.length} / 300</div>
 
           <div className="h-[0.0625rem] w-full ring-color opacity-70"/>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 lg:gap-3">
-            <div className="flex items-center gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 lg:text-lg">
+            <div className="items-baseline flex gap-2.5 md:gap-3">
               <h4 className="flex-shrink-0 font-weight-basic username-spacing">마감기한</h4>
-              <input data-cursor-target placeholder="Deadline"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+              <FormInput placeholder="Deadline" name="deadline" type="date"
+              value={formData.deadline} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.deadline} />
             </div>
 
             <div className="block md:hidden h-[0.0625rem] w-full ring-color opacity-70"/>
 
-            <div className="flex items-center gap-2">
+            <div className="items-baseline flex gap-2.5 md:gap-3">
               <h4 className="flex-shrink-0 font-weight-basic username-spacing">예산범위</h4>
-              <input data-cursor-target placeholder="Budget"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none 
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+              <FormInput placeholder="Budget" name="budget" type="text"
+              value={formData.budget} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.budget} />
             </div>
           </div>
 
           <div className="h-[0.0625rem] w-full ring-color opacity-70"/>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 lg:gap-3">
-            <div className="flex items-center gap-2">
-              <h4 className="flex-shrink-0 font-weight-basic username-spacing">소속</h4>
-              <input data-cursor-target placeholder="Company"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none 
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 lg:text-lg">
+            <div className="items-baseline flex gap-2.5 md:gap-3">
+              <h4 className="flex-shrink-0 font-weight-basic username-spacing">소속*</h4>
+              <FormInput required placeholder="Company" name="company" type="text"
+              value={formData.company} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.company} />
             </div>
 
             <div className="block md:hidden h-[0.0625rem] w-full ring-color opacity-70"/>
 
-            <div className="flex items-center gap-2">
-              <h4 className="flex-shrink-0 font-weight-basic username-spacing">담당자명</h4>
-              <input data-cursor-target placeholder="Name"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none 
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+            <div className="items-baseline flex gap-2.5 md:gap-3">
+              <h4 className="flex-shrink-0 font-weight-basic username-spacing">담당자명*</h4>
+              <FormInput required placeholder="Name" name="name" type="text"
+              value={formData.name} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.name} />
             </div>
           </div>
 
           <div className="h-[0.0625rem] w-full ring-color opacity-70"/>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 lg:gap-3">
-            <div className="flex items-center gap-2">
-              <h4 className="flex-shrink-0 font-weight-basic username-spacing">이메일</h4>
-              <input data-cursor-target placeholder="E-mail"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none 
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 lg:text-lg">
+            <div className="items-baseline flex gap-2.5 md:gap-3">
+              <h4 className="flex-shrink-0 font-weight-basic username-spacing">이메일*</h4>
+              <FormInput required placeholder="E-Mail" name="email" type="email"
+              value={formData.email} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.email} />
             </div>
 
             <div className="block md:hidden h-[0.0625rem] w-full ring-color opacity-70"/>
 
-            <div className="flex items-center gap-2">
-              <h4 className="flex-shrink-0 font-weight-basic username-spacing">연락처</h4>
-              <input data-cursor-target placeholder="Phone Number"
-              className="w-full h-10 mx-auto transition-all
-              focus:outline-none border-none 
-              placeholder:text-[var(--form-text-color)]
-              placeholder:opacity-30
-              font-weight-form"/>
+            <div className="items-baseline flex gap-2.5 md:gap-3">
+              <h4 className="flex-shrink-0 font-weight-basic username-spacing">연락처*</h4>
+              <FormInput required placeholder="Phone Number" name="phone" type="text"
+              value={formData.phone} onChange={handleChange}
+              errors={state?.error?.fieldErrors?.phone} />
             </div>
           </div>
         </div>
@@ -143,8 +213,6 @@ export default function Contact(){
     </div>
 
     <MenuBar/>
-
-    <ConditionBar/>
     </>
   );
 }
