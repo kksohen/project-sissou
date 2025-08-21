@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getFollowStatus, getUserInfo } from "./actions";
 import { unstable_cache as nextCache } from 'next/cache';
 import getSession from "@/lib/session/get-session";
+import { getImgPlaceholder } from "@/lib/Image/util-img";
+import { getThumbnailImage } from "@/lib/utils";
 
 type Params = Promise<{id: string;}>;
 
@@ -51,7 +53,16 @@ export default async function ProfileModal({params}: {params : Params}){
   //follow
   const followStatus = await getCachedFollowStatus(idNumber);
 
+  //Image 최적화
+  const photoBlur = await Promise.all(
+    user.posts.map(async (post)=>{
+    const thumbnail = getThumbnailImage(post.photo);
+    return getImgPlaceholder(`${thumbnail}/public`);
+    })
+  );
+
   return(
-    <ClientProfileModal user={user} initFollowStatus={followStatus} isOwner={isOwner}/>
+    <ClientProfileModal user={user} initFollowStatus={followStatus} isOwner={isOwner}
+    photoBlur={photoBlur}/>
   );
 }

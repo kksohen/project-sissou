@@ -6,14 +6,16 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FollowBtn from "./follow-btn";
 import ModalChatBtn from "../chats/modal-chat-btn";
+import { getThumbnailImage } from "@/lib/utils";
 
 interface ProfileModalProps{
   user: userProfile;
   initFollowStatus: followStatus;
   isOwner: boolean;
+  photoBlur?: string[];
 };
 
-export default function ClientProfileModal({user, initFollowStatus, isOwner}:ProfileModalProps){
+export default function ClientProfileModal({user, initFollowStatus, isOwner, photoBlur}:ProfileModalProps){
   const router = useRouter();
   const avatarUrl = user?.avatar ? user.avatar : null;
 
@@ -27,12 +29,6 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner}:Pro
       document.body.style.overflow = "unset";
     }
   },[]);
-
-  //img 가져오기
-  function getThumbnailImage(photo: string){
-    const images = JSON.parse(photo);
-    return Array.isArray(images) ? images[0] : images;
-  };
 
   const handleClose = ()=>{
     router.back();
@@ -93,6 +89,7 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner}:Pro
       <div className="flex mb-0.5">
       {user.posts.map((post, index)=>{
         const thumbnail = getThumbnailImage(post.photo);
+        const photoBlurs = photoBlur?.[index];
 
         return (
           <Image className="size-24 sm:size-32 object-cover aspect-square"
@@ -101,6 +98,7 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner}:Pro
           alt={`${user.username}'s posts ${index+1}`} 
           width={128} height={128} priority
           quality={100}
+          placeholder="blur" blurDataURL={photoBlurs}
           />
         );
       })}

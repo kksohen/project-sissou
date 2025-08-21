@@ -128,3 +128,13 @@ export function skipHistory(path: string){
 
   return result;
 };
+
+//썸네일 이미지 경로 추출
+export function getThumbnailImage(photoData: string): string{
+  try{
+    const parse = JSON.parse(photoData);
+    return Array.isArray(parse) ? parse[0] : photoData;
+  }catch{
+    return photoData;
+  };
+}

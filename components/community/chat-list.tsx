@@ -15,21 +15,23 @@ interface ChatListProps{
   participantCount: number;
   messageCount: number;
   updated_at: Date;
+  avatarBlur?: string[];
 }
 
-export default function ChatList({id, title, participants, participantCount, messageCount, updated_at}: ChatListProps){
+export default function ChatList({id, title, participants, participantCount, messageCount, updated_at, avatarBlur}: ChatListProps){
   //username 글자수 제한
   const textMaxlength = (text: string | null | undefined, maxLength: number)=>{
     if(!text) return "";
     return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
 
-  const avatarImg = (participant: typeof participants[0])=>{
+  const avatarImg = (participant: typeof participants[0], index: number)=>{
     return(
       <div className="size-15 md:size-16">
         {participant.avatar ? (
         <Image src={participant.avatar} alt={participant.username}
         priority quality={100} width={64} height={64}
+        placeholder="blur" blurDataURL={avatarBlur?.[index]}
         className="pointer-none rounded-lg"/>
         ):(
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="pointer-none rounded-lg ring-color opacity-80">
@@ -48,26 +50,26 @@ export default function ChatList({id, title, participants, participantCount, mes
 
       {participantCount === 1 ? (
         <div className="inline-grid justify-items-center align-top">
-        {avatarImg(participants[0])}
+        {avatarImg(participants[0], 0)}
         </div>
 
       ) : participantCount === 2 ? (
           <div className="inline-grid justify-items-center grid-cols-2 gap-2 align-top">
-          {avatarImg(participants[0])}
-          {avatarImg(participants[1])}
+          {avatarImg(participants[0], 0)}
+          {avatarImg(participants[1], 1)}
           </div>
       ) : participantCount === 3 ? (
           <div className="inline-grid justify-items-center grid-cols-2 gap-2">
-          {avatarImg(participants[0])}
-          {avatarImg(participants[1])}
-          {avatarImg(participants[2])}
+          {avatarImg(participants[0], 0)}
+          {avatarImg(participants[1], 1)}
+          {avatarImg(participants[2], 2)}
           </div>
       ) : (
           <div className="inline-grid justify-items-center grid-cols-2 gap-2">
-          {avatarImg(participants[0])}
-          {avatarImg(participants[1])}
-          {avatarImg(participants[2])}
-          {avatarImg(participants[3])}
+          {avatarImg(participants[0], 0)}
+          {avatarImg(participants[1], 1)}
+          {avatarImg(participants[2], 2)}
+          {avatarImg(participants[3], 3)}
           </div>
       )}
         

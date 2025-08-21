@@ -645,6 +645,7 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
             alt={chat.host.username}
             priority quality={100}
             width={72} height={72}
+            placeholder="blur" blurDataURL={chat.avatarBlur}
             className="rounded-2xl"/>
             ):(
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="rounded-2xl opacity-60 border-1">
@@ -657,6 +658,7 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
             alt={chat.otherUser.username}
             priority quality={100}
             width={72} height={72}
+            placeholder="blur" blurDataURL={chat.otherAvatarBlur}
             className="rounded-2xl"/>
             ):(
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor" className="rounded-2xl opacity-60 border-1">

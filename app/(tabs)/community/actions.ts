@@ -1,7 +1,9 @@
 "use server";
 
 import db from "@/lib/db";
+import { getImgPlaceholder } from "@/lib/Image/util-img";
 import getSession from "@/lib/session/get-session";
+import { getThumbnailImage } from "@/lib/utils";
 
 export async function getInitChats(){
   const session = await getSession();
@@ -44,31 +46,42 @@ export async function getInitChats(){
     }
   });
 
-  return chats.map(room => {
-    const isGroupChat = room.type === "GROUP";
+  const chatWithBlur = await Promise.all(
+    chats.map(async room=>{
+      const isGroupChat = room.type === "GROUP";
 
-    const participants = room.chatRoomUsers.map(user=>({
-      id: user.user.id,
-      username: user.user.username,
-      avatar: user.user.avatar
-    }));
+      const participants = room.chatRoomUsers.map(user=>({
+        id: user.user.id,
+        username: user.user.username,
+        avatar: user.user.avatar
+      }));
 
-    const title = room.name || "Circle";
+      const title = room.name || "Circle";
 
-    //채팅방 참여 여부
-    const isParticipating = participants.some(p => p.id === session.id);
+      //채팅방 참여 여부
+      const isParticipating = participants.some(p => p.id === session.id);
 
-    return{
-      id: room.id,
-      title,
-      isGroupChat,
-      participants,
-      participantCount: room._count.chatRoomUsers,
-      messageCount: room._count.messages,
-      updated_at: room.updated_at,
-      isParticipating
-    }
-  });
+      const avatarBlur = await Promise.all(
+        participants.slice(0, 4).map(async participant => {
+          return participant.avatar ? getImgPlaceholder(participant.avatar) : Promise.resolve("");
+        })
+      );
+
+      return{
+        id: room.id,
+        title,
+        isGroupChat,
+        participants,
+        participantCount: room._count.chatRoomUsers,
+        messageCount: room._count.messages,
+        updated_at: room.updated_at,
+        isParticipating,
+        avatarBlur
+      };
+    })
+  );
+
+  return chatWithBlur;
 }
 
 export async function getMoreChats(page: number){
@@ -113,31 +126,42 @@ export async function getMoreChats(page: number){
     }
   });
 
-  return chats.map(room => {
-    const isGroupChat = room.type === "GROUP";
+  const chatWithBlur = await Promise.all(
+    chats.map(async room=>{
+      const isGroupChat = room.type === "GROUP";
 
-    const participants = room.chatRoomUsers.map(user=>({
-      id: user.user.id,
-      username: user.user.username,
-      avatar: user.user.avatar
-    }));
+      const participants = room.chatRoomUsers.map(user=>({
+        id: user.user.id,
+        username: user.user.username,
+        avatar: user.user.avatar
+      }));
 
-    const title = room.name || "Circle";
+      const title = room.name || "Circle";
 
-    //채팅방 참여 여부
-    const isParticipating = participants.some(p => p.id === session.id);
+      //채팅방 참여 여부
+      const isParticipating = participants.some(p => p.id === session.id);
 
-    return{
-      id: room.id,
-      title,
-      isGroupChat,
-      participants,
-      participantCount: room._count.chatRoomUsers,
-      messageCount: room._count.messages,
-      updated_at: room.updated_at,
-      isParticipating
-    }
-  });
+      const avatarBlur = await Promise.all(
+        participants.slice(0, 4).map(async participant => {
+          return participant.avatar ? getImgPlaceholder(participant.avatar) : Promise.resolve("");
+        })
+      );
+
+      return{
+        id: room.id,
+        title,
+        isGroupChat,
+        participants,
+        participantCount: room._count.chatRoomUsers,
+        messageCount: room._count.messages,
+        updated_at: room.updated_at,
+        isParticipating,
+        avatarBlur
+      };
+    })
+  );
+
+  return chatWithBlur;
 }
 
 export async function getInitPosts(){
@@ -168,7 +192,19 @@ export async function getInitPosts(){
       created_at: 'desc'
     }
   });
-  return posts;
+
+  const postWithBlur = await Promise.all(
+    posts.map(async (post)=>{
+      const thumbnailUrl = `${getThumbnailImage(post.photo)}/public`;
+
+      return {
+        ...post,
+        photoBlur: await getImgPlaceholder(thumbnailUrl)
+      };
+    })
+  );
+
+  return postWithBlur;
 };
 
 export async function getMorePosts(page: number){
@@ -200,5 +236,17 @@ export async function getMorePosts(page: number){
       created_at: 'desc'
     }
   });
-  return posts;
+
+  const postWithBlur = await Promise.all(
+    posts.map(async (post)=>{
+      const thumbnailUrl = `${getThumbnailImage(post.photo)}/public`;
+
+      return {
+        ...post,
+        photoBlur: await getImgPlaceholder(thumbnailUrl)
+      };
+    })
+  );
+
+  return postWithBlur;
 };

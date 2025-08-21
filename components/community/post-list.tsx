@@ -1,4 +1,4 @@
-import { formatToTimeAgo } from "@/lib/utils";
+import { formatToTimeAgo, getThumbnailImage } from "@/lib/utils";
 import { ChatBubbleBottomCenterIcon, EyeIcon, HeartIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,23 +19,14 @@ interface PostListProps{
     username: string;
     avatar: string | null;
   };
+  photoBlur?: string;
 };
 
-export default function PostList({id, title, description, views, photo, created_at, _count, user}: PostListProps){
+export default function PostList({id, title, description, views, photo, created_at, _count, user, photoBlur}: PostListProps){
   //desc 글자수 제한
   const textMaxlength = (text: string | null | undefined, maxLength: number)=>{
     if(!text) return "";
     return text.length > maxLength ? text.slice(0, maxLength) + " . . ." : text;
-  };
-
-  //썸네일 이미지 경로 추출
-  const getThumbnailImage = (photoData: string):string => {
-    try{
-      const parse = JSON.parse(photoData);
-      return Array.isArray(parse) ? parse[0] : photoData;
-    }catch{
-      return photoData;
-    };
   };
 
   return(
@@ -96,7 +87,9 @@ export default function PostList({id, title, description, views, photo, created_
       <div>
         <Image className="rounded-t-none rounded-b-3xl object-cover
         w-full h-auto aspect-video mx-auto pointer-none"
-        src={`${getThumbnailImage(photo)}/public`} alt={title} width={400} height={225} priority quality={100}/>
+        src={`${getThumbnailImage(photo)}/public`} 
+        alt={title} width={400} height={225} priority quality={100} 
+        placeholder="blur" blurDataURL={photoBlur}/>
       </div>
     </Link>
   </div>

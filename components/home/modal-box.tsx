@@ -70,7 +70,7 @@ export default function ModalBox({onClose} : {onClose: ()=> void}){
         </div>
         
         <div>
-          <p><span className="italic font-bold">&#12302;SISSOU&#12303;</span> 는 일본어 동음이의어인 失踪(실종)과 疾走(질주)를 활용한 언어유희로, 상실과 나아감에 대한 질문을 내포한다. 이러한 맥락에서 인트로는 도피와 질주 사이의 모호함으로 움직임의 방향성을 관객의 판단에 맡긴다. 이를 통해 전진과 후퇴 모두 개인의 선택이자 해석임을 보여준다.</p>
+          <p><span className="italic font-bold">&#12302;SISSOU&#12303;</span> 는 일본어 동음이의어인 失踪(실종)과 疾走(질주)를 활용한 언어유희로, 상실과 나아감에 대한 질문을 내포한다. 이러한 맥락에서 인트로는 도주와 질주 사이의 모호함으로 움직임의 방향성을 관객의 판단에 맡긴다. 이를 통해 전진과 후퇴 모두 개인의 선택이자 해석임을 보여준다.</p>
         </div>
 
         <div className="w-full">
@@ -107,7 +107,7 @@ export default function ModalBox({onClose} : {onClose: ()=> void}){
         </div>
 
         <div className="text-left">
-          <p>인트로는 도피와 질주 사이의 모호함</p>
+          <p>인트로는 도주와 질주 사이의 모호함</p>
           <p>으로 움직임의 방향성을 관객의 판단에</p>
           <p>맡긴다. 이를 통해 전진과 후퇴 모두</p>
           <p>개인의 선택이자 해석임을 보여준다.</p>

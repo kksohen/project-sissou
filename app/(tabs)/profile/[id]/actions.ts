@@ -1,6 +1,8 @@
 "use server";
 
 import db from "@/lib/db";
+import { getImgPlaceholder } from "@/lib/Image/util-img";
+import { getThumbnailImage } from "@/lib/utils";
 
 export async function getInitUserPosts(userId: number){
   const userPosts = await db.post.findMany({
@@ -17,7 +19,18 @@ export async function getInitUserPosts(userId: number){
     }
   });
 
-  return userPosts;
+  const postWithBlur = await Promise.all(
+    userPosts.map(async post=>{
+      const thumbnailUrl = `${getThumbnailImage(post.photo)}/public`; 
+
+      return{
+        ...post,
+        photoBlur: await getImgPlaceholder(thumbnailUrl)
+      }
+    })
+  );
+
+  return postWithBlur;
 }
 
 export async function getMoreUserPosts(userId: number, page: number){
@@ -36,5 +49,16 @@ export async function getMoreUserPosts(userId: number, page: number){
     }
   });
 
-  return userPosts;
+  const postWithBlur = await Promise.all(
+    userPosts.map(async post=>{
+      const thumbnailUrl = `${getThumbnailImage(post.photo)}/public`; 
+
+      return{
+        ...post,
+        photoBlur: await getImgPlaceholder(thumbnailUrl)
+      }
+    })
+  );
+
+  return postWithBlur;
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { initUserPosts } from '../../../app/(tabs)/profile/[id]/page';
 import { useEffect, useRef, useState } from "react";
 import { getMoreUserPosts } from "@/app/(tabs)/profile/[id]/actions";
+import { getThumbnailImage } from "@/lib/utils";
 
 interface TakeUserPostsProps{
   initUserPosts: initUserPosts;
@@ -51,11 +52,6 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
       };
   },[page, isLoading, isLastPage, userId]);
   
-  //img 불러오기
-  function getThumbnailImage(photo: string){
-    const images = JSON.parse(photo);
-    return Array.isArray(images) ? images[0] : images;
-  };
   //게시글 없을 때
   if(!posts || posts.length === 0){
     return(
@@ -773,6 +769,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
           priority quality={100}
           width={430}
           height={430}
+          placeholder="blur" blurDataURL={post.photoBlur}
           className="object-cover aspect-square pointer-none"/>
         </Link>
       ))}

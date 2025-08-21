@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     }
   },
   images: {
+    // formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
       hostname: "k.kakaocdn.net"

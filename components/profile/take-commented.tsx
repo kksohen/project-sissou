@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { getUserCommentedPosts } from "@/app/(tabs)/profile/actions";
 import Link from "next/link";
 import Image from 'next/image';
-import { formatToTimeAgo } from "@/lib/utils";
+import { formatToTimeAgo, getThumbnailImage } from "@/lib/utils";
 
 interface ITakeCommented{
   id: number;
@@ -13,6 +13,7 @@ interface ITakeCommented{
   photo: string;
   payload: string;
   commented_at: Date;
+  photoBlur?: string;
 };
 
 export default function TakeCommented({userId}: TakeUserActivityProps){
@@ -22,12 +23,6 @@ export default function TakeCommented({userId}: TakeUserActivityProps){
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const trigger = useRef<HTMLSpanElement>(null);
-
-  //img 불러오기
-  function getThumbnailImage(photo: string){
-    const images = JSON.parse(photo);
-    return Array.isArray(images) ? images[0] : images;
-  };
 
   useEffect(()=>{
     if(!isOpen) return;
@@ -120,6 +115,7 @@ export default function TakeCommented({userId}: TakeUserActivityProps){
               <Image src={`${getThumbnailImage(post.photo)}/public`}
               alt={`${post.id}`} priority quality={100}
               width={80} height={80} 
+              placeholder="blur" blurDataURL={post.photoBlur}
               className="ml-auto object-cover aspect-square rounded-2xl size-14 sm:size-20"/>
             </div>
 

@@ -6,9 +6,10 @@ import { motion, PanInfo } from 'framer-motion';
 interface ImgSlideProps{
   allImages: string[];
   title: string;
+  photoBlur?: string[];
 };
 
-export default function ImgSlide({allImages, title}: ImgSlideProps){
+export default function ImgSlide({allImages, title,photoBlur}: ImgSlideProps){
   const [isExpand, setIsExpand] = useState(false); //펼쳐진 상태
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageWidth, setImageWidth] = useState(420);
@@ -89,6 +90,7 @@ export default function ImgSlide({allImages, title}: ImgSlideProps){
         height={560}
         priority
         quality={100}
+        placeholder="blur" blurDataURL={photoBlur?.[0]}
         className="w-full max-w-[420px] aspect-[3/4] rounded-3xl mx-auto object-cover"/>
       </motion.div>
     );
@@ -154,6 +156,7 @@ export default function ImgSlide({allImages, title}: ImgSlideProps){
                 height={560}
                 priority
                 quality={100}
+                placeholder="blur" blurDataURL={photoBlur?.[index]}
                 className="rounded-3xl aspect-[3/4] object-cover pointer-events-none"/>
             </motion.div>
           );

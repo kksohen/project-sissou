@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import HandleDeleteBtn from "@/components/community/posts/handle-delete-btn";
 import ImgSlide from "@/components/community/posts/img-slide";
 import Link from "next/link";
+import { getImgPlaceholder } from "@/lib/Image/util-img";
 
 type Params = Promise<{id: string;}>;
 
@@ -91,6 +92,12 @@ export default async function PostDetail({params}: {params : Params}){
 
   const allImages = getAllImages(post.photo);
 
+  const photoBlur = await Promise.all(
+    allImages.slice(0, 3).map(async (imageUrl: string)=>{
+      return getImgPlaceholder(`${imageUrl}/public`);
+    })
+  );
+
   return(
     <div className="my-10">
       <div className="fixed top-0 left-0 right-0 pt-10 z-10
@@ -137,7 +144,7 @@ export default async function PostDetail({params}: {params : Params}){
         break-all whitespace-pre-wrap text-wrap
         ">{post.description}</p>
         
-        <ImgSlide allImages={allImages} title={post.title}/>
+        <ImgSlide allImages={allImages} title={post.title} photoBlur={photoBlur}/>
       </div>
       
       {/* icons */}

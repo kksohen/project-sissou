@@ -6,11 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import { getUserLikedPosts } from "@/app/(tabs)/profile/actions";
 import Link from "next/link";
 import Image from "next/image";
+import { getThumbnailImage } from "@/lib/utils";
 
 interface ITakeLiked{
   id: number;
   photo: string;
   liked_at: Date;
+  photoBlur?: string;
 };
 
 export default function TakeLiked({userId}: TakeUserActivityProps){
@@ -20,12 +22,6 @@ export default function TakeLiked({userId}: TakeUserActivityProps){
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
   const trigger = useRef<HTMLSpanElement>(null);
-
-  //img 불러오기
-  function getThumbnailImage(photo: string){
-    const images = JSON.parse(photo);
-    return Array.isArray(images) ? images[0] : images;
-  };
   
   useEffect(()=>{
     if(!isOpen) return;
@@ -108,6 +104,7 @@ export default function TakeLiked({userId}: TakeUserActivityProps){
             quality={100}
             width={210}
             height={210}
+            placeholder="blur" blurDataURL={post.photoBlur}
             className="object-cover aspect-square pointer-none"/>
           </Link>
         ))}

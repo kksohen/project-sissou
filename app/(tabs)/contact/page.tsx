@@ -19,10 +19,10 @@ export default function Contact(){
   });
 
   const types = [
-    {id: "BI", label: "BI", color: "hover:bg-primary", selectedBg: "bg-primary"},
+    {id: "Branding", label: "Branding", color: "hover:bg-primary", selectedBg: "bg-primary"},
     {id: "Graphic", label: "Graphic", color: "hover:bg-secondary", selectedBg: "bg-secondary"},
     {id: "Web", label: "Web", color: "hover:bg-accent", selectedBg: "bg-accent"},
-    {id: "UIUX", label: "UIUX", color: "hover:bg-point", selectedBg: "bg-point"},
+    {id: "App", label: "App", color: "hover:bg-point", selectedBg: "bg-point"},
     {id: "Motion", label: "Motion", color: "hover:bg-success", selectedBg: "bg-success"},
     {id: "etc", label: "etc", color: "hover:bg-warning", selectedBg: "bg-warning"},
   ];

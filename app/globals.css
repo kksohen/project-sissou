@@ -26,7 +26,13 @@
 }
 
 @layer base{
-  :root { /* light */
+  :root { 
+    /* portfolio card variable */
+    --card-width: 135px;
+    --card-depth: 67px;
+    --link-lh: 0rem;
+
+    /* light */
     --font-pretendard: "Pretendard", sans-serif;
 
     --color-primary: #0098FF;
@@ -332,6 +338,9 @@
   }
   .loading-color{
     background-color: var(--loading-color);
+  }
+  .desc-text-color{
+    color: var(--desc-text-color);
   }
   
   .color-primary{
@@ -660,6 +669,119 @@
       #83edff 100%
     );
     box-shadow: 0 0 0 0.0313rem #0098ff;
+  }
+
+  /* portfolio box */
+  .scene{
+    perspective: 1500px;
+    width: 100%;
+    height: 100%;
+    max-width: var(--card-width);
+  }
+  .card{
+    position: relative;
+    aspect-ratio: 5/7;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.68, -1.0, 0.265, 2.0);
+  }
+  .card-face{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--loading-bg);
+    color: var(--mode-color);
+    backface-visibility: hidden;
+  }
+  .card-front{
+    transform: rotateY(0deg) translateZ(var(--card-depth));
+  }
+  .card-back{
+    transform: rotateY(180deg) translateZ(var(--card-depth));
+  }
+  .card-left{
+    transform: rotateY(-90deg) translateZ(var(--card-depth));
+  }
+  .card-right{
+    transform: rotateY(90deg) translateZ(var(--card-depth));
+  }
+  .portfolio-link{
+    line-height: var(--link-lh);
+  }
+
+  @media (max-width: 374px){
+    :root{
+      --card-width: 135px;
+      --card-depth: 67px;
+      --link-lh: 2.5rem;
+    }
+  }
+  @media (min-width: 375px) and (max-width: 407px){
+    :root{
+      --card-width: 160px;
+      --card-depth: 80px;
+      --link-lh: 3rem;
+    }
+    .portfolio-grid{
+      padding-top: 16.75rem;
+    }
+  }
+  @media (min-width: 408px) and (max-width: 479px){
+    :root{
+      --card-width: 175px;
+      --card-depth: 87px;
+      --link-lh: 3.25rem;
+    }
+    .portfolio-grid{
+      padding-top: 17.25rem;
+    }
+  }
+  @media (min-width: 480px) and (max-width: 539px){
+    :root{
+      --card-width: 205px;
+      --card-depth: 102px;
+      --link-lh: 3.75rem;
+    }
+    .portfolio-grid{
+      padding-top: 17.5rem;
+    }
+  }
+  @media (min-width: 540px) and (max-width: 767px){
+    :root{
+      --card-width: 230px;
+      --card-depth: 115px;
+      --link-lh: 4rem;
+    }
+    .portfolio-grid{
+      padding-top: 17.75rem;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px){
+    :root{
+      --card-width: 196px;
+      --card-depth: 97px;
+      --link-lh: 3.75rem;
+    }
+  }
+  @media (min-width: 1024px) and (max-width: 1279px){
+    :root{
+      --card-width: 233px;
+      --card-depth: 116px;
+      --link-lh: 4.625rem;
+    }
+  }
+  @media (min-width: 1280px) and (max-width: 1535px){
+    :root{
+      --card-width: 303px;
+      --card-depth: 151px;
+      --link-lh: 6.25rem;
+    }
+  }
+  @media (min-width: 1536px){
+    :root{
+      --card-width: 371px;
+      --card-depth: 185px;
+      --link-lh: 8rem;
+    }
   }
 
 }
