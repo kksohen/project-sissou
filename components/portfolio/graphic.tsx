@@ -12,7 +12,7 @@ export default function GraphicWorks(){
   useEffect(()=>{
     async function loadWorks() {
       try{
-        const work = await getWorksWithBlur();
+        const work = await getWorksWithBlur("graphic");
         setWorks(work);
       }catch(error){
         console.error(error);
@@ -69,7 +69,7 @@ export default function GraphicWorks(){
 
               <p className="z-1 pointer-none flex-1 opacity-70 font-weight-form text-xs lg:text-base">{work.date}</p>
               <h2 className="z-1 pointer-none flex-1 text-xl md:text-2xl lg:text-3xl font-weight-basic">{work.title}</h2>
-              <p className="z-1 pointer-none opacity-70 font-weight-form text-xs lg:text-base">{work.desc}</p>
+              <p className="z-1 pointer-none opacity-70 font-weight-form text-xs lg:text-base">{work.type}</p>
 
               <div className="absolute inset-0 opacity-30"
               style={{
@@ -102,7 +102,7 @@ export default function GraphicWorks(){
 
               <p className="z-1 pointer-none flex-1 opacity-70 font-weight-form text-xs lg:text-base">{work.date}</p>
               <h2 className="z-1 pointer-none flex-1 text-xl md:text-2xl lg:text-3xl font-weight-basic">{work.title}</h2>
-              <p className="z-1 pointer-none opacity-70 font-weight-form text-xs lg:text-base">{work.desc}</p>
+              <p className="z-1 pointer-none opacity-70 font-weight-form text-xs lg:text-base">{work.type}</p>
 
               <div className="absolute inset-0 opacity-30"
               style={{
@@ -163,7 +163,7 @@ export default function GraphicWorks(){
         </div>
 
         <Link data-cursor-target 
-        key={work.id} href={`/portfolio/${work.id}`}
+        key={work.id} href={`/portfolio/graphic/${work.id}`}
         className="portfolio-link font-weight-form desc-text-color flex w-full px-3">
           <h4 className="pointer-none">{work.title}</h4>
           <p className="ml-auto pointer-none">+</p>
