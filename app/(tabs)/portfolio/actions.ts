@@ -16,7 +16,7 @@ async function getImgBlurPlaceholder(src: string) {
       buffer = readFileSync(path);
     }else{
       const res = await fetch(src);
-      if(res.ok) return defaultBlur;
+      if(!res.ok) return defaultBlur;
       buffer = Buffer.from(await res.arrayBuffer());
     };
 
@@ -60,6 +60,7 @@ async function getImgPlaceholder(src: string){
   };
 }
 
+export type WorkCategory = "graphic" | "web-app" | "branding" | "motion";
 export interface IWork{
   id: number;
   date: string;
@@ -70,15 +71,36 @@ export interface IWork{
   desc: string;
   image: string;
   pixel: string;
-  category: "graphic" | "web-app" | "branding" | "motion";
+  category: readonly WorkCategory[];
   detailImages: string[];
   photoBlur?: string[];
 }
 
-const allWorks = [
+const allWorks: IWork[] = [
+  //web-app category
+  //web-app, branding category
+  { 
+    id: 8,
+    date:"2024",
+    title: "Lucky One",
+    type: "UXUI Design",
+    project: "Personal",
+    tools:["Cinema 4D", "Figma", "Photoshop", "Illustration"],
+    desc: "AR · RPG 요소를 결합한 셀프 멘탈케어를 위한 챌린지형 작물 재배 · 수확 앱입니다. 스마트폰과 연동해 사용자의 생체리듬과 감정을 분석하며, 진행 상황 공유 및 지인과 함께 수행할 수 있는 프로그램을 구성해 지속적인 참여를 유도합니다.",
+    image: "/assets/images/mockup/luckyone-thum.jpg",
+    pixel: "",
+    category: ["web-app", "branding"] as const,
+    detailImages: [
+      "/assets/images/mockup/luckyone-1.jpg",
+      "/assets/images/mockup/luckyone-2.jpg",
+      "/assets/images/mockup/luckyone-4.jpg",
+      "/assets/images/mockup/luckyone-5.jpg",
+      "/assets/images/mockup/luckyone-6.jpg"
+    ]
+  },
   //graphic category
   { 
-    id: 5, 
+    id: 7, 
     date:"2025",
     title: "Animal Farm", 
     type: "Book Cover Design",
@@ -87,7 +109,7 @@ const allWorks = [
     desc: "조지 오웰의 『동물농장』 책 커버 디자인으로, 주요 등장인물과 배경 요소를 그래픽으로 표현했습니다.",
     image: "/assets/images/mockup/animal-thum.jpg",
     pixel: "",
-    category: "graphic" as const,
+    category: ["graphic"] as const,
     detailImages: [
       "/assets/images/mockup/animal-1.jpg",
       "/assets/images/mockup/animal-2.jpg",
@@ -95,7 +117,7 @@ const allWorks = [
     ]
   },
   { 
-    id: 4, 
+    id: 6, 
     date:"2025", 
     title: "1984", 
     type: "Book Cover Design",
@@ -104,7 +126,7 @@ const allWorks = [
     desc: "조지 오웰의 『1984』 책 커버 디자인으로, 슬로건과 상징 요소를 그래픽으로 표현했습니다.",
     image: "/assets/images/mockup/1984-thum.jpg",
     pixel: "",
-    category: "graphic" as const,
+    category: ["graphic"] as const,
     detailImages: [
       "/assets/images/mockup/1984-1.jpg",
       "/assets/images/mockup/1984-2.jpg",
@@ -112,16 +134,16 @@ const allWorks = [
     ]
   },
   { 
-    id: 3, 
+    id: 5, 
     date:"2025", 
     title: "Этажи", 
     type: "Vinyl Album Design",
     project: "Personal",
     tools:["Photoshop", "Illustration"], 
-    desc: "몰찻도마의 『Etazhi』 앨범 패키지 디자인으로, 추상적인 그래픽 요소와 모서리가 뾰족한 타이포를 통해 타이틀곡 「Sudno」 의 배경인 병실 내부의 경직된 분위기와 앨범 제목 '복층 건물'의 기하학적 구조를 시각화했습니다.",
+    desc: "몰찻도마의 『Etazhi』 앨범 패키지 디자인으로, 추상적인 그래픽 요소와 모서리가 뾰족한 타이포그래피를 통해 타이틀곡 「Sudno」 의 배경인 병실 내부의 경직된 분위기와 앨범 제목 '복층 건물'의 기하학적 구조를 시각화했습니다.",
     image: "/assets/images/mockup/etazhi-thum.jpg",
     pixel: "",
-    category: "graphic" as const,
+    category: ["graphic"] as const,
     detailImages: [
       "/assets/images/mockup/etazhi-1.jpg",
       "/assets/images/mockup/etazhi-2.jpg",
@@ -132,7 +154,7 @@ const allWorks = [
     ]
   },
   { 
-    id: 2, 
+    id: 4, 
     date:"2025", 
     title: "RusKor", 
     type: "Type Design",
@@ -141,7 +163,7 @@ const allWorks = [
     desc: "러시아어를 입문하는 한국인을 위해 키릴 문자의 발음기호에 부합하는 한글의 자모음을 배치하고, 한글의 시각적 형태를 활용하여 러시아어 발음을 연상시키며 쉽게 익숙해질 수 있는 『RusKor』 문자를 디자인했습니다.",
     image: "/assets/images/mockup/ruskor-thum.jpg",
     pixel: "",
-    category: "graphic" as const,
+    category: ["graphic"] as const,
     detailImages: [
       "/assets/images/mockup/ruskor-1.jpg",
       "/assets/images/mockup/ruskor-2.jpg",
@@ -151,7 +173,7 @@ const allWorks = [
     ]
   },
   { 
-    id: 1, 
+    id: 3, 
     date:"2024", 
     title: "2024年13月", 
     type: "Poster Design",
@@ -160,17 +182,51 @@ const allWorks = [
     desc: "2024년을 보내며 한 해를 마무리하는 포스터를 제작했습니다.",
     image: "/assets/images/mockup/newyear-thum.jpg",
     pixel: "",
-    category: "graphic" as const,
+    category: ["graphic"] as const,
     detailImages: [
       "/assets/images/mockup/newyear-1.jpg",
       "/assets/images/mockup/newyear-2.jpg",
       "/assets/images/mockup/newyear-3.jpg",
     ]
+  },
+  { 
+    id: 2, 
+    date:"2022", 
+    title: "에코의 에-코", 
+    type: "Magazine Design",
+    project: "Personal",
+    tools:["Cinema 4D", "InDesign", "Photoshop", "Illustration"],
+    desc: "Eco와 Echo가 만나 '생태의 메아리'라는 의미를 지닌 『에코의 에-코의 에-코』 는 친환경 라이프에 관한 이야기를 담은 매거진입니다. 파동을 시각화한 타이포그래피와 자연의 울림이 퍼져나가는 그래픽 연출을 통해 주제를 표현했습니다.",
+    image: "/assets/images/mockup/eco-thum.jpg",
+    pixel: "",
+    category: ["graphic"] as const,
+    detailImages: [
+      "/assets/images/mockup/eco-1.jpg",
+      "/assets/images/mockup/eco-2.jpg",
+      "/assets/images/mockup/eco-3.jpg",
+      "/assets/images/mockup/eco-4.jpg"
+    ]
+  },
+  { 
+    id: 1, 
+    date:"2020", 
+    title: "조화", 
+    type: "Poster Design",
+    project: "Personal",
+    tools:["Illustration"],
+    desc: "'조화'라는 단어에 내포된 다채로움과 희망을 표현한 포스터 연작입니다.",
+    image: "/assets/images/mockup/nothing-thum.jpg",
+    pixel: "",
+    category: ["graphic"] as const,
+    detailImages: [
+      "/assets/images/mockup/nothing-1.jpg",
+      "/assets/images/mockup/nothing-2.jpg",
+    ]
   }
 ];
 
-export async function getWorksWithBlur(category: IWork["category"]):Promise<IWork[]> {
-  const filterWorks = allWorks.filter(work => work.category === category);
+export async function getWorksWithBlur(category: IWork["category"][0]):Promise<IWork[]> {
+  const filterWorks = allWorks.filter(work => work.category.includes(category));
 
   const worksWithBlur = await Promise.all(
     filterWorks.map(async work=>{
@@ -190,12 +246,12 @@ export async function getWorksWithBlur(category: IWork["category"]):Promise<IWor
 }
 
 //id 불러오기
-export async function getWorkById(id:number, category?: IWork["category"]): Promise<IWork|null>{
+export async function getWorkById(id:number, category?: IWork["category"][0]): Promise<IWork|null>{
   try{
     let targetWorks: IWork[];
 
     if(category){
-      targetWorks = allWorks.filter(work => work.category === category);
+      targetWorks = allWorks.filter(work => work.category.includes(category));
     }else{
       targetWorks = allWorks;
     }
@@ -221,10 +277,10 @@ export async function getWorkById(id:number, category?: IWork["category"]): Prom
 }
 
 //게시글에서 같은 카테고리 내의 다른 게시물들 받아오기
-export async function getOtherWorks(category: IWork["category"], excludeId?: number){
+export async function getOtherWorks(category: IWork["category"][0], excludeId?: number){
   try{
     //같은 카테고리 내 현재 게시글 제외 다 불러오기
-    const works = allWorks.filter(work => work.category === category && work.id !== excludeId).sort((a, b)=> b.id - a.id);
+    const works = allWorks.filter(work => work.category.includes(category) && work.id !== excludeId).sort((a, b)=> b.id - a.id);
 
     //년도 별 그룹
     const group: Record<string, Array<{id: number; title: string;}>> = {};

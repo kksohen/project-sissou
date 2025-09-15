@@ -35,7 +35,7 @@ const publicOnlyUrls : Routes = { //아무나 접근ㅇ
 
 //페이지 접근 권한
 export function canAccessPage(pathname: string, isLoggedIn: boolean){
-  const isPublicUrl = publicOnlyUrls[pathname];
+  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio");
   const isAuthUrl = authOnlyUrls[pathname];
   
   if(isLoggedIn){
@@ -47,10 +47,12 @@ export function canAccessPage(pathname: string, isLoggedIn: boolean){
 
 export async function middleware(req: NextRequest){
   const session = await getSession();
-  const fullPath = req.nextUrl.pathname + req.nextUrl.search; //쿼리파라미터 포함ㅇ
+  const pathname = req.nextUrl.pathname;
+  
+  const fullPath = pathname + req.nextUrl.search; //쿼리파라미터 포함ㅇ
 
-  const isPublicUrl = publicOnlyUrls[req.nextUrl.pathname];
-  const isAuthUrl = authOnlyUrls[req.nextUrl.pathname];
+  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio");
+  const isAuthUrl = authOnlyUrls[pathname];
   
   if(!session.id){ 
     if(!isPublicUrl){ //로그인 필요한 페이지 접근 시 로그인 페이지로

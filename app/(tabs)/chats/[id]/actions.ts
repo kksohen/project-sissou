@@ -64,8 +64,12 @@ export async function getRoomJoin(chatRoomId: string){
         }
       });
 
-      if(isParticipating) return {chatRoom, joined: false};
+      //참여 중 - 채팅방 들어가도록ㅇ
+      if(isParticipating){
+        return {chatRoom, joined: false};
+      }
 
+      //참여 시 채팅방 인원 이미 다 찼을 경우
       if(chatRoom._count.chatRoomUsers >= chatRoom.max_participants){
         return {chatRoom: {...chatRoom, isFull: true}, joined: false};
       };
@@ -113,6 +117,10 @@ export async function getRoomJoin(chatRoomId: string){
     });
 
     if(!result) return null;
+
+    if("isFull" in result.chatRoom && result.chatRoom.isFull){
+      return result.chatRoom;
+    };
 
     if(result.joined && result.joinMsg && result.user){
       const channel = server.channel(`room-${chatRoomId}`);

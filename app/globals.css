@@ -722,7 +722,7 @@
       --link-lh: 3rem;
     }
     .portfolio-grid{
-      padding-top: 16.75rem;
+      padding-top: 16.5rem;
     }
   }
   @media (min-width: 408px) and (max-width: 479px){
@@ -732,7 +732,7 @@
       --link-lh: 3.25rem;
     }
     .portfolio-grid{
-      padding-top: 17.25rem;
+      padding-top: 17rem;
     }
   }
   @media (min-width: 480px) and (max-width: 539px){
@@ -742,7 +742,7 @@
       --link-lh: 3.75rem;
     }
     .portfolio-grid{
-      padding-top: 17.5rem;
+      padding-top: 17.25rem;
     }
   }
   @media (min-width: 540px) and (max-width: 767px){
@@ -752,7 +752,7 @@
       --link-lh: 4rem;
     }
     .portfolio-grid{
-      padding-top: 17.75rem;
+      padding-top: 17.5rem;
     }
   }
   @media (min-width: 768px) and (max-width: 1023px){

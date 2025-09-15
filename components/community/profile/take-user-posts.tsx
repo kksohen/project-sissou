@@ -759,7 +759,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
   
   return(
     <>
-    <div className="pt-40 sm:pt-44 lg:pt-48 mb-10 sm:mb-40
+    <div className="pt-40 sm:pt-45 lg:pt-48 mb-10 sm:mb-40
     grid grid-cols-3 gap-0.5 lg:gap-1">
       {posts.map(post => (
         <Link key={post.id} href={`/posts/${post.id}`}

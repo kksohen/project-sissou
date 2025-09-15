@@ -631,7 +631,7 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
 
   return(
     <>
-    <div className="pt-40 sm:pt-44 lg:pt-48 mb-10 sm:mb-40 flex flex-col">
+    <div className="pt-40 sm:pt-45 lg:pt-48 mb-10 sm:mb-40 flex flex-col">
     {chats.map(chat => (
       <Link key={`${chat.id}-${chat.updated_at}`} 
       href={`/chats/${chat.id}`} data-cursor-target
