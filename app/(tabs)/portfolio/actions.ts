@@ -93,6 +93,7 @@ const allWorks: IWork[] = [
     detailImages: [
       "/assets/images/mockup/luckyone-1.jpg",
       "/assets/images/mockup/luckyone-2.jpg",
+      "/assets/images/mockup/luckyone-3.gif",
       "/assets/images/mockup/luckyone-4.jpg",
       "/assets/images/mockup/luckyone-5.jpg",
       "/assets/images/mockup/luckyone-6.jpg"
