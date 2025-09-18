@@ -279,31 +279,46 @@ export async function saveMessage(payload: string, chatRoomId: string){
   const session=  await getSession();
   if(!session.id) return;
 
-  const newMessage = await db.message.create({
-    data: {
-      payload,
-      chatRoomId,
-      userId: session.id!
-    },
-    select: {
-      id: true
-    }
-  });
+  try{
+    const result = await db.$transaction(async(tx)=>{
+      const newMessage = await tx.message.create({
+      data: {
+        payload,
+        chatRoomId,
+        userId: session.id!
+      },
+      select: {
+        id: true,
+        created_at: true
+      }
+    });
 
-  await markMsgAsRead(newMessage.id, session.id!);
+    await tx.messageRead.create({
+      data: {
+        messageId: newMessage.id,
+        userId: session.id!,
+        read_at: new Date()
+      }
+    });
 
-  await db.chatRoom.update({
-    where: {
-      id: chatRoomId,
-    },
-    data: {
-      updated_at: new Date()
-    }
-  });
+    await tx.chatRoom.update({
+      where: {
+        id: chatRoomId
+      },
+      data: {
+        updated_at: new Date()
+      }
+    });
 
-  revalidatePath("/community");
+    return newMessage;
+    });
 
-  return newMessage;
+    revalidatePath("/community");
+    return result;
+  }catch(error){
+    console.error(error);
+    throw error;
+  };
 }
 
 export async function updateMsgRead(chatRoomId: string, userId: number){

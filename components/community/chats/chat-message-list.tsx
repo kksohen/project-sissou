@@ -2,7 +2,7 @@
 import { InitChatMessages } from "@/app/(tabs)/chats/[id]/page";
 import { formatToDate, formatToTime } from "@/lib/utils";
 import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import ChatDeleteBtn from "./chat-delete-btn";
 import { createClient, RealtimeChannel } from "@supabase/supabase-js";
@@ -29,6 +29,8 @@ interface ChatMessageListProps{
 export default function ChatMessageList({initMessages, userId, chatRoomId, username, avatar, isGroupChat, participantCount}: ChatMessageListProps){
   const [messages, setMessages] = useState(initMessages);
   const [message, setMessage] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState<Set<number>>(new Set()); //현재 접속 중
+  const lastSystemMsg = useRef<{payload: string, time: number} | null>(null); //영상채팅 알림 중복 메시지 방지
   const bottomRef = useRef<HTMLDivElement>(null);
   const initLoadRef = useRef(true);
   const channel = useRef<RealtimeChannel>(null);
@@ -43,13 +45,62 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
     };
   };
 
+  //unreadCount
+  const calculateUnreadCount = useCallback((currentOnlineUsers: Set<number>) => {
+    const onlineCount = currentOnlineUsers.size; //현재 접속 중 인원 수
+
+    if(isGroupChat){
+      return Math.max(0, participantCount - 1 - onlineCount); //그룹챗 본인 제외
+    }else{
+      return onlineCount > 0 ? 0 : 1; //1:1챗 접속 중 0 : 1
+    };
+
+  }, [isGroupChat, participantCount]);
+
+  //영상채팅 시스템 메시지
+  const handleSystemMsg = useCallback((e: CustomEvent) => {
+    const {payload, userId: messageUserId, username: messageUsername, type, isSystemMessage} = e.detail;
+
+    //시스템 메시지 발생에 해당하는 사용자만 브로드캐스트해서 중복 방지
+    if (messageUserId !== userId) return;
+
+    setOnlineUsers(currentOnlineUsers => {
+      const currentUnreadCount = calculateUnreadCount(currentOnlineUsers);
+
+      const msgPayload = {
+        id: Date.now(),
+        payload,
+        is_read: currentUnreadCount === 0,
+        created_at: new Date(),
+        userId: messageUserId,
+        user: {
+          username: messageUsername,
+          avatar: avatar
+        },
+        unreadCount: currentUnreadCount,
+        type,
+        isSystemMessage: isSystemMessage || false
+      };
+
+      if(channel.current){
+        channel.current.send({
+          type: "broadcast",
+          event: "message",
+          payload: msgPayload
+        });
+      };
+
+      return currentOnlineUsers;
+    });
+  }, [userId, avatar, calculateUnreadCount]);
+
   useEffect(()=>{
     if(messages.length > 0){
-      const latestMessage = messages[messages.length -1];
+      const latestMessage = messages[messages.length - 1];
       if(userId === latestMessage.userId){
         scrollToBottom();
-      }
-    };
+      };
+    }
   },[messages, userId]);
 
   //page 진입 시 메시지 로드
@@ -72,12 +123,12 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
   const onSubmit = async(e:React.FormEvent)=>{
     e.preventDefault();
 
-    const newUnreadCount = isGroupChat ? participantCount - 1 : 0;
+    const newUnreadCount = calculateUnreadCount(onlineUsers);
 
     const myMsg = {
       id: Date.now(),
       payload: message,
-      is_read: false,
+      is_read: newUnreadCount === 0,
       created_at: new Date(),
       userId,
       user: {
@@ -91,14 +142,28 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
     setMessages(prevMsgs => [...prevMsgs, myMsg]);
     setMessage("");
 
-    try{ //실시간 브로드캐스트
-      await saveMessage(message, chatRoomId);
+    try{
+      const savedMessage = await saveMessage(message, chatRoomId);
+      //실시간 브로드캐스트
+      if(savedMessage){
+        const broadcastMsg = {
+          ...myMsg,
+          id: savedMessage.id
+        };
 
-      channel.current?.send({
-      type: "broadcast",
-      event: "message",
-      payload: myMsg
-    });
+        setMessages(prevMsgs => 
+          prevMsgs.map(msg => 
+            msg.id === myMsg.id ? broadcastMsg : msg
+          )
+        );
+
+        channel.current?.send({
+          type: "broadcast",
+          event: "message",
+          payload: broadcastMsg
+        });
+      };
+      
     }catch(error){
       console.error(error);
       setMessages(prevMsgs => prevMsgs.filter(msg => msg.id !== myMsg.id));
@@ -111,101 +176,162 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
       await updateMsgRead(chatRoomId, userId);
     };
 
-    const sendMessages = ()=>{
-      channel.current?.send({
-        type: "broadcast",
-        event: "message-receipt",
-        payload: {userId}
-      });
-    };
-
-    //영상채팅 관련
-    const handleSystemMessage = (e: CustomEvent)=>{
-      const {payload, userId: messageUserId, username: messageUsername, type, isSystemMessage} = e.detail;
-
-      const msgPayload = {
-        id: Date.now(),
-        payload,
-        is_read: false,
-        created_at: new Date(),
-        userId: messageUserId,
-        user: {
-          username: messageUsername,
-          avatar: avatar
-        },
-        unreadCount: 0,
-        type,
-        isSystemMessage: isSystemMessage || false
-      };
-
-      if(channel.current){ //실시간 브로드캐스트 - 일반메시지처럼 보냄
-        channel.current.send({
-          type: "broadcast",
-          event: "message",
-          payload: msgPayload
-        });
-      };
-    };
-
-    window.addEventListener("send-system-message", handleSystemMessage as EventListener);
+    window.addEventListener("send-system-message", handleSystemMsg as EventListener);
 
     channel.current = client.channel(`room-${chatRoomId}`);
 
     if(channel.current){
       channel.current.on(
-        "broadcast",
-        {event: "message"},
-        (payload)=>{
-          const newMessage = payload.payload;
-          //영상채팅 시스템 메시지
-          if(newMessage.isSystemMessage){
-            setMessages(prevMsgs => [...prevMsgs, newMessage]);
-            return;
+      "broadcast",
+      {event: "message"},
+      (payload)=>{
+        const newMessage = payload.payload;
+
+        //영상채팅 시스템 메시지
+        if(newMessage.isSystemMessage){
+          const now = Date.now();
+
+          //메시지 내용 동일, 3초이내 같은 메시지 수신 시 무시ㅇ
+          if(lastSystemMsg.current && lastSystemMsg.current.payload === newMessage.payload && now - lastSystemMsg.current.time < 3000) return;
+
+          lastSystemMsg.current = {
+            payload: newMessage.payload,
+            time: now
           };
-          //일반 채팅 메시지 
-          if(newMessage.userId !== userId){
-            setMessages(prevMsgs => [...prevMsgs, newMessage]);
-            lastMsgAsRead();
-            sendMessages();
+
+          setMessages(prevMsgs => [...prevMsgs, newMessage]);
+          return;
+        };
+        //일반 채팅 메시지 
+        if(newMessage.userId !== userId){
+          setMessages(prevMsgs => [...prevMsgs, newMessage]);
+          lastMsgAsRead();
+
+          channel.current?.send({
+            type: "broadcast",
+            event: "read-message",
+            payload: {
+              messageId: newMessage.id, 
+              readId: userId
+            }
+          });
+        };
+      }).on("broadcast", {
+      event: "system-message"
+      }, (payload)=>{ //들어오고 나가는 인원 시스템 메시지
+        const systemMsg = payload.payload;
+
+        setOnlineUsers(currentOnlineUsers => {
+          const adjustedSystemMsg = {
+            ...systemMsg,
+            unreadCount: calculateUnreadCount(currentOnlineUsers),
+            is_read: calculateUnreadCount(currentOnlineUsers) === 0
           };
-        }).on("broadcast",
-          {event: "system-message"},
-          (payload)=>{ //들어오고 나가는 인원 시스템 메시지
-            const systemMsg = payload.payload;
-            setMessages(prevMsgs => [...prevMsgs, systemMsg]);
-          }
-        ).on("broadcast",
-          {event: "message-receipt"},
-          (payload)=>{
-            const readBy = payload.payload.userId;
 
-            setMessages(prevMsgs => {
-              if(prevMsgs.length === 0) return prevMsgs;
+          setMessages(prevMsgs => [...prevMsgs, adjustedSystemMsg]);
 
-              return prevMsgs.map(msg => {
-                if(readBy && readBy !== msg.userId && msg.unreadCount > 0){
-                  const newUnreadCount = Math.max(0, (msg.unreadCount || 0) - 1);
+          return currentOnlineUsers;
+        });
+      }).on("broadcast",{
+        event: "read-message"
+      }, (payload)=>{
+        const {messageId, readId} = payload.payload;
 
-                  return {
-                    ...msg,
-                    is_read: newUnreadCount === 0,
-                    unreadCount: newUnreadCount
-                  };
-                }
-                return msg;
-              });
-            });
-          }
-      ).subscribe();
+        setMessages(prevMsgs=>
+          prevMsgs.map(msg => {
+            if(msg.id === messageId && msg.userId === userId && readId !== userId){
+              const newUnreadCount = Math.max(0, msg.unreadCount - 1);
+
+              return{
+                ...msg,
+                unreadCount: newUnreadCount,
+                is_read: newUnreadCount === 0
+              };
+            };
+            
+            return msg;
+          })
+        );
+      }).on("broadcast", {
+        event: "user-online"
+      }, (payload)=>{
+        const onlineUserId = payload.payload.userId;
+
+        if(onlineUserId !== userId){
+          setOnlineUsers(prev=>{
+            const newOnlineUsers = new Set(prev);
+            newOnlineUsers.add(onlineUserId);
+
+            return newOnlineUsers;
+          });
+        }
+      }).on("broadcast", {
+        event: "user-offline"
+      }, (payload)=>{
+        const offlineUserId = payload.payload.userId;
+
+        setOnlineUsers(prev =>{
+          const newOnlineUsers = new Set(prev);
+          newOnlineUsers.delete(offlineUserId);
+
+          return newOnlineUsers;
+        });
+      }).on("broadcast", {
+        event: "request-online-users"
+      }, (payload)=>{
+        const requestId = payload.payload.requestId;
+        
+        if(requestId !== userId){
+          channel.current?.send({
+            type: "broadcast",
+            event: "response-online-users",
+            payload: {userId, respondTo: requestId}
+          });
+        }
+      }).on("broadcast",{
+        event: "response-online-users"
+      }, (payload)=>{
+        const responseUserId = payload.payload.userId;
+        const respondTo = payload.payload.respondTo;
+
+        if(respondTo === userId && responseUserId !== userId){
+          setOnlineUsers(prev => {
+            const newOnlineUsers = new Set(prev);
+            newOnlineUsers.add(responseUserId);
+
+            return newOnlineUsers;
+          });
+        }
+      }).subscribe();
+
+      channel.current.send({
+        type: "broadcast",
+        event: "user-online",
+        payload: {userId}
+      });
+
+      setTimeout(()=>{
+        channel.current?.send({
+          type: "broadcast",
+          event: "request-online-users",
+          payload: {requestId: userId}
+        });
+      }, 100);
     };
-    
+  
     return()=>{
       if(channel.current){
+        channel.current.send({
+          type: "broadcast",
+          event: "user-offline",
+          payload: {userId}
+        });
+
         channel.current?.unsubscribe();
         channel.current = null;
       };
     };
-  },[avatar, chatRoomId, userId]);
+  },[calculateUnreadCount, chatRoomId, handleSystemMsg, userId]);
 
   return(
     <>
