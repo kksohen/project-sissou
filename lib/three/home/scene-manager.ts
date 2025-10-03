@@ -32,7 +32,7 @@ export class SceneManager{
   init(){
     if (this.isDisposed) return;
     
-    try {
+    try{
       this.initRenderer();
       this.initScene();
       this.initCamera();
@@ -41,7 +41,7 @@ export class SceneManager{
       this.initLoaders();
       this.initPasses();
       this.animate();
-    } catch (error) {
+    }catch(error){
       console.error(error);
       this.dispose();
     };

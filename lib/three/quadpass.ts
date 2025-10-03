@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-interface QuadPassParams {
+interface QuadPassParams{
   renderer: THREE.WebGLRenderer;
   pixel_density?: number;
   buffer_param?: THREE.RenderTargetOptions;
@@ -8,10 +8,12 @@ interface QuadPassParams {
     vertexShader: string;
     fragmentShader: string;
   };
-  uniforms: { [uniform: string]: THREE.IUniform };
+  uniforms: { 
+    [uniform: string]: THREE.IUniform 
+  };
 };
 
-export class QuadPass {
+export class QuadPass{
   renderer: THREE.WebGLRenderer;
   pixel_density: number;
   buffer_param: THREE.RenderTargetOptions;
@@ -25,9 +27,11 @@ export class QuadPass {
   material: THREE.RawShaderMaterial;
   quad_geometry: THREE.PlaneGeometry;
   quad: THREE.Mesh;
-  uniforms: { [uniform: string]: THREE.IUniform };
+  uniforms: { 
+    [uniform: string]: THREE.IUniform 
+  };
 
-  constructor(params: QuadPassParams) {
+  constructor(params: QuadPassParams){
     this.renderer = params.renderer;
     this.shader = params.shader;
 
@@ -57,7 +61,7 @@ export class QuadPass {
     };
 
     //resolution 수동 추가해줘야 함(오류 때문)
-    if(!params.shader.vertexShader.includes('uniform vec2 resolution')){
+    if(!params.shader.vertexShader.includes("uniform vec2 resolution")){
       params.shader.vertexShader =
       "precision mediump float;\nprecision mediump int;\nuniform vec2 resolution;\n" +
       params.shader.vertexShader;
@@ -100,7 +104,7 @@ export class QuadPass {
     this.scene.add(this.quad);
   };
 
-  resize() {
+  resize(){
     this.buffer.setSize(
       window.innerWidth * this.pixel_density,
       window.innerHeight * this.pixel_density
@@ -111,11 +115,11 @@ export class QuadPass {
     ];
   };
 
-  render(renderToScreen: boolean = false) {
+  render(renderToScreen: boolean = false){
     this.renderer.setRenderTarget(renderToScreen ? null : this.buffer);
     this.renderer.render(this.scene, this.camera);
   };
-  dispose() {
+  dispose(){
     this.buffer.dispose();
     this.material.dispose();
     this.quad_geometry.dispose();

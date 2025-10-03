@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import GraphicWorks from "@/components/portfolio/graphic";
 import BrandingWorks from "./branding";
 import WebAppWorks from "./web-app";
+import MotionWorks from "./motion";
 
 export default function PortfolioClient(){
   const [activeTab, setActiveTab] = useState("Graphic");
@@ -27,7 +28,7 @@ export default function PortfolioClient(){
       case "Graphic": return <GraphicWorks />;
       case "Web · App": return <WebAppWorks />;
       case "Branding": return <BrandingWorks />;
-      case "Motion": return <GraphicWorks />;
+      case "Motion": return <MotionWorks />;
       default: <GraphicWorks />;
     }
   };

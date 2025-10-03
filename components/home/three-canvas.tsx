@@ -23,7 +23,7 @@ export default function ThreeCanvas({
     if (!container) return;
 
     //1.이전 인스턴스 정리
-    if (sceneManagerRef.current) {
+    if(sceneManagerRef.current){
       sceneManagerRef.current.dispose();
       sceneManagerRef.current = null;
       onSceneManagerDispose?.();
@@ -38,17 +38,17 @@ export default function ThreeCanvas({
 
     //4.초기화 지연시킴(dom 안정화)
     const initTimeout = setTimeout(() => {
-      try {
+      try{
         sceneManager.init();
         onSceneManager?.(sceneManager);
-      } catch (error) {
+      }catch(error){
         console.error(error);
         onSceneManagerDispose?.();
-      }
+      };
     }, 50);
 
     const handleResize = () => {
-      if (sceneManagerRef.current) {
+      if(sceneManagerRef.current){
         sceneManagerRef.current.resize();
       }
     };
@@ -59,7 +59,7 @@ export default function ThreeCanvas({
       clearTimeout(initTimeout);
       window.removeEventListener("resize", handleResize);
       
-      if (sceneManagerRef.current) {
+      if(sceneManagerRef.current){
         sceneManagerRef.current.dispose();
         sceneManagerRef.current = null;
         onSceneManagerDispose?.();
