@@ -4,6 +4,8 @@ import OtherWorks from "./other-btn";
 import React from "react";
 import { getPortfolioData } from "@/lib/portfolio/utils";
 import Image from "next/image";
+import P5CanvasWrap from "./p5-canvas-wrap";
+import P5Canvas3 from "./p5-canvas3";
 
 interface PortfolioDetailProps {
   params: Promise<{ id: string }>;
@@ -12,11 +14,8 @@ interface PortfolioDetailProps {
 
 const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
   switch (work.id) {
-    case 9:
-    case 10:
-    case 11:
-      return (
-        <div className="flex flex-col gap-1">
+    case 9: return (
+        <div className="aspect-video flex flex-col gap-1">
           {work.detailImages.map((img, index) => (
             <Image
               key={index}
@@ -45,6 +44,10 @@ const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
           ))}
         </div>
       );
+    case 10:
+      return <P5CanvasWrap work={work}/>
+    case 11:
+      return <P5Canvas3 work={work} model="/assets/models/gun.obj"/>
 
     default:
       return <div>None Content</div>;
@@ -55,15 +58,13 @@ export default async function MotionDetail({
   params,
   category,
 }: PortfolioDetailProps) {
-  const { work, otherWorks } = await getPortfolioData(params, category);
+  const {work, otherWorks} = await getPortfolioData(params, category);
 
   return (
     <>
-      <div
-        className="fixed left-0 p-4 pb-2
-    pt-10 mode-svg-color-50 w-full md:w-1/3 md:pr-0
-    backdrop-blur-md"
-      >
+      <div className="fixed left-0 p-4 pb-2
+      pt-10 mode-svg-color-50 w-full md:w-1/3 md:pr-0
+      backdrop-blur-md">
         <div className="flex items-start">
           {/* left - backBtn */}
           <HandleBackBtn />
@@ -121,11 +122,9 @@ export default async function MotionDetail({
       </div>
 
       {/* right - artwork */}
-      <div
-        className="absolute -z-1 mt-10 pb-10 px-4
-    right-0 top-67 sm:top-56 md:top-0
-    w-full aspect-[16/9] md:w-2/3"
-      >
+      <div className="absolute -z-1 mt-10 pb-10 px-4
+      right-0 top-67 sm:top-56 md:top-0
+      w-full md:w-2/3">
         <MotionRender work={work} />
       </div>
     </>
