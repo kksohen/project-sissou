@@ -5,13 +5,9 @@ interface Bullet{
   x: number;
   y: number;
   z: number;
-  vx: number;
-  vy: number;
-  vz: number;
-  life: number;
 }
 
-export const sketch3 = (dimension: {width: number; height: number }, model?: string)=>{
+export const sketch4 = (dimension: {width: number; height: number }, model?: string)=>{
   return(p: p5)=>{
     let gun: p5.Geometry | null = null;
     let loaded = false;
@@ -31,7 +27,8 @@ export const sketch3 = (dimension: {width: number; height: number }, model?: str
     //shooting 
     const bullets: Bullet[] = [];
     let lastShootTime = 0;
-    const shootInterval = 320; //발사 간격
+    const shootInterval = 300; //발사 간격
+    const maxBullets = 30; //최대 총알 수
 
     //HandLandmarker 초기화
     const initHandTracking = async()=>{
@@ -99,39 +96,14 @@ export const sketch3 = (dimension: {width: number; height: number }, model?: str
       if(now - lastShootTime < shootInterval) return;
       lastShootTime = now;
 
-      //총구 방향 계산(오일러 각도 -> 방향벡터)
-      const cy = Math.cos(handRotY);
-      const sy = Math.sin(handRotY);
-      const cx = Math.cos(handRotX);
-      const sx = Math.sin(handRotX);
-
-      const dirX = sy * cx;
-      const dirY = -sx;
-      const dirZ = cy * cx;
-
-      const speed = 12;
-
       bullets.push({
-        x: handX,
-        y: handY,
-        z: handZ,
-        vx: dirX * speed,
-        vy: dirY * speed,
-        vz: dirZ * speed,
-        life: 150
+        x: p.random(-300, 300),
+        y: p.random(-200, 200),
+        z: p.random(-600, 200)
       });
-    };
 
-    const updateBullets =()=>{
-      for(let i = bullets.length -1; i >=0; i--){
-        bullets[i].x += bullets[i].vx;
-        bullets[i].y += bullets[i].vy;
-        bullets[i].z += bullets[i].vz;
-        bullets[i].life--;
-
-        if(bullets[i].life <=0){
-          bullets.splice(i, 1);
-        }
+      if(bullets.length > maxBullets){
+        bullets.shift(); //가장 오래된 총알 제거
       }
     };
 
@@ -267,9 +239,6 @@ export const sketch3 = (dimension: {width: number; height: number }, model?: str
       if(p.frameCount % 2 === 0){
         runHandTracking();
       }
-
-      //총알 업데이트
-      updateBullets();
 
       //lights
       p.ambientLight(100);

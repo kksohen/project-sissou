@@ -90,7 +90,7 @@ const allWorks: IWork[] = [
     type: "Interactive Art",
     project: "Personal",
     tools: ["Blender", "P5JS", "MediaPipe"],
-    desc: "P5JS와 MediaPipe를 활용한 인터랙티브 아트워크로, 사용자의 손동작을 인식해 총을 쏠 수 있습니다. 화면을 향해 손가락 총을 겨누어보세요!",
+    desc: "P5JS와 MediaPipe를 활용한 인터랙티브 아트워크로, 사용자의 손동작을 인식해 총을 쏠 수 있습니다. 모드를 바꿔가며 화면을 향해 두 손가락으로 총을 겨누어보세요!",
     image: "/assets/images/mockup/p53-thum.jpg",
     pixel: "",
     category: ["motion"] as const,

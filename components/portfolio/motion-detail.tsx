@@ -5,7 +5,7 @@ import React from "react";
 import { getPortfolioData } from "@/lib/portfolio/utils";
 import Image from "next/image";
 import P5CanvasWrap from "./p5-canvas-wrap";
-import P5Canvas3 from "./p5-canvas3";
+import P5CanvasWrap2 from "./p5-canvas-wrap2";
 
 interface PortfolioDetailProps {
   params: Promise<{ id: string }>;
@@ -47,7 +47,7 @@ const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
     case 10:
       return <P5CanvasWrap work={work}/>
     case 11:
-      return <P5Canvas3 work={work} model="/assets/models/gun.obj"/>
+      return <P5CanvasWrap2 work={work} model="/assets/models/gun.obj"/>
 
     default:
       return <div>None Content</div>;
