@@ -241,7 +241,7 @@ export const sketch3 = (dimension: {width: number; height: number }, model?: str
 
       //webcam
       video = p.createCapture("video");
-      video.size(1920, 1080);
+      video.size(640, 480);
       video.hide();
 
       //load model
@@ -261,7 +261,7 @@ export const sketch3 = (dimension: {width: number; height: number }, model?: str
     };
 
     p.draw = () => {
-      p.background("#ff0000");
+      p.background("#D80016");
 
       //손 감지
       if(p.frameCount % 2 === 0){

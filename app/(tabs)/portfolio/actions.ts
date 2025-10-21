@@ -84,6 +84,19 @@ export interface IWork {
 const allWorks: IWork[] = [
   //motion category
   {
+    id: 12,
+    date: "2024",
+    title: "Tears",
+    type: "Interactive Art",
+    project: "Personal",
+    tools: ["P5JS", "MediaPipe"],
+    desc: "P5JS와 MediaPipe를 활용한 인터랙티브 아트워크로, 사용자의 눈과 손을 인식해 동작하는 그래픽을 제작했습니다. 눈 밑에 검지를 대면 흘러내리는 눈물을 볼 수 있습니다.",
+    image: "/assets/images/mockup/p53-thum.jpg",
+    pixel: "",
+    category: ["motion"] as const,
+    detailImages: [],
+  },
+  {
     id: 11,
     date: "2024",
     title: "총",
