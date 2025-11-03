@@ -207,7 +207,7 @@ export class SceneManager{
   };
 
   private initPasses(){
-    const { rendererRef, sceneBufferRef, mainPassRef, backPassRef } = this.refs;
+    const {rendererRef, sceneBufferRef, mainPassRef, backPassRef} = this.refs;
     if (!rendererRef.current || !sceneBufferRef.current || this.isDisposed) return;
 
     try {
@@ -218,7 +218,7 @@ export class SceneManager{
         pixel_density: pixelRatio,
         shader: home_bck_shader,
         uniforms: {
-          copy_buffer: { value: null }
+          copy_buffer: {value: null}
         }
       });
 
@@ -227,8 +227,8 @@ export class SceneManager{
         pixel_density: pixelRatio,
         shader: home_main_shader,
         uniforms: {
-          scene_buffer: { value: sceneBufferRef.current.texture },
-          bck_buffer: { value: backPass.buffer.texture }
+          scene_buffer: {value: sceneBufferRef.current.texture},
+          bck_buffer: {value: backPass.buffer.texture}
         }
       });
       
@@ -390,8 +390,8 @@ export class SceneManager{
     this.render();
   };
 
-  private disposeRenderer() {
-    const { rendererRef, containerRef } = this.refs;
+  private disposeRenderer(){
+    const {rendererRef, containerRef} = this.refs;
     const container = containerRef.current;
     
     if(rendererRef.current){

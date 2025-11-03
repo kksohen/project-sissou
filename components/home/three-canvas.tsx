@@ -13,10 +13,10 @@ export default function ThreeCanvas({
   onSceneManager, onSceneManagerDispose
 }: IThreeCanvas) {
   const refs = useThreeRefs();
-  const { containerRef } = refs;
+  const {containerRef} = refs;
   const sceneManagerRef = useRef<SceneManager | null>(null);
   
-  useBgColor({ refs });
+  useBgColor({refs});
 
   useEffect(() => {
     const container = containerRef.current;
