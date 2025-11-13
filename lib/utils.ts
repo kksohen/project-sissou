@@ -120,6 +120,8 @@ export function skipHistory(path: string){
     pathname.includes("/edit/"),
     pathname.includes("/chats/"),
     pathname.includes("/graphic/"),
+    pathname.includes("/motion/"),
+    pathname.includes("/web-app/"),
     isModal && /\/profile\/\d+$/.test(pathname), //프로필 모달 제외
     path.includes("/.well-known/"),
     path.includes("/favicon"),

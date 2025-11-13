@@ -1,23 +1,23 @@
 "use client";
 import { IWork } from "@/app/(tabs)/portfolio/actions";
-import P5Canvas2 from "./p5-canvas2";
 import { useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import P5Canvas1 from "./p5-canvas1";
 
 interface P5CanvasProps{
   work: IWork;
 }
 
-export default function P5CanvasWrap({work}: P5CanvasProps){
-  const canvas2Ref = useRef<{clear: () => void}>(null);
+export default function P5CanvasWrap3({work}: P5CanvasProps){
+  const canvas1Ref = useRef<{clear: () => void}>(null);
 
   const handleClear = () => {
-    canvas2Ref.current?.clear();
+    canvas1Ref.current?.clear();
   };
 
   return(
     <div className="aspect-[1.4/1] flex flex-col gap-1 items-center">
-      <P5Canvas2 ref={canvas2Ref} work={work}/>
+      <P5Canvas1 ref={canvas1Ref} work={work}/>
 
       <button data-cursor-target onClick={handleClear}
       className="rounded-full

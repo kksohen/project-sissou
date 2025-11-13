@@ -1,28 +1,18 @@
 "use client";
 import { IWork } from "@/app/(tabs)/portfolio/actions";
-import { sketch1 } from "@/lib/p5/sketch-1";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { sketch6 } from "@/lib/p5/sketch-6";
+import { useEffect, useRef, useState } from "react";
 
 interface P5CanvasProps{
   work: IWork;
 }
 
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
-const P5Canvas1 = forwardRef<{clear: ()=>void}, P5CanvasProps>(({work}, ref)=>{
+const P5Canvas6 = ({work}: P5CanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimension, setDimension] = useState({width: 0, height: 0});
-  const clearRef = useRef<(()=>void) | null>(null);
 
-  //clear
-  useImperativeHandle(ref, ()=>({
-    clear: ()=>{
-      if(clearRef.current){
-        clearRef.current();
-      }
-    }
-  }));
-
-  //resize observe
+  //resize
   useEffect(()=>{
     if(!containerRef.current) return;
 
@@ -41,35 +31,32 @@ const P5Canvas1 = forwardRef<{clear: ()=>void}, P5CanvasProps>(({work}, ref)=>{
   }, []);
 
   //p5js
-  useEffect(()=>{
+  useEffect(() => {
     if(dimension.width === 0) return;
 
+    const container = containerRef.current;
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
     let p5instance: any;
 
     import("p5").then((p5Module)=>{
       const p5 = p5Module.default;
 
-      const sketchClear = sketch1(dimension, (cl)=>{
-        clearRef.current = cl;
-      });
+      const sketchInstance = sketch6(dimension);
 
-      p5instance = new p5(sketchClear, containerRef.current!);
+      p5instance = new p5(sketchInstance, container!);
     });
 
     return()=>{
       if(p5instance){
         p5instance.remove();
       }
-
-      clearRef.current = null;
     };
   }, [dimension]);
-  
-  return(
+
+  return (
     <div ref={containerRef} className="overflow-hidden w-full h-full aspect-[1.4/1]"/>
   );
-});
+};
 
-P5Canvas1.displayName = "P5Canvas1";
-export default P5Canvas1;
+P5Canvas6.displayName = "P5Canvas6";
+export default P5Canvas6;
