@@ -48,6 +48,16 @@ const P5Canvas6 = ({work}: P5CanvasProps) => {
 
     return()=>{
       if(p5instance){
+        //video stream 정리
+        const videoEl = container?.querySelectorAll("video");
+        videoEl?.forEach((video)=>{
+          const stream = video.srcObject as MediaStream;
+
+          if(stream){
+            stream.getTracks().forEach((track)=>track.stop());
+          }
+        });
+
         p5instance.remove();
       }
     };

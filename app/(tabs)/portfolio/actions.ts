@@ -84,6 +84,19 @@ export interface IWork {
 const allWorks: IWork[] = [
   //motion category
   {
+    id: 17,
+    date: "2025",
+    title: "Fisheye Grid",
+    type: "Interactive Art",
+    project: "Personal",
+    tools: ["P5JS"],
+    desc: "P5JS와 MediaPipe를 활용한 인터랙티브 아트워크입니다. 사용자의 손을 추적해 형성되는 어안렌즈 효과와 왜곡되는 그리드를 체험할 수 있습니다. 화면에 검지를 대보세요!",
+    image: "/assets/images/mockup/p52-thum.jpg",
+    pixel: "",
+    category: ["motion"] as const,
+    detailImages: [],
+  },
+  {
     id: 16,
     date: "2025",
     title: "능선",
