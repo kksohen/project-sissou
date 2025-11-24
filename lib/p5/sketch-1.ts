@@ -46,7 +46,7 @@ export const sketch1 = (dimension: {width: number, height: number}, onClear?: (c
 
       if(auto){
         const nVal = p.noise(nOffset); 
-        const autoY = pg.height / 2 + p.map(nVal, 0, 1, -180, 180); //y값 높낮이 조절
+        const autoY = pg.height / 2 + p.map(nVal, 0, 1, -220, 220); //y값 높낮이 조절
 
         const index = Math.floor(currentX / xStep);
         
@@ -70,7 +70,7 @@ export const sketch1 = (dimension: {width: number, height: number}, onClear?: (c
           xDir = 1;
         };
 
-        nOffset += 0.05;
+        nOffset += 0.04;
       }
     };
 
