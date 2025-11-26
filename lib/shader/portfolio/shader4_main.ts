@@ -128,25 +128,25 @@ export const shader4_main : Shader = {
     float getValue(float idx, float x, float y){
       int i = int(idx);
       if(i == 0) return 1.0;
-      if(i == 1) return 15.0;
-      if(i == 2) return x;
+      if(i == 1) return log(abs(x * y) + 1.0); //로그 곡선
+      if(i == 2) return x; //선형
       if(i == 3) return y;
       if(i == 4) return x * x; //포물선 - 좌우
       if(i == 5) return y * y; //포물선 - 상하
-      if(i == 6) return x * x * x;
+      if(i == 6) return x * x * x; //3차 곡선
       if(i == 7) return y * y * y;
-      if(i == 8) return x * x * x * x;
+      if(i == 8) return x * x * x * x; //4차 곡선
       if(i == 9) return y * y * y * y;
-      if(i == 10) return x * y * x;
+      if(i == 10) return x * y * x; //2차 혼합
       if(i == 11) return y * y * x;
-      if(i == 12) return sin(y); //파동 - 수평
+      if(i == 12) return sin(y);
       if(i == 13) return cos(y);
-      if(i == 14) return sin(x); //파동 - 수직
+      if(i == 14) return sin(x);
       if(i == 15) return cos(x);
       if(i == 16) return sin(x) * cos(y);
-      if(i == 17) return length(vec2(x, y));
-      if(i == 18) return 2.0;
-      if(i == 19) return distance(vec2(x, y), vec2(0.0)); //원형 그라디언트
+      if(i == 17) return length(vec2(x, y)); //원형 그라디언트
+      if(i == 18) return sin(x * y * 5.0); //모아레
+      if(i == 19) return length(vec2(x, y));
       if(i == 20) return PI;
       if(i == 21) return atan(x, y) * 4.0; //방사형
       if(i == 22) return pnoise(vec2(x, y) / 2.0);

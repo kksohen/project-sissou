@@ -12,7 +12,7 @@ import ThreeCanvas2 from "./three-canvas2";
 import ThreeCanvasWrap from "./three-canvas-wrap";
 import P5CanvasWrap3 from "./p5-canvas-wrap3";
 import P5Canvas6 from "./p5-canvas6";
-import ThreeCanvas4 from "./three-canvas4";
+import ThreeCanvasWrap2 from "./three-canvas-wrap2";
 
 interface PortfolioDetailProps {
   params: Promise<{ id: string }>;
@@ -20,7 +20,7 @@ interface PortfolioDetailProps {
 }
 
 const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
-  switch (work.id) {
+  switch(work.id){
     case 9: return (
         <div className="aspect-video flex flex-col gap-1">
           {work.detailImages.map((img, index) => (
@@ -68,7 +68,7 @@ const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
     case 17:
       return <P5Canvas6 work={work}/>
     case 18:
-      return <ThreeCanvas4 work={work}/>
+      return <ThreeCanvasWrap2 work={work}/>
 
     default:
       return <div>None Content</div>;
