@@ -13,6 +13,7 @@ import ThreeCanvasWrap from "./three-canvas-wrap";
 import P5CanvasWrap3 from "./p5-canvas-wrap3";
 import P5Canvas6 from "./p5-canvas6";
 import ThreeCanvasWrap2 from "./three-canvas-wrap2";
+import ThreeCanvas5 from "./three-canvas5";
 
 interface PortfolioDetailProps {
   params: Promise<{ id: string }>;
@@ -69,6 +70,8 @@ const MotionRender: React.FC<{ work: IWork }> = ({ work }) => {
       return <P5Canvas6 work={work}/>
     case 18:
       return <ThreeCanvasWrap2 work={work}/>
+    case 19:
+      return <ThreeCanvas5 work={work}/>
 
     default:
       return <div>None Content</div>;

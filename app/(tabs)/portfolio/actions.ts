@@ -84,6 +84,19 @@ export interface IWork {
 const allWorks: IWork[] = [
   //motion category
   {
+    id: 19,
+    date: "2025",
+    title: "Tile",
+    type: "Generative Art",
+    project: "Personal",
+    tools: ["ThreeJS", "WebGL", "Shader"],
+    desc: "여러 개의 수학 함수와 색상 팔레트를 결합한 무한 루프 제너레이티브 아트워크입니다. 1.3초마다 기하학적 패턴, 잔상, 터널 애니메이션이 랜덤으로 재생됩니다.",
+    image: "/assets/images/mockup/three4-thum.jpg",
+    pixel: "",
+    category: ["motion"] as const,
+    detailImages: [],
+  },
+  {
     id: 18,
     date: "2025",
     title: "Eternal Tunnel",
