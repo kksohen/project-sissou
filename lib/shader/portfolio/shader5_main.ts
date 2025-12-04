@@ -19,24 +19,22 @@ export const shader5_main : Shader = {
     uniform float time;
 
     #define bigness 0.1
-    #define EPSILON pow(10., -4.)
+    #define EPSILON 0.0001 //pow(10., -4.)
     #define num_balls 30.
+    #define num_wire_points 60.
     #define TIME_OFFSET 600.
     #define PI 3.1415
 
-    float sdSphere(vec3 p, float s){
-      return length(p)-s;
+    //노이즈
+    float mod289(float x){
+      return x - floor(x * (1.0 / 289.0)) * 289.0;
     }
-
-    float smin(float a, float b, float k){
-      float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
-      return mix(b, a, h) - k * h * (1.0 - h);
+    vec4 mod289(vec4 x){
+      return x - floor(x * (1.0 / 289.0)) * 289.0;
     }
-
-    float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
-    vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
-    vec4 perm(vec4 x){return mod289(((x * 34.0) + 1.0) * x);}
-    
+    vec4 perm(vec4 x){
+      return mod289(((x * 34.0) + 1.0) * x);
+    }
     float noise(vec3 p){
       vec3 a = floor(p);
       vec3 d = p - a;
@@ -53,38 +51,168 @@ export const shader5_main : Shader = {
       vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
       return o4.y * d.y + o4.x * (1.0 - d.y);
     }
-
+    //random
+    float random(vec2 p){
+      float s = dot(p, vec2(31.1717, 23.7171));
+      return fract(sin(s * 13.7887) * 45781.9731);
+    }
+    float filmGrain(vec2 uv, float time){
+      vec2 coord = uv * 10.0;
+      return random(coord + fract(time * 0.5)) * 2.0 - 1.0;
+    }
+    //구
+    float sdSphere(vec3 p, float s){
+      return length(p) - s;
+    }    
+    //메타볼
+    float smin(float a, float b, float k){
+      float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
+      return mix(b, a, h) - k * h * (1.0 - h);
+    }
+    vec3 rotateX(vec3 p, float angle){
+      float c = cos(angle);
+      float s = sin(angle);
+      return vec3(
+        p.x,
+        p.y * c - p.z * s,
+        p.y * s + p.z * c
+      );
+    }
+    //구 배치, 모션
     float SDF(vec3 p){
       float dP = 100.0;
-      float t = 0.0;
+      float t = time * 0.05; //rot
       
-      float radius = 0.18;
-      float helixLength = 0.7;
-      float turns = 4.;
-      
-      for(float i = num_balls; i < num_balls * 2.0; i++){
-        float progress = (i - num_balls) / num_balls;
-        float angle = progress * turns * 2.0 * PI + t;
-        float xPos = (progress - 0.5) * helixLength;
-        
+      float majorRadius = 0.25;  
+      float minorRadius = 0.15; 
+
+      for(float i = .0; i < num_balls; i++){
+        float angle = (i / num_balls) * 2.0 * PI + t;
+
         vec3 pos = vec3(
-          xPos,
-          cos(angle) * radius,
-          sin(angle) * radius
+          cos(angle) * majorRadius,
+          sin(angle) * majorRadius,
+          0.0
         );
+
+        float wavePulse = sin(time * 2.0 + angle) * 0.5 + 0.5;
+
+        float individualWave = sin(time * 3.0 + i * 0.5) * 0.001;
+        float sphereSize = 0.03 + wavePulse * 0.005 + individualWave;
+        
+        float blendStrength = 0.005 + wavePulse * 0.03;
                 
-        float smallSphere = sdSphere(p - pos, 0.04);
-        dP = smin(dP, smallSphere, 0.05);
+        float smallSphere = sdSphere(p - pos, sphereSize);
+        dP = smin(dP, smallSphere, blendStrength);
+      }
+
+      float smallMajorRadius = 0.15;
+      
+      for(float i = 0.0; i < num_balls; i++){
+        float angle = (i / num_balls) * 2.0 * PI + t;
+
+        vec3 pos = vec3(
+          cos(angle) * smallMajorRadius,
+          sin(angle) * smallMajorRadius,
+          0.0
+        );
+        
+        // 45도 회전 적용
+        pos = rotateX(pos, PI * 0.15);
+        
+        // 우측으로 이동
+        pos.z += 0.1;
+        pos.y += -0.1;
+
+        float wavePulse = sin(time * 2.0 + angle) * 0.5 + 0.5;
+        float individualWave = sin(time * 3.0 + i * 0.5) * 0.001;
+        float sphereSize = 0.022 + wavePulse * 0.003 + individualWave;
+        float blendStrength = 0.004 + wavePulse * 0.02;
+                
+        float smallSphere = sdSphere(p - pos, sphereSize);
+        dP = smin(dP, smallSphere, blendStrength);
+      }
+      
+      for(float i = 0.0; i < num_balls; i++){
+        float angle = (i / num_balls) * 2.0 * PI + t;
+
+        vec3 pos = vec3(
+          cos(angle) * smallMajorRadius,
+          sin(angle) * smallMajorRadius,
+          0.0
+        );
+        
+        // -45도 회전 적용
+        pos = rotateX(pos, -PI * 0.15);
+        
+        // 우측으로 이동
+        pos.z += -0.1;
+        pos.y += -0.1;
+
+        float wavePulse = sin(time * 2.0 + angle) * 0.5 + 0.5;
+        float individualWave = sin(time * 3.0 + i * 0.5) * 0.001;
+        float sphereSize = 0.022 + wavePulse * 0.003 + individualWave;
+        float blendStrength = 0.004 + wavePulse * 0.02;
+                
+        float smallSphere = sdSphere(p - pos, sphereSize);
+        dP = smin(dP, smallSphere, blendStrength);
+      }
+
+      for(float i = 0.0; i < num_balls; i++){
+        float angle = (i / num_balls) * 2.0 * PI + t;
+
+        vec3 pos = vec3(
+          cos(angle) * smallMajorRadius,
+          sin(angle) * smallMajorRadius,
+          0.0
+        );
+        
+        pos = rotateX(pos, PI * 0.35);
+        
+        pos.z += 0.15;
+        pos.y += -0.2;
+
+        float wavePulse = sin(time * 2.0 + angle) * 0.5 + 0.5;
+        float individualWave = sin(time * 3.0 + i * 0.5) * 0.001;
+        float sphereSize = 0.022 + wavePulse * 0.003 + individualWave;
+        float blendStrength = 0.004 + wavePulse * 0.02;
+                
+        float smallSphere = sdSphere(p - pos, sphereSize);
+        dP = smin(dP, smallSphere, blendStrength);
+      }
+
+      for(float i = 0.0; i < num_balls; i++){
+        float angle = (i / num_balls) * 2.0 * PI + t;
+
+        vec3 pos = vec3(
+          cos(angle) * smallMajorRadius,
+          sin(angle) * smallMajorRadius,
+          0.0
+        );
+        
+        pos = rotateX(pos, -PI * 0.35);
+        
+        // 우측으로 이동
+        pos.z += -0.2;
+        pos.y += -0.2;
+
+        float wavePulse = sin(time * 2.0 + angle) * 0.5 + 0.5;
+        float individualWave = sin(time * 3.0 + i * 0.5) * 0.001;
+        float sphereSize = 0.022 + wavePulse * 0.003 + individualWave;
+        float blendStrength = 0.004 + wavePulse * 0.02;
+                
+        float smallSphere = sdSphere(p - pos, sphereSize);
+        dP = smin(dP, smallSphere, blendStrength);
       }
       
       return dP;
     }
-    
+    //ray marching
     vec4 trace(vec3 o, vec3 r){
       float t = 0.0;
       vec3 p = o;
       
-      for(int i = 0; i < 20; i++){
+      for(int i = 0; i < 14; i++){
         p = o + r * t;
         float d = SDF(p);
         t += d * 1.0;
@@ -105,8 +233,10 @@ export const shader5_main : Shader = {
       vec2 uv = gl_FragCoord.xy / resolution.xy;
       vec2 rs = resolution;
       uv = (uv - 0.5) * rs / rs.y;
-            
-      vec3 camera = vec3(0.35, 0.3, .35);
+      
+      uv *= 0.7;
+
+      vec3 camera = vec3(0.9, 0.0, 0.3);
       vec3 target = vec3(0.0, 0.0, 0.0);
       vec3 forward = normalize(target - camera);
       vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
@@ -116,35 +246,37 @@ export const shader5_main : Shader = {
       
       vec4 v = trace(camera, ray);
       
-      vec3 background = vec3(1.0, 1.0, 0.2);
-      vec3 col = background;
+      vec3 bg = vec3(1.0, 1.0, 0.2);
+      vec3 col = bg;
       
       if(v.w < 10.0){
         vec3 normal = estimateNormal(v.xyz);
         vec3 newRay = reflect(ray, normal);
         
-        // 반사 강도 계산
         float reflectStrength = dot(normal, -ray) * 0.5 + 0.5;
         
-        vec3 lightCol1 = vec3(0.4, 1.0, 0.1); 
-        vec3 lightCol2 = vec3(1.0, 0.7, 0.1);  
-        vec3 accentCol = vec3(0.1, 0.5, 1.0);
+        vec3 accentCol = vec3(0.36, 1.0, 0.1);
+        vec3 mainCol = vec3(1.0, 0.44, 0.1);
+        vec3 botCol = vec3(0.1, 0.86, 1.0);
         
-        float colorVar = abs(sin(newRay.x * 3.0)); // abs로 항상 양수
-        vec3 surfaceCol = mix(lightCol1, lightCol2, colorVar);
+        float colorVar = abs(newRay.x * 3.0);
+        vec3 surfaceCol = mix(botCol, accentCol, colorVar);
         
-        // accentCol 혼합 강도 줄임
-        float accentMix = abs(sin(newRay.y * 4.0)) * 0.2; // 0.3 -> 0.2로 감소
-        surfaceCol = mix(surfaceCol, accentCol, accentMix);
+        float accentMix = abs(newRay.y * 4.0) * 0.2;
+        surfaceCol = mix(surfaceCol, mainCol, accentMix);
+
+        float specular = pow(reflectStrength, 12.0);
+        vec3 whiteHighlight = vec3(1.0, 1.0, 0.7);
+        surfaceCol += whiteHighlight * specular * 0.5;
         
-        surfaceCol = mix(surfaceCol, vec3(1.0, 0.9, 0.3), reflectStrength * 0.2);
+        float grain = filmGrain(gl_FragCoord.xy / resolution.xy, time);
         
-        surfaceCol = max(surfaceCol, vec3(0.3, 0.5, 0.1));
+        float grainStrength = 0.05; 
+        surfaceCol += grain * grainStrength;
         
         float fog = 1.0 / (1.0 + pow(v.w, 10.0) * 0.1);
-        col = surfaceCol * fog + (1.0 - fog) * background;
+        col = surfaceCol * fog + (1.0 - fog) * bg;
         
-        // 밝기 부스트
         col *= 1.2;
       }
       

@@ -68,7 +68,7 @@ export const shader4_bck : Shader = {
         vec2 rotUV = rot(tanh(sin(cameraPos.z * 0.01) * 3.0) * 0.3) * u; //터널 속에서 둥글게 회전ㅇ
         vec3 rayDir = normalize(rightDir * rotUV.x + cross(rightDir, forwardDir) * rotUV.y + forwardDir * 1.0);
         
-        //lay marching
+        //ray marching
         float totalDist = 0.0;
         float stepSize = 0.002;
         

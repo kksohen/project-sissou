@@ -13,7 +13,8 @@ export class SceneManager5{
   private FADE_IN_DURATION = "0.3s";
 
   private getPixelRatio(){//성능 최적화
-      return Math.min(CONSTANTS.PIXEL_DENSITY, window.devicePixelRatio); 
+      // return Math.min(CONSTANTS.PIXEL_DENSITY, window.devicePixelRatio); 
+      return Math.min(0.5, window.devicePixelRatio); 
     };
 
   private getScreen(){
