@@ -1,3 +1,5 @@
+"use client";
+
 import { formatToTimeAgo } from "@/lib/utils";
 import Image from "next/image";
 import CommentDelete from "./comment-delete";
