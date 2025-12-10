@@ -8,11 +8,11 @@ import { usePathname } from "next/navigation";
 
 const pageDesc = {
   "/": "Prologue : 즐거운 우리 집 | Home Sweet Home | Casa Dolce Casa",
-  "/exhibition-born":"Born : 어느 날, 그들은 태어났다 . . . | One Day, They Were Born . . .",
-  "/exhibition-growth":"Growth : 그들은 무엇으로 이루어져 있는가 ? | What Are They Made of ?",
+  "/exhibition/born":"Born : 어느 날, 그들은 태어났다 . . . | One Day, They Were Born . . .",
+  "/exhibition/growth":"Growth : 그들은 무엇으로 이루어져 있는가 ? | What Are They Made of ?",
   "/portfolio":"Intermission : SOU's Home",
-  "/exhibition-climax":"Climax : 도주 혹은 질주 | SISSOU or SISSOU",
-  "/exhibition-end":"End : 처음으로 | Da Capo",
+  "/exhibition/climax":"Climax : 도주 혹은 질주 | SISSOU or SISSOU",
+  "/exhibition/end":"End : 처음으로 | Da Capo",
   "/brand":"Epilogue : Behind Exhibition . . .",
   "/community":"Community : 만들어봐요, 우리 집 | Let's Build Our Home !",
   "/goods":"Goods : Welcome, Homeless",

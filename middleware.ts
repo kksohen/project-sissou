@@ -22,11 +22,8 @@ const authOnlyUrls : Routes = { //로그인한 사용자는 접근ㄴ, /profile�
 
 const publicOnlyUrls : Routes = { //아무나 접근ㅇ
   "/": true,
-  "/exhibition-born": true,
-  "/exhibition-growth": true,
+  "/exhibition": true,
   "/portfolio": true,
-  "/exhibition-climax": true,
-  "/exhibition-end": true,
   "/brand": true,
   "/goods": true,
   "/contact": true,
@@ -35,7 +32,7 @@ const publicOnlyUrls : Routes = { //아무나 접근ㅇ
 
 //페이지 접근 권한
 export function canAccessPage(pathname: string, isLoggedIn: boolean){
-  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio");
+  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio") || pathname.startsWith("/exhibition");
   const isAuthUrl = authOnlyUrls[pathname];
   
   if(isLoggedIn){
@@ -51,7 +48,7 @@ export async function middleware(req: NextRequest){
   
   const fullPath = pathname + req.nextUrl.search; //쿼리파라미터 포함ㅇ
 
-  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio");
+  const isPublicUrl = publicOnlyUrls[pathname] || pathname.startsWith("/portfolio") || pathname.startsWith("/exhibition");
   const isAuthUrl = authOnlyUrls[pathname];
   
   if(!session.id){ 

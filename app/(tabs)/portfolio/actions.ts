@@ -84,19 +84,6 @@ export interface IWork {
 const allWorks: IWork[] = [
   //motion category
   {
-    id: 19,
-    date: "2025",
-    title: "Tile",
-    type: "Generative Art",
-    project: "Personal",
-    tools: ["ThreeJS", "WebGL", "Shader"],
-    desc: "메타볼을 디벨롭시켰습니다.",
-    image: "/assets/images/mockup/three4-thum.jpg",
-    pixel: "",
-    category: ["motion"] as const,
-    detailImages: [],
-  },
-  {
     id: 18,
     date: "2025",
     title: "Eternal Tunnel",
