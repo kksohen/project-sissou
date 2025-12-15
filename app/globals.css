@@ -34,6 +34,8 @@
 
     /* light */
     --font-pretendard: "Pretendard", sans-serif;
+    --font-agahnsangsoo: agahnsangsoo2012, sans-serif;
+    --font-jjjgothic: jjjgothic, sans-serif;
 
     --color-primary: #0098FF;
     --color-secondary: #00A052;
@@ -567,6 +569,12 @@
   }
 
   /* font custom */
+  .font-agahnsangsoo{
+    font-family: var(--font-agahnsangsoo);
+  }
+  .font-jjjgothic{
+    font-family: var(--font-jjjgothic);
+  }
   .font-weight-custom{
     font-weight: var(--font-weight-custom);
   }
