@@ -97,7 +97,7 @@ export default function PortfolioCube({work, index, rotation, onCubeClick, categ
 
       <Link data-cursor-target 
       href={`/portfolio/${category}/${work.id}`}
-      className="portfolio-link font-weight-form desc-text-color flex w-full px-3">
+      className="portfolio-link font-weight-basic username-spacing desc-text-color flex w-full px-3">
         <h4 className="pointer-none">{work.title}</h4>
         <p className="ml-auto pointer-none">+</p>
       </Link>

@@ -1,14 +1,23 @@
 "use client";
-
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react"
 
 export const MouseCursor = ()=>{
+  const pathname = usePathname();
   const [pos, setPos]  = useState({x: 0, y: 0});
-  const [active, setActive] = useState(false); // 커서 hover, focus, click, active
+  const [active, setActive] = useState(false); //cursor hover, focus, click, active
   const [color, setColor] = useState("#FF5FCF");
 
   useEffect(()=>{
-    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+    let colorVar = "--color-accent";
+
+    if(pathname === "/exhibition/born" || pathname === "/exhibition/growth"){
+      colorVar = "--color-secondary";
+    }else if(pathname === "/exhibition/end" || pathname === "/brand"){
+      colorVar = "--color-primary";
+    };
+
+    const accentColor = getComputedStyle(document.documentElement).getPropertyValue(colorVar).trim();
     if(accentColor){
       setColor(accentColor);
     };
@@ -20,7 +29,7 @@ export const MouseCursor = ()=>{
     const up = ()=> setActive(false);
 
     const isCursorTarget = (el: HTMLElement | null): boolean => {
-      return !!el?.closest('[data-cursor-target]');
+      return !!el?.closest("[data-cursor-target]");
     };
 
     const onMouseOver = (e:MouseEvent)=>{
@@ -56,7 +65,7 @@ export const MouseCursor = ()=>{
       window.removeEventListener('mouseout', onMouseOut);
     };
 
-  }, []);
+  }, [pathname]);
 
   const rad = active ? 24 : 12;
   const cursorSize = 48;
@@ -78,7 +87,7 @@ export const MouseCursor = ()=>{
         cy={center}
         r={rad}
         fill={color}
-        style={{ transition: "r 0.3s ease" }}
+        style={{transition: "r 0.3s ease"}}
       />
       <circle cx={center} cy={center} r={5} fill={color} />
     </svg>

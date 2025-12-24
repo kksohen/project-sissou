@@ -7,11 +7,47 @@ import { MouseCursor } from "@/components/mouse-cursor";
 import { ModalProvider } from '../components/modal-context';
 
 //local font
-const pretendard = localFont({
+/* const pretendard = localFont({
   src: "../fonts/PretendardVariable.woff2",
   display: "swap",
   weight: "45 920",
   variable: "--font-pretendard",
+}); */
+const astaSans = localFont({
+  src: [
+    {
+      path: "../fonts/AstaSans-Light.woff2",
+      weight: "300",
+      style: "normal"
+    },
+    {
+      path: "../fonts/AstaSans-Regular.woff2",
+      weight: "400",
+      style: "normal"
+    },
+    {
+      path: "../fonts/AstaSans-Medium.woff2",
+      weight: "500",
+      style: "normal"
+    },
+    {
+      path: "../fonts/AstaSans-SemiBold.woff2",
+      weight: "600",
+      style: "normal"
+    },
+    {
+      path: "../fonts/AstaSans-Bold.woff2",
+      weight: "700",
+      style: "normal"
+    },
+    {
+      path: "../fonts/AstaSans-ExtraBold.woff2",
+      weight: "800",
+      style: "normal"
+    }
+  ],
+  display: "swap",
+  variable: "--font-astasans",
 });
 
 export const metadata: Metadata = {
@@ -31,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.variable} mx-auto 
+        className={`${astaSans.variable} mx-auto 
         max-w-screen-xs 
         media-text-xs
         sm:max-w-lg 

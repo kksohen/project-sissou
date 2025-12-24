@@ -112,7 +112,7 @@ export default function ContactClient(){
 
             <div className="flex-wrap flex gap-1 sm:gap-2
             text-xs md:text-sm lg:text-base
-            font-weight-form
+            font-weight-form username-spacing-comm
             leading-3 md:leading-4
             *:py-1.5 *:lg:py-2
             *:px-2 *:md:px-2.5 *:lg:px-2.75 *:rounded-full

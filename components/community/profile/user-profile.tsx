@@ -87,7 +87,7 @@ export default function ClientUserProfile({user, initFollowStatus = null, isOwne
             
           </div>
           {/* counts */}
-          <ul className="flex gap-4 sm:gap-6 font-weight-form opacity-70 text-xs md:text-sm lg:text-base">
+          <ul className="flex gap-4 sm:gap-6 font-weight-form username-spacing opacity-70 text-xs md:text-sm lg:text-base">
             <li>
               <span>Posts</span>
               <span className="ml-1 sm:ml-2">{user._count.posts}</span>
@@ -109,7 +109,7 @@ export default function ClientUserProfile({user, initFollowStatus = null, isOwne
     <div className="h-[0.0625rem] w-full ring-color opacity-70 mt-3"/>
     
     {isOwner ? (
-      <div className="flex justify-center gap-4 sm:gap-6 py-3 font-weight-basic username-spacing-comm">
+      <div className="flex justify-center gap-4 sm:gap-6 py-3 font-weight-basic username-spacing">
         {tabs.map((tab)=>(
           <button data-cursor-target
           key={tab} onClick={()=>handleTabClick(tab)}
@@ -119,7 +119,7 @@ export default function ClientUserProfile({user, initFollowStatus = null, isOwne
         ))}
       </div>
     ):(
-      <div className="flex justify-center py-3 font-weight-basic username-spacing-comm">편 Pieces</div>
+      <div className="flex justify-center py-3 font-weight-basic username-spacing">편 Pieces</div>
     )}
   </div>
 );

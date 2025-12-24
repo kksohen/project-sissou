@@ -103,12 +103,12 @@ export default function TakeCommented({userId}: TakeUserActivityProps){
               <div className="flex flex-col justify-between flex-1 min-w-0">
                 <div className="flex gap-1 items-center">
                   <h4 className="text-[0.8125rem] md:text-[0.9375rem] lg:text-lg leading-3 md:leading-4
-                  font-weight-basic username-spacing-comm">{post.title}</h4>
+                  font-weight-basic username-spacing">{post.title}</h4>
                   <span className="opacity-40 text-xs md:text-sm lg:text-base">|</span>
-                  <span className="opacity-40 text-xs md:text-sm lg:text-base font-weight-form username-spacing-desc">{formatToTimeAgo(post.commented_at.toString())}</span>
+                  <span className="opacity-40 text-xs md:text-sm lg:text-base font-weight-form username-spacing">{formatToTimeAgo(post.commented_at.toString())}</span>
                 </div>
 
-                <p className="opacity-70 text-xs md:text-sm lg:text-base font-weight-form username-spacing-desc leading-3 md:leading-4
+                <p className="opacity-70 text-xs md:text-sm lg:text-base font-weight-form username-spacing leading-3 md:leading-4
                 break-all line-clamp-2 max-w-full overflow-hidden">Me : {post.payload}</p>
               </div>
 

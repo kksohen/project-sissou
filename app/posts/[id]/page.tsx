@@ -124,8 +124,8 @@ export default async function PostDetail({params}: {params : Params}){
               }</div>
             
               <div className="*:text-xs *:md:text-sm *:lg:text-base pointer-none">
-                <h4 className="font-weight-basic username-spacing-comm">{post.user.username}</h4>
-                <p className="font-weight-form username-spacing-desc opacity-40 -mt-1">{formatToTimeAgo(post.created_at.toString())}</p>
+                <h4 className="font-weight-basic username-spacing">{post.user.username}</h4>
+                <p className="font-weight-form username-spacing opacity-40 -mt-1">{formatToTimeAgo(post.created_at.toString())}</p>
               </div>
             </Link>
             
@@ -140,7 +140,7 @@ export default async function PostDetail({params}: {params : Params}){
     
       {/* post detail */}
       <div className="pt-32 sm:pt-36 md:pt-40">
-        <p className="font-weight-form username-spacing-desc lg:text-lg md:leading-5 lg:leading-6 opacity-70
+        <p className="font-weight-form lg:text-lg md:leading-5 lg:leading-6 opacity-70
         break-all whitespace-pre-wrap text-wrap
         ">{post.description}</p>
         
@@ -149,7 +149,7 @@ export default async function PostDetail({params}: {params : Params}){
       
       {/* icons */}
       <div className="text-xs md:text-sm lg:text-base 
-      flex gap-3 items-center mt-6
+      flex gap-3 items-center mt-6 font-weight-form
       *:flex *:items-center *:gap-1">
         <LikeBtn isLiked={isLiked} likeCount={likeCount} postId={idNumber}/>
         

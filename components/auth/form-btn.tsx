@@ -15,7 +15,7 @@ export default function FormBtn({text}: FormBtnProps) {
     <button data-cursor-target
     disabled={pending}
     className={`py-2 border-custom-all mode-svg-color transition-all 
-    rounded-lg font-weight-custom text-xl tracking-wide form-btn-text
+    rounded-lg text-xl tracking-wide form-btn-text
     ${pending ? "mode-secondary-50 backdrop-blur-lg cursor-not-allowed" : "mode-secondary"}`}>{pending ? "Loading..." : text}</button>
   );
 };

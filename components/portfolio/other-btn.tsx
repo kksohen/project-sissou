@@ -30,7 +30,7 @@ export default function OtherWorks({otherWorks, category}: OtherWorksProps){
       text-xs md:text-sm lg:text-base xl:text-lg">
 
         <div className="flex items-center form-text-color">
-          <p className="font-weight-basic username-spacing-comm
+          <p className="font-weight-basic username-spacing
           text-xs md:text-sm lg:text-base xl:text-lg">Other Works</p>
 
           <button onClick={handleToggle} data-cursor-target
@@ -59,7 +59,7 @@ export default function OtherWorks({otherWorks, category}: OtherWorksProps){
             duration: 0.2,
             delay: yearIndex * 0.05
           }}>
-            <h3 className="opacity-60 italic form-text-color font-weight-basic username-spacing-comm leading-5 md:leading-6 lg:leading-7">{year.year}</h3>
+            <h3 className="opacity-60 italic form-text-color font-weight-basic username-spacing leading-5 md:leading-6 lg:leading-7">{year.year}</h3>
             
             <div className="flex gap-1.5 flex-wrap">
             {year.works.map((other, workIndex) => (
@@ -72,7 +72,7 @@ export default function OtherWorks({otherWorks, category}: OtherWorksProps){
               }}
               className="-my-0.5">
                 <Link href={`/portfolio/${category}/${other.id}`} data-cursor-target
-                className="px-1 bg-[var(--desc-text-color)] text-[var(--loading-bg)] opacity-60 hover:opacity-100 transition-all">
+                className="px-1 bg-[var(--desc-text-color)] text-[var(--loading-bg)] opacity-60 hover:opacity-100 transition-all font-weight-custom">
                   {other.title}
                 </Link>
               </motion.div>

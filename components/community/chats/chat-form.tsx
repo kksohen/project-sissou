@@ -62,7 +62,7 @@ export default function ChatForm({name, type, placeholder}:ChatFormProps){
       <div className="mx-auto max-w-screen-xs sm:max-w-lg md:max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl">
         <div className="max-w-full lg:max-w-4/5 xl:max-w-3/5 mx-auto">
 
-          <h2 className="text-center font-weight-basic username-spacing 
+          <h2 className="text-center font-weight-basic username-spacing-desc
           mb-4 sm:mb-8">초대 인원 선택 ({selectedUsers.length}/3)</h2>
 
           {isLoading ? (

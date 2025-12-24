@@ -752,7 +752,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
           </div>
         </div>
 
-        <h4 className="text-2xl sm:text-3xl font-weight-basic username-spacing-comm">&#40; 집 정립 중 . . . &#41;</h4>
+        <h4 className="text-2xl sm:text-3xl font-weight-basic">&#40; 집 정립 중 . . . &#41;</h4>
       </div>
     );
   };

@@ -624,7 +624,7 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
           </div>
         </div>
 
-        <h4 className="text-2xl sm:text-3xl font-weight-basic username-spacing-comm">&#40; 낙원을 찾아서 . . . &#41;</h4>
+        <h4 className="text-2xl sm:text-3xl font-weight-basic">&#40; 낙원을 찾아서 . . . &#41;</h4>
       </div>
     );
   };
@@ -673,7 +673,7 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
             
             <div className="flex flex-col">
               <h4 className="text-[0.8125rem] md:text-[0.9375rem] lg:text-lg 
-              font-weight-basic username-spacing-comm leading-4 md:leading-6">{chat.title}</h4>
+              font-weight-basic leading-4 md:leading-6">{chat.title}</h4>
 
               <p className="mt-auto
               opacity-70 text-xs md:text-sm lg:text-base
@@ -685,11 +685,11 @@ export default function TakeUserChats({initUserChats}: TakeUserChatsProps){
               {/* unread 배지 */}
               {chat.unreadCount > 0 && (
               <div className="color-primary ml-auto">
-                <span className="text-xs md:text-sm lg:text-base font-weight-basic username-spacing-desc">{chat.unreadCount > 99 ? "99+" : chat.unreadCount}</span>
+                <span className="text-xs md:text-sm lg:text-base font-weight-basic">{chat.unreadCount > 99 ? "99+" : chat.unreadCount}</span>
               </div>
               )}
 
-              <span className="mt-auto opacity-40 text-xs md:text-sm lg:text-base font-weight-form username-spacing-desc leading-3 md:leading-4">{formatToDayTime(chat.lastMsgTime.toString())}</span>
+              <span className="mt-auto opacity-40 text-xs md:text-sm lg:text-base font-weight-form leading-3 md:leading-4">{formatToDayTime(chat.lastMsgTime.toString())}</span>
             </div>
           </div>
 

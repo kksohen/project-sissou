@@ -82,7 +82,7 @@ export default function ChatList({id, title, participants, participantCount, mes
 
       </div>
       
-      <div className="pointer-none text-xs md:text-sm lg:text-base opacity-60 rounded-b-3xl loading-color 
+      <div className="pointer-none text-xs md:text-sm lg:text-base opacity-60 rounded-b-3xl loading-color font-weight-form
       flex items-start mx-7">
           <span className="py-3 justify-center items-center flex flex-1 gap-1">
             <AtSymbolIcon className="size-4 stroke-2"/>
@@ -91,7 +91,7 @@ export default function ChatList({id, title, participants, participantCount, mes
 
           <div className="w-[0.0625rem] self-stretch bg-[var(--form-text-color)] opacity-20"/>
 
-          <div className="py-3 px-4 flex flex-col flex-1 font-weight-form leading-4 md:leading-4.5 lg:leading-5 items-center">
+          <div className="py-3 px-4 flex flex-col flex-1 leading-4 md:leading-4.5 lg:leading-5 items-center">
             <div className="text-left">
               {participants.map(p=>(
               <p key={p.id}>{textMaxlength(p.username, 8)}</p>

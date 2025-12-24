@@ -40,12 +40,12 @@ export default function CommentList({
       flex gap-10">
         <div className="flex flex-col gap-0.5">
           <div className="flex items-center gap-1">
-            <h4 className="font-weight-basic username-spacing-comm">{user.username}</h4>
+            <h4 className="font-weight-basic username-spacing">{user.username}</h4>
             <span className="opacity-40">|</span>
-            <p className="font-weight-form username-spacing-desc opacity-40">{formatToTimeAgo(created_at.toString())}</p>
+            <p className="font-weight-form username-spacing opacity-40">{formatToTimeAgo(created_at.toString())}</p>
           </div>
 
-          <p className="font-weight-form username-spacing-desc opacity-70 break-all max-w-full overflow-hidden leading-3 md:leading-4">{payload}</p>
+          <p className="font-weight-form username-spacing opacity-70 break-all max-w-full overflow-hidden leading-3 md:leading-4">{payload}</p>
         </div>
 
         <div className="ml-auto">

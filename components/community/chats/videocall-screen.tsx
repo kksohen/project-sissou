@@ -432,7 +432,7 @@ export default function VideoCallScreen({chatRoomId, userId, username, avatar}: 
                 className="transform scale-x-[-1] w-full h-auto aspect-video object-cover rounded-md"/>
 
                 <p className="pt-0.75 text-[0.625rem] md:text-xs lg:text-sm
-                username-spacing-comm text-center leading-4 sm:leading-6">Me : {username}</p>
+                username-spacing text-center leading-4 sm:leading-6">Me : {username}</p>
               </motion.div>
 
               {/* other users - videoCall */}
@@ -453,10 +453,10 @@ export default function VideoCallScreen({chatRoomId, userId, username, avatar}: 
                   autoPlay playsInline muted={false}
                   className="transform scale-x-[-1] w-full h-auto aspect-video object-cover rounded-md"/>
 
-                  <p className="pt-0.75 text-[0.625rem] md:text-xs lg:text-sm username-spacing-comm text-center leading-4 sm:leading-6">{user.username}</p>
+                  <p className="pt-0.75 text-[0.625rem] md:text-xs lg:text-sm username-spacing text-center leading-4 sm:leading-6">{user.username}</p>
                 </div>
                 ):(
-                <p className="text-[0.625rem] md:text-xs lg:text-sm username-spacing-comm text-center">Connecting . . .</p>
+                <p className="text-[0.625rem] md:text-xs lg:text-sm username-spacing text-center">Connecting . . .</p>
                 )}
               </motion.div>
               ))}
@@ -467,7 +467,7 @@ export default function VideoCallScreen({chatRoomId, userId, username, avatar}: 
               transition={{delay: (remoteUsers.length + index) * 0.1}}
               key={`empty-${index}`} className="w-full h-auto aspect-video object-cover flex items-center justify-center rounded-md overflow-hidden form-text-color form-bg-color font-weight-basic">
 
-                <p className="text-[0.625rem] md:text-xs lg:text-sm username-spacing-comm text-center">Waiting for . . .</p>
+                <p className="text-[0.625rem] md:text-xs lg:text-sm username-spacing text-center">Waiting for . . .</p>
               </motion.div>
               ))}
             </motion.div>

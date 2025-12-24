@@ -92,46 +92,36 @@ export default async function MotionDetail({
           {/* middle */}
           <div className="flex flex-col gap-2 w-full">
             {/* desc */}
-            <div
-              className="py-2 px-3 md:py-2.5 md:px-3.5
-          mode-svg-color-70 backdrop-blur-md rounded-3xl form-text-color"
-            >
-              <p
-                className="opacity-60 italic 
-            font-weight-basic username-spacing-comm
-            text-xs md:text-sm lg:text-base xl:text-lg"
-              >
+            <div className="py-2 px-3 md:py-2.5 md:px-3.5
+          mode-svg-color-70 backdrop-blur-md rounded-3xl form-text-color">
+              <p className="opacity-60 italic 
+              font-weight-basic username-spacing
+              text-xs md:text-sm lg:text-base xl:text-lg">
                 {work.date}
               </p>
 
-              <h3
-                className="leading-5 md:leading-6 lg:leading-7
-            desc-text-color text-xl md:text-2xl lg:text-3xl font-weight-basic username-spacing-comm"
-              >
+              <h3 className="leading-5 md:leading-6 lg:leading-7
+              desc-text-color text-xl md:text-2xl lg:text-3xl font-weight-basic username-spacing">
                 {work.title}
               </h3>
 
-              <div className="pt-3 xl:pt-6
-            text-xs md:text-sm lg:text-base xl:text-lg lg:leading-6">
-                <p className="font-weight-basic username-spacing-comm">
+              <div className="pt-3 xl:pt-6 text-xs md:text-sm lg:text-base xl:text-lg lg:leading-6">
+                <p className="font-weight-basic username-spacing">
                   ▪ {work.type}
                 </p>
-                <p className="font-weight-basic username-spacing-comm">
+                <p className="font-weight-basic username-spacing">
                   ▪ Project :{" "}
-                  <span className="opacity-60 font-weight-form">
+                  <span className="opacity-60 font-weight-form username-spacing">
                     {work.project}
                   </span>
                 </p>
-                <p className="font-weight-basic username-spacing-comm">
+                <p className="font-weight-basic username-spacing">
                   ▪ Tools :{" "}
-                  <span className="opacity-60 font-weight-form">
+                  <span className="opacity-60 font-weight-form username-spacing">
                     {work.tools.join(", ")}
                   </span>
                 </p>
-                <p
-                  className="pt-3 xl:pt-6 
-              font-weight-basic username-spacing-desc"
-                >
+                <p className="pt-3 xl:pt-6 font-weight-basic username-spacing-desc">
                   {work.desc}
                 </p>
               </div>

@@ -68,7 +68,7 @@ export default function PortfolioClient(){
       <div className="h-[0.0625rem] w-full ring-color opacity-70 mt-3"/>
 
       {/* tabs bar */}
-      <div className="flex justify-center gap-4 sm:gap-6 py-3 font-weight-basic username-spacing-comm">
+      <div className="flex justify-center gap-4 sm:gap-6 py-3 font-weight-basic username-spacing">
       {tabs.map(tab => (
         <button data-cursor-target
         key={tab} onClick={()=>handleTabsChange(tab)}

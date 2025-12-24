@@ -383,7 +383,7 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
               <span className="pb-0.25 text-[0.625rem] md:text-xs lg:text-sm font-weight-form opacity-40">{formatToTime(message.created_at.toString())}</span>
               
               {/* payload */}
-              <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75
+              <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75 font-weight-form
               rounded-2xl lg:rounded-3xl
               text-xs md:text-sm lg:text-base text-[#EEEEF0]
               text-shadow-md username-spacing-desc
@@ -426,7 +426,7 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
                   )}
                   
                   <div className="flex flex-row gap-1 items-end">
-                    <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75
+                    <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75 font-weight-form
                     rounded-2xl lg:rounded-3xl
                     text-xs md:text-sm lg:text-base text-[#EEEEF0]
                     text-shadow-md username-spacing-desc
@@ -443,7 +443,7 @@ export default function ChatMessageList({initMessages, userId, chatRoomId, usern
               </div>
               ):(
               <>
-              <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75
+              <span className="py-1.5 lg:py-2 px-2 md:px-2.5 lg:px-2.75 font-weight-form
               rounded-2xl lg:rounded-3xl
               text-xs md:text-sm lg:text-base text-[#EEEEF0]
               text-shadow-md username-spacing-desc

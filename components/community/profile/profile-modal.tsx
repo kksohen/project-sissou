@@ -45,7 +45,7 @@ export default function ClientProfileModal({user, initFollowStatus, isOwner, pho
     flex justify-center items-center backdrop-blur-lg">
       <div onClick={(e)=>e.stopPropagation()}
       className="mode-secondary-50 border-custom-all mode-svg-color
-      font-weight-custom dark:tracking-normal
+      font-weight-modal dark:tracking-normal
       rounded-3xl p-3 sm:p-4">
       
       <div className="flex gap-2.5 sm:gap-3.5 items-start mb-2">
