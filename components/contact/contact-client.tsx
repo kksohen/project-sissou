@@ -77,7 +77,7 @@ export default function ContactClient(){
   
   return(
     <>
-    <div className="mt-10 max-w-full lg:max-w-4/5 xl:max-w-3/5 mx-auto mb-24 sm:mb-36">
+    <div className="mt-10 max-w-full lg:max-w-4/5 xl:max-w-3/5 mx-auto mb-12">
       {/* title */}
       <div className="mb-10
       flex flex-col justify-center items-center gap-1.5 text-center">

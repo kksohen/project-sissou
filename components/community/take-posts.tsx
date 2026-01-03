@@ -52,7 +52,7 @@ export default function TakePosts({initPosts}: TakePostsProps){
 
   return(
     <>
-    <div className="mb-24 sm:mb-40 items-start grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-10">
+    <div className="mb-10 sm:mb-24 items-start grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 xl:gap-10">
     {posts.map(post => <PostList key={post.id} {...post} />)}
     </div>
 

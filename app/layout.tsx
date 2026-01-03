@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import DarkMode from "@/components/dark-mode";
 import { MouseCursor } from "@/components/mouse-cursor";
 import { ModalProvider } from '../components/modal-context';
+import FooterWrap from "@/components/footer-wrap";
 
 //local font
 /* const pretendard = localFont({
@@ -86,6 +87,7 @@ export default function RootLayout({
         <MouseCursor />
         <ModalProvider>
           {children}
+          <FooterWrap/>
         </ModalProvider>
 
         {/* adobe fonts */}

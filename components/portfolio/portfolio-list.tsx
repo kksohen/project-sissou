@@ -50,7 +50,7 @@ export default function PortfolioList({category}: PortfolioListProps){
 
   return(
     <div className="pt-66 md:pt-70 lg:pt-72 xl:pt-74 2xl:pt-77
-    mb-20 sm:mb-40
+    mb-6
     grid grid-cols-2 md:grid-cols-3
     portfolio-grid">
       {works.map((work, index)=>{

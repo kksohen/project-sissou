@@ -196,7 +196,11 @@
   -moz-appearance: textfield;
   appearance: textfield;
   }
-
+  @media (min-width: 409px) and (max-width: 639px){
+    .mb-xs{
+      margin-bottom: 6.25rem;
+    }
+  }
   @media (max-width: 640px){
     .max-w-screen-xs{
       margin: 0 1rem;
@@ -243,7 +247,15 @@
       width: 800px;
     }
   }
+  @media(min-width: 641px) and (max-width: 767px){
+    .mb-br{
+      margin-bottom: 0.5rem;
+    }
+  }
   @media(max-width: 565px){
+    .mb-br{
+      margin-bottom: 0.5rem;
+    }
     .media-logo-w{
     display: none;
     }
