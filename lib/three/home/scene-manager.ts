@@ -136,8 +136,8 @@ export class SceneManager{
 
   private initLoaders(){
     const{
-      sceneRef, 
-      envMapRef, 
+      sceneRef,
+      envMapRef,
       sphereMaterialRef,
       loadersRef,
       texturesRef,
@@ -159,7 +159,12 @@ export class SceneManager{
 
     //cubeMap load
     cubeLoader.setPath("/assets/models/").load([
-      'px3.png', 'nx3.png', 'py3.png', 'ny3.png', 'pz3.png', 'nz3.png'
+      "px3.png",
+      "nx3.png",
+      "py3.png",
+      "ny3.png",
+      "pz3.png",
+      "nz3.png"
     ], (envmap)=>{
       if (this.isDisposed) return;
       
