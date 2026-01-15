@@ -100,80 +100,68 @@ export const globe_shader : Shader = {
       vec4 col = vec4(0.0);
 
       vec3 pos = vpos;
-      vec3 norm = vnormal;
+      vec3 norm = normalize(vnormal);
 
       //픽셀 단위 노이즈로 표면 디테일 추가
-      float sc = 2200.; //노이즈 스케일
+      float sc = 4500.; //노이즈 스케일
       vec3 ffpos = fract(vorpos * sc);
 
       //빛 위치 무작위로 흔들어주기 - 물체 표면에 노이즈 생기게 하기 위함
       float lon = random(floor(vorpos * sc)) * PI * 2.;
       float lat = random(floor(vorpos * sc) + 1.) * PI;
       float pck = random(floor(vorpos * sc) + 2.);
-      /* ec3 shake = vec3(
-        sin(lat)*cos(lon),
-        sin(lat)*sin(lon),
-        cos(lat)) * rad * 0.5; */
+      
       vec3 shake = vec3(
         cos(lat) * cos(lon),
         cos(lat) * sin(lon),
         sin(lat)
       ) * .01 * pck;
 
-      if(pck < .6) pos += shake; //60% 픽셀만 흔들림
+      if(pck < .7) pos += shake; //70% 픽셀만 흔들림
+
+      vec3 normShake = vec3(
+      random(floor(vorpos * sc) + 3.),
+      random(floor(vorpos * sc) + 4.),
+      random(floor(vorpos * sc) + 5.)
+      ) * 2. - 1.;
+      
+      norm += normShake * 0.05;
+      norm = normalize(norm);
 
       //조명
-      vec3 light1 = vec3(.1);
-      vec3 light2 = vec3(-.1);
-      vec3 light3 = vec3(.1, -.1, .0);
-      /* vec3 light1 = vec3(1.,1.,-1.) + shake;
+      vec3 light1 = vec3(1.,1.,-1.) + shake;
       vec3 light2 = vec3(-1.,1.,-1.)+ shake;
-      vec3 light3 = vec3(1.,-1.,-1.)+ shake; */
+      vec3 light3 = vec3(1.,-1.,-1.)+ shake;
       
       //조명 방향
-      vec3 ldir1 = normalize(light1-pos);
-      vec3 ldir2 = normalize(light2-pos);
-      vec3 ldir3 = normalize(light3);
+      vec3 ldir1 = light1;
+      vec3 ldir2 = light2;
+      vec3 ldir3 = light3;
 
       //조명 강도
       float sh1 = dot(ldir1, norm);
       float sh2 = dot(ldir2, norm);
       float sh3 = dot(ldir3, norm);
       //음의 값 나오지 않도록(0보다 크게)
-      /* sh1 = max(0., sh1);
+      sh1 = max(0., sh1);
       sh2 = max(0., sh2);
-      sh3 = max(0., sh3); */
+      sh3 = max(0., sh3);
 
       //조명 색상
-      /* vec3 col1 = vec3(
-        sin(sh1 * 3.)* .5 + .5,
-        sin(sh1 * 1.5)* .5 + .5,
-        sin(sh1 * 1.)* .5 + .5
-      );
-      vec3 col2 = vec3(
-        sin(sh2 * 1.2)* .5 + .5,
-        sin(sh2 * 1.5)* .5 + .5,
-        sin(sh2 * 1.9)* .5 + .5
-      );
-      vec3 col3 = vec3(
-        sin(sh3 * 1.)* .5 + .5,
-        sin(sh3 * 1.5)* .5 + .5,
-        sin(sh3 * 1.2)* .5 + .5
-      ); */
       vec3 col1 = vec3(
-        sin(sh1 * 2.) * .5 + .5,
-        sin(sh1 * 1.) * .5 + .5,
-        sin(sh1 * .5) * .5 + .5
+        sin(sh1 * 2.5) * .6 + .4, //r
+        sin(sh1 * 1.25) * .6 + .4, //g
+        sin(sh1 * .7) * .6 + .4 //b
       );
       vec3 col2 = vec3(
-        sin(sh2 * .5) * .5 + .5,
-        sin(sh2 * 1.) * .5 + .5,
-        sin(sh2 * 2.) * .5 + .5
+        sin(sh2 * .5) * .6 + .4, //r
+        sin(sh2 * 1.) * .6 + .4, //g
+        sin(sh2 * 2.) * .6 + .4 //b
       );
       vec3 col3 = vec3(
-        sin(sh3 * .5) * .5 + .5,
-        sin(sh3 * 1.4) * .5 + .5,
-        sin(sh3 * 2.5) * .5 + .5
+        sin(sh3 * .5) * .6 + .4, //r
+        sin(sh3 * 1.55) * .6 + .4, //g
+        sin(sh3 * 2.5) * .6 + .4 //b
       );
 
       //환경맵 반사
@@ -182,11 +170,16 @@ export const globe_shader : Shader = {
       vec3 ref = reflect(cam_dir, norm);
       vec3 env = textureCube(envmap, ref).rgb;
 
-      // col.rgb = col1 * col2 * col3;
-      // col.rgb = col.rgb * .3 + env * .7;
+      col.rgb = max(max(col1, col2), col3);
       col.rgb = (env * .8 + .2) * (.3 + .7 * max(max(col1, col2), col3));
-      col.rgb *= 1.5;
-      
+
+      col.rgb *= 2.7; //밝기
+      col.rgb = pow(col.rgb, vec3(1.2)); //감마
+
+      //채도
+      vec3 lumi = vec3(dot(col.rgb, vec3(0.299, 0.587, 0.114)));
+      col.rgb = mix(lumi, col.rgb, 1.3);
+
       gl_FragColor = vec4(col.rgb, 1.0);
     }
   `
