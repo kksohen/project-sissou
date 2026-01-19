@@ -1,4 +1,5 @@
-import ThreeCanvasWrap from "@/components/exhibition/born/three-canvas-wrap";
+import Clock from "@/components/exhibition/born/clock";
+import ThreeCanvasClient from "@/components/exhibition/born/three-canvas-client";
 import MenuBar from "@/components/menu-bar";
 
 export const metadata = {
@@ -12,7 +13,12 @@ export default function Born(){
       <h1 className="font-agahnsangsoo text-4xl sm:text-5xl text-center">어느 날, 그들은 태어났다...</h1>
     </div>
     
-    <ThreeCanvasWrap/>
+    <div className="grid grid-cols-3 items-center">
+      <ThreeCanvasClient/>
+
+      <Clock/>
+    </div>
+    
 
     <MenuBar/>
     </>
