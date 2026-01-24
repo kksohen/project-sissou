@@ -1,5 +1,6 @@
 import Clock from "@/components/exhibition/born/clock";
-import ThreeCanvasClient from "@/components/exhibition/born/three-canvas-client";
+import ThreeCanvas1Client from "@/components/exhibition/born/three-canvas1-client";
+import ThreeCanvas2Client from "@/components/exhibition/born/three-canvas2-client";
 import MenuBar from "@/components/menu-bar";
 
 export const metadata = {
@@ -14,9 +15,11 @@ export default function Born(){
     </div>
     
     <div className="grid grid-cols-3 items-center">
-      <ThreeCanvasClient/>
+      <ThreeCanvas1Client/>
 
       <Clock/>
+
+      <ThreeCanvas2Client/>
     </div>
     
 
