@@ -1,7 +1,9 @@
 import Clock from "@/components/exhibition/born/clock";
 import ThreeCanvas1Client from "@/components/exhibition/born/three-canvas1-client";
 import ThreeCanvas2Client from "@/components/exhibition/born/three-canvas2-client";
+import ThreeCanvas3Client from "@/components/exhibition/born/three-canvas3-client";
 import MenuBar from "@/components/menu-bar";
+import BornBg from "@/public/assets/images/born-bg";
 
 export const metadata = {
   title: "Born"
@@ -21,6 +23,20 @@ export default function Born(){
 
       <ThreeCanvas2Client/>
     </div>
+
+    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+      <div className="relative">
+        <BornBg/>
+        
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full h-full">
+            <ThreeCanvas3Client/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>하이</div>
     
 
     <MenuBar/>

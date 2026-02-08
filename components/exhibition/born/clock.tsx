@@ -43,7 +43,7 @@ export default function Clock(){
         transform={`rotate(${minutes} 100 100)`}/>
         {/* 초침 */}
         <line x1="100" y1="110" x2="100" y2="35"
-        stroke="#E8FD00"
+        stroke="#fcf050"
         strokeWidth="2"
         transform={`rotate(${seconds} 100 100)`}/>
       </svg>
