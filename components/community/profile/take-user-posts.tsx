@@ -280,7 +280,6 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span></span>
             <span></span>
             <span></span>
-            <span></span>
             <span>_</span>
             <span></span>
             <span></span>
@@ -294,9 +293,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span></span>
             <span></span>
             <span></span>
-            <span></span>
             <span>_</span>
-            <span></span>
             <span></span>
             <span></span>
             <span></span>
@@ -588,6 +585,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span></span>
             <span></span>
             <span></span>
+            <span></span>
             <span>| |</span>
             <span></span>
             <span></span>
@@ -604,6 +602,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span></span>
             <span></span>
             <span>| |</span>
+            <span></span>
             <span></span>
             <span></span>
             <span></span>
@@ -687,6 +686,7 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span>&#41; _</span>
             <span></span>
             <span></span>
+            <span></span>
             <span>| |</span>
             <span></span>
             <span></span>
@@ -702,6 +702,9 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span></span>
             <span></span>
             <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
             <span>—</span>
             <span>—</span>
             <span>—</span>
@@ -712,6 +715,9 @@ export default function TakeUserPosts({initUserPosts, userId}: TakeUserPostsProp
             <span>==</span>
             <span></span>
             <span>|</span>
+            <span></span>
+            <span></span>
+            <span></span>
             <span></span>
             <span></span>
             <span>_ &#40; &#40;</span>
