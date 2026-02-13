@@ -1,4 +1,5 @@
 import Clock from "@/components/exhibition/born/clock";
+import GradAlbum from "@/components/exhibition/born/graduation-album";
 import ThreeCanvas1Client from "@/components/exhibition/born/three-canvas1-client";
 import ThreeCanvas2Client from "@/components/exhibition/born/three-canvas2-client";
 import ThreeCanvas3Client from "@/components/exhibition/born/three-canvas3-client";
@@ -36,7 +37,9 @@ export default function Born(){
       </div>
     </div>
 
-    <div>하이</div>
+    <div>
+      <GradAlbum/>
+    </div>
     
 
     <MenuBar/>
