@@ -8,14 +8,16 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
     let pg: p5.Graphics;
     let isReady = false;
 
+    //grid layout
     const cols = 5;
     const gap = 8;
     const padding = 24;
-
+    
     let imgW = 0;
     let imgH = 0;
     const imgPos: {x: number, y: number}[] = [];
 
+    //canvas bg color - dark, light mode
     let currentBG = "#fff";
 
     const updateBG = ()=>{
@@ -27,8 +29,8 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
     p.setup = async()=>{
       p.createCanvas(dimension.width, dimension.height, p.WEBGL);
       shader = p.createShader(gradShaderVert, gradShaderFrag);
-    
       pg = p.createGraphics(dimension.width, dimension.height);
+      
       p.noStroke();
 
       updateBG();
@@ -39,6 +41,7 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
         attributeFilter: ["class"],
       });
 
+      //load images
       const load = imgPaths.map(async(path)=>{
         try{
           return p.loadImage(path);
@@ -51,14 +54,15 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
       const loaded = await Promise.all(load);
       imgs.push(...loaded.filter((img): img is p5.Image => img !== null));
 
+      //images position
       const availableW = dimension.width - (padding * 2);
       const total_gap = gap * (cols - 1);
       imgW = (availableW - total_gap) / cols;
-      imgH = imgW * (9 / 7);
+      imgH = imgW * (9 / 7); //7:9 비율
 
       imgs.forEach((_, index)=>{
-        const col = index % cols;
-        const row = Math.floor(index / cols);
+        const col = index % cols; //열
+        const row = Math.floor(index / cols); //행
         const x = padding + col * (imgW + gap);
         const y = padding + row * (imgH + gap);
         imgPos.push({x, y});
@@ -77,12 +81,14 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
         pg.image(img, pos.x, pos.y, imgW, imgH);
       });
 
+      //shader
       p.shader(shader);
       shader.setUniform("pixel_density", p.pixelDensity());
       shader.setUniform("image", pg);
-      shader.setUniform("mouse", [p.mouseX / dimension.width, 1 - p.mouseY / dimension.height]);
+      shader.setUniform("mouse", [p.mouseX / dimension.width, 1 - p.mouseY / dimension.height]); //마우스 좌표 0~1 범위로 정규화, y축 반전
       shader.setUniform("resolution", [dimension.width, dimension.height]);
 
+      //사각형 그리기 - webgl 정규화 좌표
       p.quad(-1, -1, 1, -1, 1, 1, -1, 1);
     };
   };

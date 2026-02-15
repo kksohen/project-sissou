@@ -48,16 +48,17 @@ void main(){
   vec2 uv = gl_FragCoord.xy/ (resolution.xy * pixel_density);
   vec2 rs = resolution;
   
-  float dst = length(uv - mouse);
-  dst = smoothstep(0., 0.1, dst - .01);
-  dst = 1.0 - dst;
+  float dst = length(uv - mouse); //픽셀 - 마우스 사이의 거리
+  dst = smoothstep(0., 0.1, dst - .01); //0.01 미만 0, 0.11 이상 1 부드럽게 변화
+  dst = 1.0 - dst; //마우스에 가까울수록 커짐(반전)
 
-  float off = dst * 20.0;
+  float off = dst * 20.0; //마우스에 가까울수록 더 큰 offset
 
-  vec2 m_dir = mouse - uv;
-  uv += normalize(m_dir) * dst * 0.05;
+  //돋보기 효과
+  vec2 m_dir = mouse - uv; //uv 좌표를 마우스 방향으로 이동
+  uv += normalize(m_dir) * dst * 0.05; //왜곡 강도(최대 5%)
 
-  uv.y = 1.0 - uv.y;
+  uv.y = 1.0 - uv.y; //텍스처 좌표는 y축이 반전되어 있어서 보정
   
   vec4 col = texture2D(image, uv);
   col.r = texture2D(image, uv + vec2(off/rs.x, 0.0)).r;
