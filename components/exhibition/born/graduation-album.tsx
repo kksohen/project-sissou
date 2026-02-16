@@ -2,7 +2,11 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 import { gradSketch } from "@/lib/p5/exhibition/grad-sketch";
 
-export default function GradAlbum(){
+interface GradAlbumProps{
+  onClick: (imgPath: string) => void;
+}
+
+export default function GradAlbum({onClick}: GradAlbumProps){
   const containerRef = useRef<HTMLDivElement>(null);
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   const p5InstanceRef = useRef<any>(null);
@@ -17,9 +21,9 @@ export default function GradAlbum(){
     "/assets/images/kingoyster-id-1.jpg",
     "/assets/images/caesars-id-1.jpg",
     "/assets/images/chanterelle-id.jpg",
-    "/assets/images/caesars-id-fr.jpg",
+    "/assets/images/caesars-id-3.jpg",
     "/assets/images/shiitake-id-2.jpg",
-    "/assets/images/caesars-id-bck.jpg",
+    "/assets/images/caesars-id-4.jpg",
   ], []);
 
   //resize
@@ -49,7 +53,7 @@ export default function GradAlbum(){
     
     import("p5").then((p5Module)=>{
       const p5 = p5Module.default;
-      const sketchInstance = gradSketch(imgPaths, dimension);
+      const sketchInstance = gradSketch(imgPaths, dimension, onClick);
       p5InstanceRef.current = new p5(sketchInstance, container);
     });
 
@@ -59,7 +63,7 @@ export default function GradAlbum(){
         p5InstanceRef.current = null;
       }
     };
-  }, [dimension, imgPaths]);
+  }, [dimension, imgPaths, onClick]);
   
   return(
     <div ref={containerRef} className="w-full h-full aspect-[9/7]"/>

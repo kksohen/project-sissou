@@ -9,6 +9,8 @@ export class GridSceneManager{
   private refs: ReturnType<typeof useGridThreeRefs>;
   private shader: Shader;
   private isDisposed = false;
+  private initTexturePath: string; //초기 텍스처 경로
+  private currentTexturePath: string = ""; //현재 텍스처 경로 - 중복 로드 방지
 
   private FADE_IN_DELAY = 300;
   private FADE_IN_DURATION = "0.3s";
@@ -35,9 +37,10 @@ export class GridSceneManager{
     };
   };
 
-  constructor(refs: ReturnType<typeof useGridThreeRefs>, shader: Shader){
+  constructor(refs: ReturnType<typeof useGridThreeRefs>, shader: Shader, initTexturePath: string){
     this.refs = refs;
     this.shader = shader;
+    this.initTexturePath = initTexturePath;
   };
 
   init(){
@@ -144,10 +147,11 @@ export class GridSceneManager{
       geomRef.current.push(geom);
 
       const textLoader = new THREE.TextureLoader();
-      const texture = textLoader.load("/assets/images/button-bg.jpg");
+      const texture = textLoader.load(this.initTexturePath); //초기 텍스처 로드
       texture.wrapS = THREE.RepeatWrapping; //반복
       texture.wrapT = THREE.RepeatWrapping;
       textureRef.current = texture;
+      this.currentTexturePath = this.initTexturePath;
 
       const mat = new THREE.RawShaderMaterial({
         uniforms: {
@@ -220,6 +224,34 @@ export class GridSceneManager{
       if(planeMatRef.current){
         planeMatRef.current.uniforms.planeSize.value.set(size, size);
       };
+    }
+  };
+
+  //selected 변경 시 texture 업데이트
+  updateTexture(imgPath: string){
+    if(this.isDisposed) return;
+    if(this.currentTexturePath === imgPath) return; //현재 텍스처로 설정된 이미지일 시 중복 로드 방지 - 성능 최적화
+
+    const {textureRef, planeMatRef} = this.refs;
+
+    try{
+      if(textureRef.current){ //기존 텍스처 정리
+        textureRef.current.dispose();
+      }
+
+      const textLoader = new THREE.TextureLoader();
+      const newTexture = textLoader.load(imgPath); //gradAlbum Imgs 클릭 시 새 텍스처 로드
+      newTexture.wrapS = THREE.RepeatWrapping;
+      newTexture.wrapT = THREE.RepeatWrapping;
+      textureRef.current = newTexture;
+      this.currentTexturePath = imgPath; //현재 텍스처 경로 업데이트
+
+      if(planeMatRef.current){
+        planeMatRef.current.uniforms.source.value = newTexture;
+        planeMatRef.current.needsUpdate = true;
+      }
+    }catch(error){
+      console.error(`Failed to load texture ${imgPath}:`, error);
     }
   };
 
@@ -339,6 +371,7 @@ export class GridSceneManager{
     }catch(error){
       console.error(error);
     };
+    this.currentTexturePath = ""; //현재 텍스처 경로 초기화
     //renderer
     this.disposeRenderer();
     //refs 초기화

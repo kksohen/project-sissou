@@ -1,7 +1,7 @@
 import { gradShaderFrag, gradShaderVert } from "@/lib/shader/exhibition/grad_shader";
 import p5 from "p5";
 
-export const gradSketch = (imgPaths: string[], dimension: {width: number; height: number})=>{
+export const gradSketch = (imgPaths: string[], dimension: {width: number; height: number}, onClick: (imgPath: string) => void)=>{
   return(p: p5)=>{
     let shader: p5.Shader;
     const imgs: p5.Image[] = [];
@@ -69,6 +69,23 @@ export const gradSketch = (imgPaths: string[], dimension: {width: number; height
       });
 
       isReady = true;
+    };
+
+    //gradAlbum imgs 마우스 클릭 시 해당 매칭 img 출력 이벤트
+    p.mousePressed =()=>{ 
+      if (!isReady) return;
+
+      const msX = p.mouseX;
+      const msY = p.mouseY;
+
+      for(let i=0; i<imgs.length; i++){
+        const pos = imgPos[i];
+        if(msX >= pos.x && msX <= pos.x + imgW && 
+        msY >= pos.y && msY <= pos.y + imgH){
+          onClick(imgPaths[i]);
+          return;
+        }
+      };
     };
 
     p.draw=()=>{
