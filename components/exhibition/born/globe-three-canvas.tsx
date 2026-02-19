@@ -81,6 +81,7 @@ export default function GlobeThreeCanvas({shader}: GlobeThreeCanvasProps){
   }, [containerRef, dimension, refs, shader]);
 
   return(
-    <div ref={containerRef} className="aspect-square overflow-hidden w-full h-full"></div>
+    <div ref={containerRef} data-cursor-target 
+    className="aspect-square overflow-hidden w-full h-full"/>
   );
 }

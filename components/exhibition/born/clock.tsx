@@ -15,7 +15,8 @@ export default function Clock(){
   const seconds = -(time.getSeconds() * 6);
   
   return(
-    <div className="flex justify-center items-center w-full h-full">
+    <div data-cursor-target
+    className="flex justify-center items-center w-full h-full">
       <svg width="80%" height="80%" viewBox="0 0 200 200">
         {/* 시간 눈금 */}
         {[...Array(12)].map((_, i)=>{
