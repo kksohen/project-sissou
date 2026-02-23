@@ -11,7 +11,7 @@ import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-mot
 
 //이미지 매칭
 const getImgs = (path: string)=>{
-  if(path.includes("caesars-id")) return "/assets/images/caesars-bg.jpg";
+  if(path.includes("caesars-id-1") || path.includes("caesars-id-2")) return "/assets/images/caesars-bg.jpg";
   
   if(path.includes("kingoyster-id")) return "/assets/images/eryngii-bg.jpg";
 
@@ -74,9 +74,9 @@ export default function BornClient(){
           </div>
           
           <div className="pt-15 sm:pt-20 pb-15">
-            <h2 className="font-agahnsangsoo text-4xl sm:text-5xl">《축 무사 졸업 기원》</h2>
-            <h4 className="pt-5 pl-5 font-weight-form lg:text-[1.0625rem] opacity-80">안녕하십니까? 귀하의 평안을 기도드립니다.</h4>
-            <h4 className="pt-5 pl-5 font-weight-form lg:text-[1.0625rem] opacity-60">** 각기 다른 사진들을 살펴보고 클릭해 보세요.</h4>
+            <h2 className="pl-5 pr-5 sm:pl-4 font-agahnsangsoo text-4xl sm:text-5xl">《세계를 빛낸 NN명의 위인들》</h2>
+            <h4 className="pt-5 pl-6 pr-5 font-weight-form lg:text-[1.0625rem] opacity-80">각기 다른 장소와 시간 속에서 저마다의 몸을 빌려 태어난 그들은 무엇이든 될 수 있었다. 모든 것은 마음에서 비롯되기 때문에. 그러나 태초부터 이 땅에 그들의 것은 없었다. 그래서 어떤 이들은 그것에 집착하기도 했다. 그렇게 언제나 같은 이유로 반복되었다.</h4>
+            <h4 className="pt-12 pl-6 font-weight-form lg:text-[1.0625rem] opacity-60">** 각각의 사진들을 관찰하고 클릭해 보세요.</h4>
 
             <GradAlbum onClick={handleImgClick}/>
           </div>
