@@ -144,12 +144,12 @@ export class GlobeSceneManager{
       const cubeLoader = new THREE.CubeTextureLoader();
       
       cubeLoader.setPath("/assets/models/").load([
-        "px3.png",
-        "nx3.png",
-        "py3.png",
-        "ny3.png",
-        "pz3.png",
-        "nz3.png"
+        "px4.png",
+        "nx4.png",
+        "py4.png",
+        "ny4.png",
+        "pz4.png",
+        "nz4.png"
       ], (cube) => {
         if(pmremRef.current){
           envmapRef.current = pmremRef.current.fromCubemap(cube).texture;

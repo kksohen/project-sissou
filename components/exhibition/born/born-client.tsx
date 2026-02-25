@@ -21,7 +21,7 @@ const getImgs = (path: string)=>{
 export default function BornClient(){
   const [selected, setSelected] = useState<string | null>(null); //selected imgPaths
   const [currentBG, setCurrentBG] = useState("#fff");
-  const [activeTab, setActiveTab] = useState<"globe" | "clock" | "sphere" | null>(null); //tabs
+  const [activeTab, setActiveTab] = useState<"globe" | "sphere" | null>(null); //tabs
   const [appear, setAppear] = useState(false); //scroll ani
   const containerRef = useRef<HTMLDivElement>(null);
   const aniRef = useRef<HTMLDivElement>(null);
@@ -30,6 +30,7 @@ export default function BornClient(){
     if (tab === activeTab) return; //더블클릭해서 멈춤 방지
     setAppear(false);
     setActiveTab(tab);
+    setSelected(null); //다른 탭 클릭 시 초기화ㅇ
   };
   
   const handleImgClick = (path: string)=>{
@@ -74,9 +75,9 @@ export default function BornClient(){
           </div>
           
           <div className="pt-15 sm:pt-20 pb-15">
-            <h2 className="pl-5 pr-5 sm:pl-4 font-agahnsangsoo text-4xl sm:text-5xl">《세계를 빛낸 NN명의 위인들》</h2>
+            <h2 className="pl-5 pr-5 sm:pl-4 font-agahnsangsoo text-4xl sm:text-5xl">〈세계를 빛낸 NN명의 위인들〉</h2>
             <h4 className="pt-5 pl-6 pr-5 font-weight-form lg:text-[1.0625rem] opacity-80">각기 다른 시공간에서 저마다의 몸을 빌려 태어난 그들은 무엇이든 될 수 있었다. 모든 것은 마음에서 비롯되기 때문에. 그러나 태초부터 이 땅에 그들의 것은 아무것도 없었다. 그래서 어떤 이들은 그것에 집착하기도 했다. 그렇게 언제나 같은 이유로 반복되었다.</h4>
-            <h4 className="pt-12 pl-6 font-weight-form lg:text-[1.0625rem] opacity-50">** 각각의 사진들을 관찰하고 클릭해 보세요.</h4>
+            <h4 className="pt-12 pl-6 font-weight-form lg:text-[1.0625rem] opacity-50">** 각각의 사진을 관찰하고 클릭해 보세요.</h4>
 
             <GradAlbum onClick={handleImgClick}/>
           </div>
@@ -86,7 +87,6 @@ export default function BornClient(){
           currentBG={currentBG}/>
         </div>
       );
-    case "clock" : return null;
     case "sphere" : return null;
     }
   };
@@ -113,7 +113,7 @@ export default function BornClient(){
         <h1>그들이 처음으로 담은 것과 닿은 것은 무엇이었을까?</h1>
       </div>
       
-      <h4 className="mt-12 font-weight-form lg:text-[1.0625rem] opacity-50">각각의 원형들을 드래그 혹은 클릭해 보세요.</h4>
+      <h4 className="mt-12 font-weight-form lg:text-[1.0625rem] opacity-50">각각의 구를 회전 혹은 클릭해 보세요.</h4>
     </div>
     
     {/* navigation toggle */}
@@ -122,9 +122,7 @@ export default function BornClient(){
         <ThreeCanvas1Client/>
       </div>
 
-      <div onClick={()=>handleTabsChange("clock")}>
-        <Clock/>
-      </div>
+      <Clock/>
 
       <div onClick={()=>handleTabsChange("sphere")}>
         <ThreeCanvas2Client/>

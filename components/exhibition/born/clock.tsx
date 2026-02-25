@@ -2,21 +2,22 @@
 import { useEffect, useState } from "react";
 
 export default function Clock(){
-  const [time, setTime] = useState(new Date()); 
+  const [time, setTime] = useState<Date | null>(null);
 
   useEffect(()=>{
+    setTime(new Date());
     const timer = setInterval(()=> setTime(new Date()), 1000);
     return ()=> clearInterval(timer);
   }, []);
 
+  if(!time) return null;
   //시계 반대로 돌리기
   const hours = -((time.getHours() % 12) * 30 + time.getMinutes() * 0.5);
   const minutes = -(time.getMinutes() * 6);
   const seconds = -(time.getSeconds() * 6);
   
   return(
-    <div data-cursor-target
-    className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-center w-full h-full">
       <svg width="80%" height="80%" viewBox="0 0 200 200">
         {/* 시간 눈금 */}
         {[...Array(12)].map((_, i)=>{
