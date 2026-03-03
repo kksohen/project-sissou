@@ -128,7 +128,7 @@ export const globe_shader : Shader = {
       random(floor(vorpos * sc) + 5.)
       ) * 2. - 1.;
       
-      norm += normShake * 0.08;
+      norm += normShake * 0.07;
       norm = normalize(norm);
 
       //조명
@@ -180,12 +180,13 @@ export const globe_shader : Shader = {
       float rim = 1.0 - abs(dot(norm, -cam_dir));
       rim = pow(rim, 4.0) * 0.2;
 
-      vec3 base_col = vec3(0.78, 0.58, 0.58);
-      vec3 shadow_col = vec3(0.7, 0.5, 0.5);
+      vec3 base_col = vec3(0.8, 0.6, 0.6);
+      vec3 shadow_col = vec3(0.75, 0.55, 0.55);
+      
       vec3 diffuse = mix(shadow_col, base_col, diff1);
       diffuse += vec3(0.05, 0.03, 0.02) * diff1;
 
-      float ambient = 0.45; //매트
+      float ambient = 0.47; //매트
       float light = ambient + diff1 * 0.65 + diff2;
 
       col.rgb = diffuse * light;
@@ -194,17 +195,19 @@ export const globe_shader : Shader = {
       vec3 ref = reflect(cam_dir, norm);
       vec3 env = textureCube(envmap, ref).rgb;
 
-      col.rgb += env * 0.05;
+      col.rgb += env * 0.07;
 
       /* col.rgb = max(max(col1, col2), col3);
       col.rgb = (env * .8 + .2) * (.3 + .7 * max(max(col1, col2), col3)); */
 
-      col.rgb *= 1.3; //밝기
-      col.rgb = pow(col.rgb, vec3(1.2)); //감마
+      col.rgb *= 1.17; //밝기
+      col.rgb = pow(col.rgb, vec3(1.15)); //감마
 
       //채도
       vec3 lumi = vec3(dot(col.rgb, vec3(0.299, 0.587, 0.114)));
       col.rgb = mix(lumi, col.rgb, 1.3);
+
+      col.rgb = (col.rgb - 0.5) * 1.15 + 0.5;
 
       gl_FragColor = vec4(col.rgb, 1.0);
     }
