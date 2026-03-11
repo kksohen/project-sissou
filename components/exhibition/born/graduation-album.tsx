@@ -23,6 +23,8 @@ export default function GradAlbum({onClick}: GradAlbumProps){
     "/assets/images/chanterelle-id.jpg",
     "/assets/images/caesars-id-3.jpg",
     "/assets/images/shiitake-id-2.jpg",
+    "/assets/images/lionsmane-id.jpg",
+    "/assets/images/enoki-id.jpg",
     "/assets/images/caesars-id-4.jpg",
   ], []);
 
