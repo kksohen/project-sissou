@@ -90,10 +90,23 @@ export default function BornClient(){
         </div>
       );
     case "sphere" : return(
-      <div className="h-200">
+      <div>
         <BornBg2/>
 
         <JultagiP5Canvas/>
+
+        <div>
+          글 들어갈 자리
+        </div>
+        <div>
+          글 들어갈 자리
+        </div>
+        <div>
+          글 들어갈 자리
+        </div>
+        <div>
+          글 들어갈 자리
+        </div>
       </div>
       
     );
