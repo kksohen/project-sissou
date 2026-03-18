@@ -7,6 +7,21 @@ interface rainDrop{
   speed: number;
 };
 
+//직선들끼리의 교점 계산식
+const intersect = (
+  x1: number, y1: number, x2: number, y2: number,
+  x3: number, y3: number, x4: number, y4: number
+)=>{
+  const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  if(Math.abs(denom) < 0.0001) return null;
+
+  const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+  return{
+    x: x1 + t * (x2 - x1),
+    y: y1 + t * (y2 - y1)
+  }
+};
+
 export const jultagiSketch=(dimension: {width: number; height: number;})=>{
   return(p: p5)=>{
     let img: p5.Image;
@@ -181,19 +196,45 @@ export const jultagiSketch=(dimension: {width: number; height: number;})=>{
       // p.line(0, dimension.height / 2, dimension.width, dimension.height / 2);
       p.line(0, leftY, dimension.width, rightY);
 
-      //lines
-      p.push();
       const imgBotX = cx + rollX;
       const imgBotY = cy;
       const spreadX = dimension.width * 2;
       const img_spreadX = dimension.width * 0.5;
+
+      const startX = imgBotX;
+      const startY = p.lerp(leftY, rightY, imgBotX / dimension.width);
+
+      //lines
+      p.push();
+      //교점 3개 계산
+      const pt1 = intersect(
+        0, leftY, dimension.width, rightY, //직선
+        imgBotX, imgBotY, imgBotX - img_spreadX, dimension.height //line 1
+      );
+      const pt2 = intersect(
+        0, leftY, dimension.width, rightY,
+        startX, startY, imgBotX - spreadX, dimension.height //line 3
+      );
+      const pt3 = intersect(
+        imgBotX, imgBotY, imgBotX - img_spreadX, dimension.height,
+        startX, startY, imgBotX - spreadX, dimension.height //line 3
+      );
+      //삼각형 채우기
+      if(pt1 && pt2 && pt3){
+        p.noStroke();
+        p.fill("#f7f7f9");
+        p.beginShape();
+        p.vertex(pt1.x, pt1.y);
+        p.vertex(pt2.x, pt2.y);
+        p.vertex(pt3.x, pt3.y);
+        p.endShape(p.CLOSE);
+      }
+
       //line 1 - img bot 기준
       p.stroke("#f7f7f9");
       p.strokeWeight(1);
       p.line(imgBotX, imgBotY, imgBotX - img_spreadX, dimension.height);
       //line 2 - 직선 기준
-      const startX = imgBotX;
-      const startY = p.lerp(leftY, rightY, imgBotX / dimension.width);
       p.line(startX, startY, imgBotX + spreadX * 2, dimension.height);
       //line 3 - 직선 기준
       p.line(startX, startY, imgBotX - spreadX, dimension.height);
