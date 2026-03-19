@@ -66,7 +66,7 @@ export default function RootLayout({
 }>){
 
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body
         className={`${astaSans.variable} mx-auto 
         max-w-screen-xs 

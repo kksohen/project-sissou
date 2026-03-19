@@ -200,7 +200,7 @@ export const jultagiSketch=(dimension: {width: number; height: number;})=>{
 
       const imgBotX = cx + rollX;
       const imgBotY = cy;
-      const spreadX = dimension.width * 1.7; //선 각도
+      const spreadX = dimension.width * 1.8; //선 각도
       const img_spreadX = dimension.width * 0.45;
 
       const startX = imgBotX;
