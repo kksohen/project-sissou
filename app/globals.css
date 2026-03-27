@@ -34,7 +34,7 @@
     --font-agahnsangsoo: agahnsangsoo2012, sans-serif;
     --font-jjjgothic: jjjgothic, sans-serif;
     --font-sourcehanserif: source-han-serif-tw-subset, sans-serif;
-    --font-mkai: m-kai-hk, sans-serif;
+    --font-arweibeib5: ar-weibeib5, sans-serif;
 
     --color-primary: #0098FF;
     --color-secondary: #00A052;
@@ -591,8 +591,8 @@
   .font-sourcehanserif{
     font-family: var(--font-sourcehanserif);
   }
-  .font-mkai{
-    font-family: var(--font-mkai);
+  .font-arweibeib5{
+    font-family: var(--font-arweibeib5);
   }
 
   .font-weight-custom{

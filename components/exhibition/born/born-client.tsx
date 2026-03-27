@@ -25,6 +25,7 @@ export default function BornClient(){
   const [currentBG, setCurrentBG] = useState("#fff");
   const [activeTab, setActiveTab] = useState<"globe" | "sphere" | null>(null); //tabs
   const [appear, setAppear] = useState(false); //scroll ani
+
   const containerRef = useRef<HTMLDivElement>(null);
   const aniRef = useRef<HTMLDivElement>(null);
 
@@ -88,33 +89,42 @@ export default function BornClient(){
     </div>
   );
 
-  const rows = Array.from({length: 14}, (_, i) => ({
-    before: i,
-    after: 13 - i
-  }));
+  const renderSphere =()=>{
+    const max = typeof window === "undefined" ? 13 : window.innerWidth < 398 ? 10 : 13;
 
-  const renderSphere =()=>(
-    <div>
-      <BornBg2/>
+    const rows = Array.from({length: max + 1}, (_, i) => ({
+      before: max - i,
+      after: max - i
+    }));
 
-      <JultagiP5Canvas/>
+    return(
+      <div>
+        <BornBg2/>
 
-      <div className="pt-12 pb-15 text-center font-weight-form">
-        <h4 className="lg:text-[1.0625rem] opacity-50">** 화면을 향해 손을 움직여보세요.</h4>
-      
-        <h2 className="pt-15 pb-10 font-agahnsangsoo text-4xl sm:text-5xl">태에 관한 문제</h2>
+        <JultagiP5Canvas/>
 
-        {rows.map((row, i)=>(
-        <h4 key={i} className="opacity-80 font-mkai">
-          <span className="inline-block">{"子".repeat(row.before)}</span>
-          <span> ·</span>
-          <span className="inline-block -scale-x-100">{"子".repeat(row.after)}</span>
-        </h4>
-        ))}
+        <div className="pt-15 pb-15 text-center font-weight-form">
+          <h2 className="pb-10 font-agahnsangsoo text-4xl sm:text-5xl">태에 관한 문제</h2>
+
+          {rows.map((row, i)=>(
+          <h4 key={i} className="opacity-80 font-arweibeib5">
+            <span className="inline-block -scale-x-100 -scale-y-100">{"子".repeat(row.before)}</span>
+            <span>{i === rows.length - 1 ? " ·" : ""}</span>
+            <span className="inline-block -scale-x-100 -scale-y-100">{"子".repeat(row.after)}</span>
+          </h4>
+          ))}
+
+          <h4 className="pt-10 opacity-80">
+            <span className="lg:text-[1.0625rem]">진단 태 : </span> 
+            <span className="font-arweibeib5">子</span>
+          </h4>
+
+          <h4 className="pt-15 lg:text-[1.0625rem] opacity-50">** 화면을 향해 손을 움직여 보세요.</h4>
+        </div>
+
       </div>
-
-    </div>
-  );
+    );
+  };
 
   const renderTabs = ()=>{
     switch(activeTab){
