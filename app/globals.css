@@ -33,6 +33,8 @@
     --font-astasans: "AstaSans", sans-serif;
     --font-agahnsangsoo: agahnsangsoo2012, sans-serif;
     --font-jjjgothic: jjjgothic, sans-serif;
+    --font-sourcehanserif: source-han-serif-tw-subset, sans-serif;
+    --font-mkai: m-kai-hk, sans-serif;
 
     --color-primary: #0098FF;
     --color-secondary: #00A052;
@@ -586,6 +588,13 @@
   .font-jjjgothic{
     font-family: var(--font-jjjgothic);
   }
+  .font-sourcehanserif{
+    font-family: var(--font-sourcehanserif);
+  }
+  .font-mkai{
+    font-family: var(--font-mkai);
+  }
+
   .font-weight-custom{
     font-weight: var(--font-weight-custom);
   }

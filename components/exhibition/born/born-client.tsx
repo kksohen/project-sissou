@@ -88,24 +88,31 @@ export default function BornClient(){
     </div>
   );
 
+  const rows = Array.from({length: 14}, (_, i) => ({
+    before: i,
+    after: 13 - i
+  }));
+
   const renderSphere =()=>(
     <div>
       <BornBg2/>
 
       <JultagiP5Canvas/>
 
-      <div>
-        글 들어갈 자리
+      <div className="pt-12 pb-15 text-center font-weight-form">
+        <h4 className="lg:text-[1.0625rem] opacity-50">** 화면을 향해 손을 움직여보세요.</h4>
+      
+        <h2 className="pt-15 pb-10 font-agahnsangsoo text-4xl sm:text-5xl">태에 관한 문제</h2>
+
+        {rows.map((row, i)=>(
+        <h4 key={i} className="opacity-80 font-mkai">
+          <span className="inline-block">{"子".repeat(row.before)}</span>
+          <span> ·</span>
+          <span className="inline-block -scale-x-100">{"子".repeat(row.after)}</span>
+        </h4>
+        ))}
       </div>
-      <div>
-        글 들어갈 자리
-      </div>
-      <div>
-        글 들어갈 자리
-      </div>
-      <div>
-        글 들어갈 자리
-      </div>
+
     </div>
   );
 
