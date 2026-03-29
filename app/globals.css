@@ -939,3 +939,42 @@
     transform-origin: center center;
   }
 }
+
+/* blur transition animation */
+@supports (view-transition-name: none){
+  @media not (prefers-reduced-motion: reduce){
+    ::view-transition-old(born-content){
+      animation: .4s cubic-bezier(.6, 0, .8, 1) forwards blur-hide;
+    }
+    ::view-transition-new(born-content){
+      opacity: 0;
+      animation: .6s .2s forwards blur-appear;
+    }
+    ::view-transition-old(root),
+    ::view-transition-new(root){
+      animation: none;
+    }
+  }
+}
+
+@keyframes blur-hide{
+  0%{
+    opacity: 1;
+    filter: blur(0);
+  }
+  100%{
+    opacity: 0;
+    filter: blur(5px);
+  }
+}
+
+@keyframes blur-appear{
+  0%{
+    opacity: 0;
+    filter: blur(5px);
+  }
+  100%{
+    opacity: 1;
+    filter: blur(0);
+  }
+}

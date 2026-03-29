@@ -10,6 +10,19 @@ import Particle from "./particle";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import BornBg2 from "@/public/assets/images/born-bg2";
 import JultagiP5Canvas from "./jultagi-p5-canvas";
+import { flushSync } from "react-dom";
+
+//blur transition animation
+const startBlur = (callback: ()=> void)=>{
+  if(!document.startViewTransition){
+    callback();
+    return;
+  }
+
+  document.startViewTransition(()=>{
+    flushSync(callback);
+  });
+};
 
 //이미지 매칭
 const getImgs = (path: string)=>{
@@ -31,9 +44,12 @@ export default function BornClient(){
 
   const handleTabsChange = (tab: typeof activeTab)=>{
     if (tab === activeTab) return; //더블클릭해서 멈춤 방지
-    setAppear(false);
-    setActiveTab(tab);
-    setSelected(null); //다른 탭 클릭 시 초기화ㅇ
+
+    startBlur(()=>{
+      setAppear(false);
+      setActiveTab(tab);
+      setSelected(null); //다른 탭 클릭 시 초기화ㅇ
+    });
   };
   
   const handleImgClick = (path: string)=>{
@@ -149,41 +165,41 @@ export default function BornClient(){
   const content = renderTabs();
 
   return(
-    <>
-    <div className="mt-12 sm:mt-20 sm:pb-12 text-center username-spacing-desc">
-      <div className="font-agahnsangsoo text-4xl sm:text-5xl leading-12 sm:leading-16">
-        <h1>어느 날, 그들은 태어났다...</h1>
-        <h1>처음으로 닿은 것은 무엇이었을까?</h1>
+    <div style={{viewTransitionName: "born-content"}}>
+      <div className="mt-12 sm:mt-20 sm:pb-12 text-center username-spacing-desc">
+        <div className="font-agahnsangsoo text-4xl sm:text-5xl leading-12 sm:leading-16">
+          <h1>어느 날, 그들은 태어났다...</h1>
+          <h1>처음으로 닿은 것은 무엇이었을까?</h1>
+        </div>
+        
+        <h4 className="mt-12 font-weight-form lg:text-[1.0625rem] opacity-50">각각의 구를 회전 혹은 클릭해 보세요.</h4>
       </div>
       
-      <h4 className="mt-12 font-weight-form lg:text-[1.0625rem] opacity-50">각각의 구를 회전 혹은 클릭해 보세요.</h4>
-    </div>
-    
-    {/* navigation toggle */}
-    <div className="grid grid-cols-1 sm:grid-cols-3 items-center sm:pb-15">
-      <div onClick={()=>handleTabsChange("globe")}>
-        <ThreeCanvas1Client/>
+      {/* navigation toggle */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 items-center sm:pb-15">
+        <div onClick={()=>handleTabsChange("globe")}>
+          <ThreeCanvas1Client/>
+        </div>
+
+        <Clock/>
+
+        <div onClick={()=>handleTabsChange("sphere")}>
+          <ThreeCanvas2Client/>
+        </div>
+        
       </div>
 
-      <Clock/>
-
-      <div onClick={()=>handleTabsChange("sphere")}>
-        <ThreeCanvas2Client/>
+      <div ref={aniRef}>
+        {content && (
+          <motion.div style={appear ? {} : {
+            scale, 
+            opacity, 
+            transformOrigin: "top center"
+          }}>
+            {content}
+          </motion.div>
+        )}
       </div>
-      
     </div>
-
-    <div ref={aniRef}>
-      {content && (
-        <motion.div style={appear ? {} : {
-          scale, 
-          opacity, 
-          transformOrigin: "top center"
-        }}>
-          {content}
-        </motion.div>
-      )}
-    </div>
-    </>
   )
 }
