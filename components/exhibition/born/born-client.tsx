@@ -41,9 +41,16 @@ export default function BornClient(){
 
   const containerRef = useRef<HTMLDivElement>(null);
   const aniRef = useRef<HTMLDivElement>(null);
+  const playedRef = useRef(false);
 
   const handleTabsChange = (tab: typeof activeTab)=>{
     if (tab === activeTab) return; //더블클릭해서 멈춤 방지
+
+    if(!playedRef.current){
+      playedRef.current = true;
+      const audio = new Audio("/assets/audio/born-sound.mp3");
+      audio.play().catch(()=>{}); //자동재생 에러 무시
+    }
 
     startBlur(()=>{
       setAppear(false);
